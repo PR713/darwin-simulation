@@ -8,11 +8,11 @@ import java.sql.SQLOutput;
 public class World {
     public static void main(String[] args) {
         System.out.println("Start");
-        run(args);
+        MoveDirection[] directions = OptionsParser.parser(args);
+        run(directions);
         System.out.println("Stop");
     }
-    public static void run(String[] str){
-        MoveDirection[] directions = OptionsParser.Parser(str);
+    private static void run(MoveDirection[] directions){
         for (MoveDirection dir : directions) {
             switch (dir) {
                 case MoveDirection.FORWARD -> System.out.println("Zwierzak idzie do przodu");
