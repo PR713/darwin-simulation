@@ -7,13 +7,9 @@ public class Vector2dTest {
     //equals()
     @Test
     void equalsByTheSameValues() {
-        //given
         Vector2d vector1 = new Vector2d(2,1);
         Vector2d vector2 = new Vector2d(2,1);
-        //when
-        //vector1.equals(vector2);
 
-        //then
         assertTrue(vector1.equals(vector2));
     }
 
