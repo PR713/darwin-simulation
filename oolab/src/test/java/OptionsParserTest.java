@@ -32,4 +32,18 @@ public class OptionsParserTest {
 
         assertArrayEquals(expected, result);
     }
+
+    @Test
+    void testParser_WithIncorrectInput() {
+        String[] arguments = {"f", "l", "abc", "a,", ",", "l", "b"};
+
+        MoveDirection[] result = OptionsParser.parser(arguments);
+        MoveDirection[] expected = {
+                MoveDirection.FORWARD,
+                MoveDirection.LEFT,
+                MoveDirection.LEFT,
+                MoveDirection.BACKWARD};
+
+        assertArrayEquals(expected, result);
+    }
 }
