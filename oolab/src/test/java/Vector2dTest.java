@@ -46,6 +46,9 @@ public class Vector2dTest {
     }
 
     //precedes
+    //P2    P2     P2
+    //P2    P1     P2 -> 8 + 1 (P1 = P2) -> 9 przypadków
+    //P2    P2     P2
     @Test
     void precedesTwoVectorsTrue() {
         Vector2d vector1 = new Vector2d(3,2);
