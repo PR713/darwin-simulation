@@ -1,10 +1,8 @@
 package agh.ics.oop.model;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.Simulation;
 
 public class Animal {
-    public MapDirection orientation = MapDirection.NORTH;
-    public Vector2d position;
+    private MapDirection orientation = MapDirection.NORTH;
+    private Vector2d position;
 
     public Animal() {
         this.position = new Vector2d(2,2);
@@ -16,11 +14,19 @@ public class Animal {
 
     @Override
     public String toString(){
-        return "(%s, %s)".formatted(this.position.getX(), this.position.getY());
+        return "(%d, %d) , %s".formatted(this.position.getX(), this.position.getY(), orientation);
     }
 
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
+    }
+
+    public MapDirection getOrientation(){
+        return this.orientation;
+    }
+
+    public Vector2d getPosition(){
+        return this.position;
     }
 
     public void move(MoveDirection direction) {
@@ -58,5 +64,4 @@ public class Animal {
             this.position = newPosition;
         }
     }
-
 }

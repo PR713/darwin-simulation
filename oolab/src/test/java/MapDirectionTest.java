@@ -78,8 +78,4 @@ public class MapDirectionTest {
 
         assertEquals(MapDirection.SOUTH, map);
     }
-
-
-
-
 }

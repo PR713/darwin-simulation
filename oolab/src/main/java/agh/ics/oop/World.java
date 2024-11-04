@@ -3,10 +3,8 @@ package agh.ics.oop;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.Simulation;
 
 import java.util.List;
-import java.util.Vector;
 
 public class World {
     public static void main(String[] args) {
@@ -18,7 +16,7 @@ public class World {
         //run(directions);
         //System.out.println("Stop");
         Animal animal = new Animal();
-        System.out.println(animal.position);
+        System.out.println(animal.getPosition());
 
 
     }
