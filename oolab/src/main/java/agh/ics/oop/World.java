@@ -21,8 +21,6 @@ public class World {
         System.out.println(animal.position);
 
 
-
-
     }
     private static void run(List<MoveDirection> directions){
         for (MoveDirection dir : directions) {

@@ -24,8 +24,12 @@ public class Simulation {
             int animalIndex = index % animals.size();
             animals.get(animalIndex).move(listOfMoves.get(index));
             System.out.printf("Zwierzę %d: %s%n",animalIndex, animals.get(animalIndex).toString());
-            }
         }
-
     }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
+}
 

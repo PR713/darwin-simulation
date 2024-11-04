@@ -3,7 +3,7 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.Simulation;
 
 public class Animal {
-    private MapDirection orientation = MapDirection.NORTH;
+    public MapDirection orientation = MapDirection.NORTH;
     public Vector2d position;
 
     public Animal() {
@@ -20,7 +20,7 @@ public class Animal {
     }
 
     public boolean isAt(Vector2d position) {
-        return this.position == position;
+        return this.position.equals(position);
     }
 
     public void move(MoveDirection direction) {
@@ -53,11 +53,10 @@ public class Animal {
                         break;
                 }; break;
         };
-        if (position.getX() >= 0 && position.getX() <= 4 &&
-                position.getY() >= 0 && position.getY() <= 4) {
+        if (newPosition.getX() >= 0 && newPosition.getX() <= 4 &&
+                newPosition.getY() >= 0 && newPosition.getY() <= 4) {
             this.position = newPosition;
         }
     }
-
 
 }
