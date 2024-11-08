@@ -3,6 +3,8 @@ package agh.ics.oop.model;
 public class Animal {
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position;
+    private static final Vector2d upperRight = new Vector2d(4,4);
+    private static final Vector2d lowerLeft = new Vector2d(0,0);
 
     public Animal() {
         this.position = new Vector2d(2,2);
@@ -37,30 +39,13 @@ public class Animal {
             case RIGHT: this.orientation = orientation.next();
                 break;
             case FORWARD:
-                switch (this.orientation) {
-                    case NORTH: newPosition = new Vector2d(this.position.getX(), this.position.getY()+1);
-                        break;
-                    case SOUTH: newPosition = new Vector2d(this.position.getX(), this.position.getY()-1);
-                        break;
-                    case EAST: newPosition = new Vector2d(this.position.getX()+1, this.position.getY());
-                        break;
-                    case WEST: newPosition = new Vector2d(this.position.getX()-1, this.position.getY());
-                        break;
-                }; break;
+                newPosition = this.position.add(this.orientation.toUnitVector());
+                break;
             case BACKWARD:
-                switch (this.orientation) {
-                    case NORTH: newPosition = new Vector2d(this.position.getX(), this.position.getY()-1);
-                        break;
-                    case SOUTH: newPosition = new Vector2d(this.position.getX(), this.position.getY()+1);
-                        break;
-                    case EAST: newPosition = new Vector2d(this.position.getX()-1, this.position.getY());
-                        break;
-                    case WEST: newPosition = new Vector2d(this.position.getX()+1, this.position.getY());
-                        break;
-                }; break;
+                newPosition = this.position.subtract(this.orientation.toUnitVector());
+                break;
         };
-        if (newPosition.getX() >= 0 && newPosition.getX() <= 4 &&
-                newPosition.getY() >= 0 && newPosition.getY() <= 4) {
+        if (newPosition.follows(lowerLeft) && newPosition.precedes(upperRight)){
             this.position = newPosition;
         }
     }
