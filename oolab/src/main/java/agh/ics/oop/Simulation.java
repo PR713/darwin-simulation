@@ -19,8 +19,8 @@ public class Simulation {
             Animal animal = new Animal(position);
             animals.add(animal);
             map.place(animal);
-
         }
+        System.out.println(map.toString());
     }
 
     public void run() {
