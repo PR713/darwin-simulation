@@ -24,28 +24,43 @@ public class RectangularMap implements WorldMap {
     public boolean place(Animal animal) {
         if (animals.containsKey(animal.getPosition()))
            return false;
+        animals.put(animal.getPosition(), animal);
         return true;
     }
 
     @Override
     public void move(Animal animal, MoveDirection direction) {
+        Vector2d oldPosition = animal.getPosition();
+        animal.move(this, direction);
+        Vector2d newPosition = animal.getPosition();
 
+        if (!oldPosition.equals(newPosition)) {
+            animals.remove(oldPosition);
+            animals.put(newPosition, animal);
+        }
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return false;
+        return animals.containsKey(position);
     }
 
     @Override
     public Animal objectAt(Vector2d position) {
+        if (isOccupied(position)) {return animals.get(position);}
         return null;
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if ((position.follows(upperRight) || position.precedes(lowerLeft)))
-            return false;
-        return true;
+        if (position.precedes(upperRight) && position.follows(lowerLeft) && (!isOccupied(position))) {
+            return true;}
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        MapVisualizer visualizer = new MapVisualizer(this);
+        return visualizer.draw(lowerLeft,upperRight);
     }
 }

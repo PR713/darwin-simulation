@@ -1,8 +1,5 @@
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.MapDirection;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,10 +52,11 @@ public class AnimalTest {
         Animal animal2 = new Animal(new Vector2d(2,3));
         Animal animal3 = new Animal(new Vector2d(2,3));
         Animal animal4 = new Animal(new Vector2d(2,3));
-        animal1.move(MoveDirection.LEFT);
-        animal2.move(MoveDirection.RIGHT);
-        animal3.move(MoveDirection.FORWARD);
-        animal4.move(MoveDirection.BACKWARD);
+        WorldMap map = new RectangularMap(5,5);
+        animal1.move(map,MoveDirection.LEFT);
+        animal2.move(map,MoveDirection.RIGHT);
+        animal3.move(map,MoveDirection.FORWARD);
+        animal4.move(map,MoveDirection.BACKWARD);
 
 
         assertEquals(MapDirection.WEST, animal1.getOrientation());
@@ -91,7 +89,7 @@ public class AnimalTest {
     void toStringAnimal() {
         Animal animal = new Animal(new Vector2d(2,3));
 
-        assertEquals("(2, 3) , Północ", animal.toString());
+        assertEquals("^", animal.toString());
     }
 
 }

@@ -1,9 +1,6 @@
 import agh.ics.oop.OptionsParser;
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.MapDirection;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,7 +15,8 @@ public class SimulationTest {
         Vector2d position2 = new Vector2d(3,4);
         List<Vector2d> positions = List.of(position1, position2);
         List<MoveDirection> directions = OptionsParser.parser(new String[] {});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
         List<Animal> animals = simulation.getAnimals();
@@ -32,7 +30,8 @@ public class SimulationTest {
     void withChangingPositionAndOrientationNorthEast() {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4));
         List<MoveDirection> directions = OptionsParser.parser(new String[] {"f","r","b","f"});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions,map);
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(new Vector2d(2,2), new Vector2d(4,4));
@@ -49,7 +48,8 @@ public class SimulationTest {
     void withChangingPositionAndOrientationSouthWest() {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3));
         List<MoveDirection> directions = OptionsParser.parser(new String[] {"r","f","r","l"});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(new Vector2d(2,2), new Vector2d(3,4));
@@ -68,7 +68,8 @@ public class SimulationTest {
         Vector2d position2 = new Vector2d(2,4);
         List<Vector2d> positions = List.of(position1, position2);
         List<MoveDirection> directions = OptionsParser.parser(new String [] {"r","f","f"});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(position1, position2);
@@ -87,7 +88,8 @@ public class SimulationTest {
         Vector2d position2 = new Vector2d(2,0);
         List<Vector2d> positions = List.of(position1, position2);
         List<MoveDirection> directions = OptionsParser.parser(new String [] {"l","b","f"});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(position1, position2);
@@ -104,7 +106,8 @@ public class SimulationTest {
     void movingWithIncorrectInput() {
         List<Vector2d> positions = List.of(new Vector2d(1,1), new Vector2d(2,3));
         List<MoveDirection> directions = OptionsParser.parser(new String [] {"fa","f","r","f","fb","abc","f"});
-        Simulation simulation = new Simulation(positions, directions);
+        WorldMap map = new RectangularMap(5,5);
+        Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(new Vector2d(1,3), new Vector2d(3,3));
