@@ -20,7 +20,7 @@ public class RectangularMap implements WorldMap {
 
     @Override
     public boolean place(Animal animal) {
-        if (animals.containsKey(animal.getPosition()))
+        if (isOccupied(animal.getPosition()))
            return false;
         animals.put(animal.getPosition(), animal);
         return true;
