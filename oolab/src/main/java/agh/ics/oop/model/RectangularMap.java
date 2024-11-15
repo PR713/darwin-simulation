@@ -6,24 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RectangularMap implements WorldMap {
-    private final Vector2d size;
     private final Vector2d upperRight;
     private final Vector2d lowerLeft;
     private final Map<Vector2d, Animal> animals = new HashMap<>();
-
+    private final MapVisualizer visualizer;
 
     public RectangularMap(int width, int height){
-        size = new Vector2d(width, height);
+        visualizer = new MapVisualizer(this);
         upperRight = new Vector2d(width - 1, height - 1);
         lowerLeft = new Vector2d(0,0);
     }
 
     @Override
     public boolean place(Animal animal) {
-        if (isOccupied(animal.getPosition()))
-           return false;
-        animals.put(animal.getPosition(), animal);
-        return true;
+        if (canMoveTo(animal.getPosition())) {
+            animals.put(animal.getPosition(), animal);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -51,14 +51,11 @@ public class RectangularMap implements WorldMap {
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if (position.precedes(upperRight) && position.follows(lowerLeft) && (!isOccupied(position))) {
-            return true;}
-        return false;
+        return (position.precedes(upperRight) && position.follows(lowerLeft) && (!isOccupied(position)));
     }
 
     @Override
     public String toString(){
-        MapVisualizer visualizer = new MapVisualizer(this);
         return visualizer.draw(lowerLeft,upperRight);
     }
 }

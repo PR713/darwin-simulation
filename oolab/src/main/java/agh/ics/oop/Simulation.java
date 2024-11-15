@@ -17,12 +17,13 @@ public class Simulation {
         this.map = map;
         for (Vector2d position : startPositions) {
             Animal animal = new Animal(position);
-            animals.add(animal);
-            map.place(animal);
+            if (map.place(animal)) {
+                animals.add(animal);
+                map.place(animal);
+            }
+            System.out.println(map.toString());
         }
-        System.out.println(map.toString());
     }
-
     public void run() {
         for (int index = 0; index < listOfMoves.size(); index++) {
             int animalIndex = index % animals.size();
