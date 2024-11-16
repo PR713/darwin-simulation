@@ -1,43 +1,33 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.RectangularMap;
+import agh.ics.oop.model.util.MapVisualizer;
+
 import java.sql.Array;
 import java.util.*;
+import agh.ics.oop.model.util.MapVisualizer;
 
 public class GrassField extends AbstractWorldMap {
     private final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     private final int numOfGrassFields;
     private final int maxDimension;
+    private final MapVisualizer visualizer;
+    private static final Vector2d MIN_VALUE = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     public GrassField(int numOfGrassFields){
-        super(new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE), new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        super(MIN_VALUE, MAX_VALUE);
         this.numOfGrassFields = numOfGrassFields;
         this.maxDimension = (int) Math.ceil(Math.sqrt(numOfGrassFields*10));
-        generateGrassPositions();
-    }
+        this.visualizer = new MapVisualizer(this);
 
-    private void generateGrassPositions(){
-        List<Vector2d> allPositions = new ArrayList<>();
-        for (int x = 0; x <= maxDimension; x++){
-            for (int y = 0; y <= maxDimension; y++) {
-                allPositions.add(new Vector2d(x,y));
-            }
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxDimension, maxDimension, numOfGrassFields);
+        Iterator<Vector2d> positionsIterator = randomPositionGenerator.iterator();
+
+        while(positionsIterator.hasNext()) {
+            Vector2d grassPosition = positionsIterator.next();
+            grassTufts.put(grassPosition, new Grass(grassPosition));
         }
-
-        Collections.shuffle(allPositions);
-        for (int i = 0; i < numOfGrassFields; i++) {
-            Vector2d position = allPositions.get(i);
-            grassTufts.put(position, new Grass(position));
-        }
-    }
-
-
-    @Override
-    public boolean place(Animal animal) {
-        if (canMoveTo(animal.getPosition()) ) {
-            return true;
-        }
-        return false;
     }
 
 
@@ -65,7 +55,18 @@ public class GrassField extends AbstractWorldMap {
 
 
     public String toString(){
+        Vector2d maxiValTemp = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        Vector2d miniValTemp = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        return "";
+        for (Vector2d position : grassTufts.keySet()) {
+            miniValTemp = miniValTemp.lowerLeft(position);
+            maxiValTemp = maxiValTemp.upperRight(position);
+        }
+        
+        for (Vector2d position : animals.keySet()) {
+            miniValTemp = miniValTemp.lowerLeft(position);
+            maxiValTemp = maxiValTemp.upperRight(position);
+        }
+        return visualizer.draw(miniValTemp, maxiValTemp);
     }
 }
