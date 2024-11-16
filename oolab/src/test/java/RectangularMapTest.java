@@ -4,6 +4,12 @@ import agh.ics.oop.model.WorldMap;
 import org.junit.jupiter.api.Test;
 
 import agh.ics.oop.model.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RectangularMapTest {
@@ -86,5 +92,26 @@ public class RectangularMapTest {
 
         assertTrue(animal1.isAt(vector1));
         assertTrue(animal2.isAt(vector2));
+    }
+
+
+
+    @Test
+    public void elementsRectangularMap(){
+        WorldMap map = new RectangularMap(4,4);
+        Vector2d vector1 = new Vector2d(1,3);
+        Animal animal1 = new Animal(vector1);
+        Vector2d vector2 = new Vector2d(3,2);
+        Animal animal2 = new Animal(vector2);
+
+        map.place(animal1);
+        map.place(animal2);
+        Map<Vector2d, WorldElement> result = new HashMap<>();
+        result.put(vector1, animal1);
+        result.put(vector2, animal2);
+
+        Map<Vector2d, WorldElement> elements = map.getElements();
+
+        assertEquals(result, elements);
     }
 }

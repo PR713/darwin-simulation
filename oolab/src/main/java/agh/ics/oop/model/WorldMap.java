@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -47,5 +47,5 @@ public interface WorldMap extends MoveValidator {
      *
      * @return Kolekcja wszystkich elementów na mapie.
      */
-    Collection<WorldElement> getElements();
+    Map<Vector2d, WorldElement> getElements();
 }

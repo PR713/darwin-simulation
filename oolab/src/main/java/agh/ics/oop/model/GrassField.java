@@ -1,11 +1,8 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.RectangularMap;
 import agh.ics.oop.model.util.MapVisualizer;
 
-import java.sql.Array;
 import java.util.*;
-import agh.ics.oop.model.util.MapVisualizer;
 
 public class GrassField extends AbstractWorldMap {
     private final int numOfGrassFields;
@@ -30,6 +27,15 @@ public class GrassField extends AbstractWorldMap {
             Vector2d grassPosition = positionsIterator.next();
             grassTufts.put(grassPosition, new Grass(grassPosition));
         }
+    }
+
+
+    public boolean place(Grass grass){
+        if(canMoveTo(grass.getPosition()) && !isOccupied(grass.getPosition())) {
+            grassTufts.put(grass.getPosition(), grass);
+            return true;
+        }
+        return false;
     }
 
 
@@ -58,15 +64,16 @@ public class GrassField extends AbstractWorldMap {
 
     public String toString(){
 
+        for (Vector2d position : animals.keySet()) {
+            miniValTemp = miniValTemp.lowerLeft(position);
+            maxiValTemp = maxiValTemp.upperRight(position);
+        }
+
         for (Vector2d position : grassTufts.keySet()) {
             miniValTemp = miniValTemp.lowerLeft(position);
             maxiValTemp = maxiValTemp.upperRight(position);
         }
 
-        for (Vector2d position : animals.keySet()) {
-            miniValTemp = miniValTemp.lowerLeft(position);
-            maxiValTemp = maxiValTemp.upperRight(position);
-        }
         return visualizer.draw(miniValTemp, maxiValTemp);
     }
 }

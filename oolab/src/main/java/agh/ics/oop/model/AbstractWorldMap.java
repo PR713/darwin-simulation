@@ -8,7 +8,7 @@ import java.util.Map;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     protected final Map<Vector2d, Animal> animals = new HashMap<>();
-    protected final Collection<WorldElement> elements = new ArrayList<>();
+    protected final Map<Vector2d, WorldElement> elements = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
 
@@ -61,9 +61,9 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public Collection<WorldElement> getElements(){
-        elements.addAll(animals.values());
-        elements.addAll(grassTufts.values());
+    public Map<Vector2d, WorldElement> getElements(){
+        elements.putAll(animals);
+        elements.putAll(grassTufts);
 
         return elements;
     }
