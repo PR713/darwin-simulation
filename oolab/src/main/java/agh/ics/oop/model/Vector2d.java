@@ -50,6 +50,7 @@ public class Vector2d {
         return new Vector2d(-x,-y);
     }
 
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -57,6 +58,7 @@ public class Vector2d {
         Vector2d vector = (Vector2d) other;
         return x == vector.x && y == vector.y;
     }
+
 
     @Override
     public int hashCode() {

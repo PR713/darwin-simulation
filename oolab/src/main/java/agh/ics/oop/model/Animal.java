@@ -14,6 +14,7 @@ public class Animal implements WorldElement {
         this.position = vector;
     }
 
+
     @Override
     public String toString(){
         return switch (this.getOrientation()) {
@@ -23,14 +24,19 @@ public class Animal implements WorldElement {
             case WEST -> "<";
         };
     }
+
+
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
     }
+
 
     public MapDirection getOrientation(){
         return this.orientation;
     }
 
+
+    @Override
     public Vector2d getPosition(){
         return this.position;
     }
