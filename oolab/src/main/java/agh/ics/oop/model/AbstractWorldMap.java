@@ -1,10 +1,14 @@
 package agh.ics.oop.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected Map<Vector2d, Animal> animals = new HashMap<>();
+    protected final Map<Vector2d, Grass> grassTufts = new HashMap<>();
+    protected final Map<Vector2d, Animal> animals = new HashMap<>();
+    protected final Collection<WorldElement> elements = new ArrayList<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
 
@@ -53,5 +57,14 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public boolean canMoveTo(Vector2d position) {
         return (position.precedes(upperRight) && position.follows(lowerLeft) && (!isOccupied(position)));
+    }
+
+
+    @Override
+    public Collection<WorldElement> getElements(){
+        elements.addAll(animals.values());
+        elements.addAll(grassTufts.values());
+
+        return elements;
     }
 }

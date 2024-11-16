@@ -1,8 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.World;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
+import java.util.Collection;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -43,4 +41,11 @@ public interface WorldMap extends MoveValidator {
      * @return animal or null if the position is not occupied.
      */
     WorldElement objectAt(Vector2d position);
+
+    /**
+     * Zwraca kolekcję wszystkich elementów na mapie (trawy i zwierzęta).
+     *
+     * @return Kolekcja wszystkich elementów na mapie.
+     */
+    Collection<WorldElement> getElements();
 }
