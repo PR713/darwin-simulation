@@ -83,7 +83,7 @@ public class GrassField extends AbstractWorldMap {
     public List<WorldElement> getElements(){
         List<WorldElement> allElements = new ArrayList<>(super.getElements());
         allElements.addAll(grassTufts.values());
-        return allElements;
+        return List.copyOf(allElements);
     }
 
 

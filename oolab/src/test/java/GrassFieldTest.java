@@ -1,7 +1,9 @@
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -91,13 +93,23 @@ public class GrassFieldTest {
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
         expected.add(animal1);
         expected.add(animal2);
-        expected.add(allGrassTufts.get(allGrassTufts.keySet().iterator().next()));
-        expected.add(allGrassTufts.get(allGrassTufts.keySet().iterator().next()));
+        Iterator<Vector2d> iterator = allGrassTufts.keySet().iterator();
+        expected.add(allGrassTufts.get(iterator.next()));
+        expected.add(allGrassTufts.get(iterator.next()));
 
         assertEquals(expected.size(), result.size());
         System.out.println(expected);
         System.out.println(result);
+
+        System.out.println(expected.get(0).getPosition());
+        System.out.println(expected.get(1).getPosition());
+        System.out.println(expected.get(2).getPosition());
+        System.out.println(expected.get(3).getPosition());
+
         for ( WorldElement element : result){
+
+            System.out.println();
+            System.out.println(element.getPosition());
             assertTrue(expected.contains(element));
         }
     }
