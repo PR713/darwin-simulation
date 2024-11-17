@@ -4,18 +4,16 @@ import agh.ics.oop.model.WorldMap;
 import org.junit.jupiter.api.Test;
 
 import agh.ics.oop.model.*;
+import org.w3c.dom.css.Rect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RectangularMapTest {
     @Test
     public void placingAnimalsOnMap(){
-        WorldMap map = new RectangularMap(5,5);
+        RectangularMap map = new RectangularMap(5,5);
         Vector2d vector1 = new Vector2d(2,2);
         Vector2d vector2 = new Vector2d(1,3);
         Animal animal1 = new Animal(vector1);
@@ -34,7 +32,7 @@ public class RectangularMapTest {
 
     @Test
     public void placingAnimalsOnMapWithTheSamePositions(){
-        WorldMap map = new RectangularMap(5,5);
+        RectangularMap map = new RectangularMap(5,5);
         Vector2d vector = new Vector2d(2,2);
         Animal animal1 = new Animal(vector);
         Animal animal2 = new Animal(vector);
@@ -50,7 +48,7 @@ public class RectangularMapTest {
 
     @Test
     public void moveAnimalsWithChangingOrienationsOrPositions(){
-        WorldMap map = new RectangularMap(7,7);
+        RectangularMap map = new RectangularMap(7,7);
         Vector2d vector1 = new Vector2d(2,3);
         Animal animal1 = new Animal(vector1);
         Vector2d vector2 = new Vector2d(1,2);
@@ -80,7 +78,7 @@ public class RectangularMapTest {
 
     @Test
     public void canMoveTo(){
-        WorldMap map = new RectangularMap(3,3);
+        RectangularMap map = new RectangularMap(3,3);
         Vector2d vector1 = new Vector2d(1,2);
         Animal animal1 = new Animal(vector1);
         Vector2d vector2 = new Vector2d(3,2);
@@ -98,7 +96,7 @@ public class RectangularMapTest {
 
     @Test
     public void elementsRectangularMap(){
-        WorldMap map = new RectangularMap(4,4);
+        RectangularMap map = new RectangularMap(4,4);
         Vector2d vector1 = new Vector2d(1,3);
         Animal animal1 = new Animal(vector1);
         Vector2d vector2 = new Vector2d(3,2);
@@ -106,12 +104,41 @@ public class RectangularMapTest {
 
         map.place(animal1);
         map.place(animal2);
-        Map<Vector2d, WorldElement> result = new HashMap<>();
-        result.put(vector1, animal1);
-        result.put(vector2, animal2);
 
-        Map<Vector2d, WorldElement> elements = map.getElements();
+        List<WorldElement> result = map.getElements();
+        List<WorldElement> expected = new ArrayList<>();
+        expected.add(animal1);
+        expected.add(animal2);
 
-        assertEquals(result, elements);
+
+        assertEquals(expected.size(), result.size());
+        for ( WorldElement element : result){
+            assertTrue(expected.contains(element));
+        }
+    }
+
+
+    @Test
+    public void elementsButSameRectangularMap(){
+        RectangularMap map = new RectangularMap(4,4);
+        Vector2d vector1 = new Vector2d(1,3);
+        Animal animal1 = new Animal(vector1);
+        Vector2d vector2 = new Vector2d(3,2);
+        Animal animal2 = new Animal(vector2);
+        Vector2d vector3 = new Vector2d(3,2);
+        Animal animal3 = new Animal(vector3);
+
+        map.place(animal1);
+        map.place(animal2);
+        map.place(animal3);
+
+        List<WorldElement> result = map.getElements();
+        List<WorldElement> expected = new ArrayList<>();
+        expected.add(animal1);
+        expected.add(animal2);
+        expected.add(animal3);
+
+
+        assertNotEquals(expected.size(), result.size());
     }
 }

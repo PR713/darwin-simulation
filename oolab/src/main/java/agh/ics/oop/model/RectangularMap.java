@@ -12,6 +12,12 @@ public class RectangularMap extends AbstractWorldMap  {
 
 
     @Override
+    public boolean canMoveTo(Vector2d position) {
+        return (position.precedes(upperRight) && position.follows(lowerLeft) && (!isOccupied(position)));
+    }
+
+
+    @Override
     public String toString(){
         return visualizer.draw(lowerLeft,upperRight);
     }

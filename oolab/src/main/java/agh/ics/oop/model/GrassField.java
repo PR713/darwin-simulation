@@ -12,7 +12,7 @@ public class GrassField extends AbstractWorldMap {
     private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     private Vector2d maxiValTemp = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
     private Vector2d miniValTemp = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-
+    private final List<WorldElement> elements = new ArrayList<>();
 
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
@@ -29,7 +29,7 @@ public class GrassField extends AbstractWorldMap {
         }
     }
 
-
+    //przeciążenie metody
     public boolean place(Grass grass){
         if(canMoveTo(grass.getPosition()) && !isOccupied(grass.getPosition())) {
             grassTufts.put(grass.getPosition(), grass);
@@ -62,6 +62,7 @@ public class GrassField extends AbstractWorldMap {
     }
 
 
+    @Override
     public String toString(){
 
         for (Vector2d position : animals.keySet()) {
@@ -76,4 +77,13 @@ public class GrassField extends AbstractWorldMap {
 
         return visualizer.draw(miniValTemp, maxiValTemp);
     }
+
+
+    @Override
+    public List<WorldElement> getElements(){
+        List<WorldElement> allElements = new ArrayList<>(super.getElements());
+        allElements.addAll(grassTufts.values());
+        return allElements;
+    }
 }
+
