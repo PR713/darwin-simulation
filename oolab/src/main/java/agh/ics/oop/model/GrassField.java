@@ -17,7 +17,7 @@ public class GrassField extends AbstractWorldMap {
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
         this.numOfGrassFields = numOfGrassFields;
-        this.maxDimensionOfGrassFields = (int) Math.ceil(Math.sqrt(numOfGrassFields*10));
+        this.maxDimensionOfGrassFields = (int) Math.floor(Math.sqrt(numOfGrassFields*10));
         this.visualizer = new MapVisualizer(this);
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxDimensionOfGrassFields, maxDimensionOfGrassFields, numOfGrassFields);
@@ -84,6 +84,11 @@ public class GrassField extends AbstractWorldMap {
         List<WorldElement> allElements = new ArrayList<>(super.getElements());
         allElements.addAll(grassTufts.values());
         return allElements;
+    }
+
+
+    public Map<Vector2d, Grass> getGrassTufts() {
+        return Collections.unmodifiableMap(grassTufts);
     }
 }
 

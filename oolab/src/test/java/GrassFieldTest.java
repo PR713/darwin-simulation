@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,69 +26,77 @@ public class GrassFieldTest {
 
     @Test
     public void testPlacingGrassWhichIsOccupiedByAnotherGrass() {
-        GrassField map = new GrassField(2);
-        exampleGrass = map.grassTufts
-        Vector2d vector = new Vector2d(1,2);//poza obszarem gdzie normalnie mogą być trawy
-        Grass grass1 = new Grass(vector);
-        Grass grass2 = new Grass(vector);
+        GrassField map = new GrassField(3);
+        Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
 
-        assertTrue(map.place(grass1));
-        assertFalse(map.place(grass2));
+        assertEquals(3, allGrassTufts.size());
 
-        assertEquals(grass1, map.objectAt(grass1.getPosition()));
-        assertNotEquals(grass2, map.objectAt(grass1.getPosition()));
+        Vector2d occupiedPosition = allGrassTufts.keySet().iterator().next();
+        Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
+        Grass grassTest = new Grass(occupiedPosition);
+        assertNotEquals(grassTest, map.objectAt(occupiedPosition));
+        assertEquals(alreadyExisting, map.objectAt(occupiedPosition));
     }
 
 
     @Test
     public void testPlaceAnimalOnGrass() {
         GrassField map = new GrassField(6);
-        Vector2d vector = new Vector2d(1,2);
-        Grass grass = new Grass(vector);
-        Animal animal = new Animal(vector);
 
-        map.place(grass); // wywowałane na metodzie z GrassField
-        map.place(animal); //wywołane z super
-        System.out.println(map.getElements());
-        assertEquals(animal, map.objectAt(vector));
+        Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
+        assertEquals(6, allGrassTufts.size());
+
+        Vector2d occupiedPosition = allGrassTufts.keySet().iterator().next();
+        Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
+
+        Animal animal = new Animal(occupiedPosition);
+        map.place(animal);
+
+        assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition));
+        assertEquals(animal, map.objectAt(occupiedPosition));
     }
 
 
     @Test
     public void testCanMoveTo() {
-        GrassField map = new GrassField(6);
-        Vector2d vector = new Vector2d(3, 2);
-        Vector2d vector1 = new Vector2d(2, 2);
-        Grass grass = new Grass(vector);
-        Animal animal = new Animal(vector1);
+        GrassField map = new GrassField(5);
 
-        map.place(grass);
+        Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
+        assertEquals(5, allGrassTufts.size());
+
+        Vector2d vector = new Vector2d(1,1);
+        Vector2d vector1 = new Vector2d(1,2);
+        Animal animal = new Animal(vector);
+        Animal animal1 = new Animal(vector1);
         map.place(animal);
+        map.place(animal1);
+        assertFalse(map.canMoveTo(vector));
 
-        assertTrue(map.canMoveTo(vector));
     }
 
 
     @Test
     public void testGetElements() {
-        GrassField map = new GrassField(1);
-        Vector2d vector = new Vector2d(3, 2);
+        GrassField map = new GrassField(2);
         Vector2d vector1 = new Vector2d(2, 2);
         Vector2d vector2 = new Vector2d(1, 2);
-        Grass grass = new Grass(vector);
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
         map.place(animal1);
         map.place(animal2);
-        map.place(grass);
+
         List<WorldElement> result = map.getElements();
         List<WorldElement> expected = new ArrayList<>();
-        expected.add(grass);
+        Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
         expected.add(animal1);
         expected.add(animal2);
-        System.out.println(result);
+        expected.add(allGrassTufts.get(allGrassTufts.keySet().iterator().next()));
+        expected.add(allGrassTufts.get(allGrassTufts.keySet().iterator().next()));
+
         assertEquals(expected.size(), result.size());
+        System.out.println(expected);
+        System.out.println(result);
         for ( WorldElement element : result){
             assertTrue(expected.contains(element));
         }
