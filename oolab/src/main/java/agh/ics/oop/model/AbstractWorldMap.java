@@ -49,7 +49,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return null;
     }
 
-
+    @Override
     public List<WorldElement> getElements(){
         return List.copyOf(animals.values());
     }

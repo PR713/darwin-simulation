@@ -29,30 +29,11 @@ public class GrassField extends AbstractWorldMap {
         }
     }
 
-    //przeciążenie metody
-    public boolean place(Grass grass){
-        if(canMoveTo(grass.getPosition()) && !isOccupied(grass.getPosition())) {
-            grassTufts.put(grass.getPosition(), grass);
-            return true;
-        }
-        return false;
-    }
-
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return grassTufts.containsKey(position);
-    }
-
 
     @Override
     public WorldElement objectAt(Vector2d position) {
         WorldElement animalExist = super.objectAt(position);
-        if (animalExist == null){
-            if (isOccupied(position)){
-                return grassTufts.get(position);
-            } else return null;
-        } else return animalExist;
+        return (animalExist != null) ? animalExist : grassTufts.get(position);
     }
 
 
@@ -74,7 +55,7 @@ public class GrassField extends AbstractWorldMap {
             miniValTemp = miniValTemp.lowerLeft(position);
             maxiValTemp = maxiValTemp.upperRight(position);
         }
-
+        
         return visualizer.draw(miniValTemp, maxiValTemp);
     }
 

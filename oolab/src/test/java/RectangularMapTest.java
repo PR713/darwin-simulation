@@ -1,10 +1,7 @@
-import agh.ics.oop.model.RectangularMap;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.World;
+import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
-import agh.ics.oop.model.*;
-import org.w3c.dom.css.Rect;
 
 import java.util.*;
 
@@ -140,5 +137,29 @@ public class RectangularMapTest {
 
 
         assertNotEquals(expected.size(), result.size());
+    }
+
+    @Test
+    public void getElementsButOnlyAnimals(){
+        RectangularMap map = new RectangularMap(5,5);
+        Vector2d vector1 = new Vector2d(2, 4);
+        Vector2d vector2 = new Vector2d(1, 2);
+        Animal animal1 = new Animal(vector1);
+        Animal animal2 = new Animal(vector2);
+
+        map.place(animal1);
+        map.place(animal2);
+
+        List<WorldElement> allAnimals = map.getElements();
+
+        List<WorldElement> expected = new ArrayList<>();
+        expected.add(animal1);
+        expected.add(animal2);
+
+        assertEquals(expected.size(), allAnimals.size());
+
+        for (WorldElement animal : allAnimals){
+            assertTrue(expected.contains(animal));
+        }
     }
 }

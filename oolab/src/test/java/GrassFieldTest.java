@@ -1,7 +1,7 @@
+import agh.ics.oop.World;
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,35 +9,20 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import agh.ics.oop.model.AbstractWorldMap;
-
 public class GrassFieldTest {
 
+
     @Test
-    public void testPlaceGrass() {
-        GrassField map = new GrassField(0);
-        Vector2d vector = new Vector2d(0,0);
-        Grass grass = new Grass(vector);
-
-        assertTrue(map.place(grass));
-        assertTrue(map.isOccupied(vector));
-
-        assertEquals(grass, map.objectAt(grass.getPosition()));
+    public void amountOfGrass() {
+        GrassField map = new GrassField(10);
+        assertEquals(10, map.getGrassTufts().size());
     }
 
 
     @Test
-    public void testPlacingGrassWhichIsOccupiedByAnotherGrass() {
-        GrassField map = new GrassField(3);
-        Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
-
-        assertEquals(3, allGrassTufts.size());
-
-        Vector2d occupiedPosition = allGrassTufts.keySet().iterator().next();
-        Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
-        Grass grassTest = new Grass(occupiedPosition);
-        assertNotEquals(grassTest, map.objectAt(occupiedPosition));
-        assertEquals(alreadyExisting, map.objectAt(occupiedPosition));
+    public void noGrass() {
+        GrassField map = new GrassField(0);
+        assertEquals(0, map.getGrassTufts().size());
     }
 
 
@@ -66,14 +51,13 @@ public class GrassFieldTest {
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
         assertEquals(5, allGrassTufts.size());
 
-        Vector2d vector = new Vector2d(1,1);
-        Vector2d vector1 = new Vector2d(1,2);
+        Vector2d vector = new Vector2d(1, 1);
+        Vector2d vector1 = new Vector2d(1, 2);
         Animal animal = new Animal(vector);
         Animal animal1 = new Animal(vector1);
         map.place(animal);
         map.place(animal1);
         assertFalse(map.canMoveTo(vector));
-
     }
 
 
@@ -98,19 +82,45 @@ public class GrassFieldTest {
         expected.add(allGrassTufts.get(iterator.next()));
 
         assertEquals(expected.size(), result.size());
-        System.out.println(expected);
-        System.out.println(result);
 
-        System.out.println(expected.get(0).getPosition());
-        System.out.println(expected.get(1).getPosition());
-        System.out.println(expected.get(2).getPosition());
-        System.out.println(expected.get(3).getPosition());
-
-        for ( WorldElement element : result){
-
-            System.out.println();
-            System.out.println(element.getPosition());
+        for (WorldElement element : result) {
             assertTrue(expected.contains(element));
+        }
+    }
+
+
+    @Test
+    public void objectAtReturnsGrass() {
+        GrassField map = new GrassField(10);
+
+        Map<Vector2d, Grass> allGrass = map.getGrassTufts();
+
+        for (Grass grass : allGrass.values()) {
+            assertEquals(grass, map.objectAt(grass.getPosition()));
+        }
+    }
+
+
+    @Test
+    public void objectAtReturnsAnimalsAndGrass() {
+        GrassField map = new GrassField(1);
+        Vector2d vector = new Vector2d(1, 3);
+        Vector2d vector1 = new Vector2d(2, 1);
+        Vector2d vector2 = new Vector2d(0, 1);
+        Animal animal = new Animal(vector);
+        Animal animal1 = new Animal(vector1);
+        Animal animal2 = new Animal(vector2);
+
+        map.place(animal);
+        map.place(animal1);
+        map.place(animal2);
+
+        List<WorldElement> allElements = map.getElements();
+
+        for (WorldElement element : allElements) {
+            if (element.getClass() == Grass.class && map.isOccupied(element.getPosition())) { //przysłania zwierzak
+                assertNotEquals(element, map.objectAt(element.getPosition()));
+            } else assertEquals(element, map.objectAt(element.getPosition())); //tylko zwierzak lub tylko trawa
         }
     }
 }

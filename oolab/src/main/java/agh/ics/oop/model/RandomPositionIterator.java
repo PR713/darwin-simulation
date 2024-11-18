@@ -7,7 +7,7 @@ public class RandomPositionIterator implements Iterator<Vector2d> {
     private final int maxHeight;
     private final List<Integer> allIndicesList;
     private int remainingToGenerate;
-    private Random random;
+    private final Random random;
     private int rangeOfChoosing;
 
     public RandomPositionIterator(int maxWidth, int maxHeight, int amountOfGrass) {
@@ -18,8 +18,8 @@ public class RandomPositionIterator implements Iterator<Vector2d> {
         this.rangeOfChoosing = (maxHeight + 1) * (maxWidth + 1) - 1;
         this.random = new Random();
 
-        for (int i = 0; i < (maxHeight + 1) * (maxWidth + 1); i++) {
-            allIndicesList.add(i); // (x,y) = (i/n,i%n)
+        for (int i = 0; i <= rangeOfChoosing; i++) {
+            allIndicesList.add(i); // (x,y) = (i%n,i/n)
         }
     }
 
@@ -31,12 +31,12 @@ public class RandomPositionIterator implements Iterator<Vector2d> {
 
     @Override
     public Vector2d next() {
-        int randomIndex = random.nextInt(rangeOfChoosing);
+        int randomIndex = random.nextInt(rangeOfChoosing + 1);
         int actualIndex = allIndicesList.get(randomIndex);
 
         Collections.swap(allIndicesList, randomIndex, rangeOfChoosing);
         remainingToGenerate -= 1;
         rangeOfChoosing -= 1;
-        return new Vector2d(actualIndex % maxWidth, actualIndex / maxWidth);
+        return new Vector2d(actualIndex % (maxWidth + 1), actualIndex / (maxWidth + 1));
     }
 }
