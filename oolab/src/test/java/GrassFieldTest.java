@@ -118,9 +118,13 @@ public class GrassFieldTest {
         List<WorldElement> allElements = map.getElements();
 
         for (WorldElement element : allElements) {
-            if (element.getClass() == Grass.class && map.isOccupied(element.getPosition())) { //przysłania zwierzak
-                assertNotEquals(element, map.objectAt(element.getPosition()));
-            } else assertEquals(element, map.objectAt(element.getPosition())); //tylko zwierzak lub tylko trawa
+            WorldElement object = map.objectAt(element.getPosition());
+
+            if (object.getClass() == Animal.class){
+                if (element.getClass() == Animal.class){
+                    assertEquals(element, object);
+                } else assertNotEquals(element, object);//zwierzak przysłania
+            } else assertEquals(element, object);
         }
     }
 }

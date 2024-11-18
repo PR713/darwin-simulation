@@ -6,10 +6,14 @@ import java.util.List;
 
 public class World {
     public static void main(String[] args) {
-        GrassField map = new GrassField(5);
-        Animal animal = new Animal(new Vector2d(3,3));
+        GrassField map = new GrassField(1);
+        Animal animal = new Animal(new Vector2d(1,1));
         Animal animal1 = new Animal(new Vector2d(1,0));
+        map.place(animal);
+        map.place(animal1);
+
         System.out.println(map);
+        //jeśli * trafi na ^ to rysuje ^ OK
     }
 
 

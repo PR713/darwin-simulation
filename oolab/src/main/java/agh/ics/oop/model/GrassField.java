@@ -31,6 +31,12 @@ public class GrassField extends AbstractWorldMap {
 
 
     @Override
+    public boolean isOccupied(Vector2d position){
+        return super.isOccupied(position) || grassTufts.containsKey(position);
+    }
+
+
+    @Override
     public WorldElement objectAt(Vector2d position) {
         WorldElement animalExist = super.objectAt(position);
         return (animalExist != null) ? animalExist : grassTufts.get(position);
@@ -55,7 +61,7 @@ public class GrassField extends AbstractWorldMap {
             miniValTemp = miniValTemp.lowerLeft(position);
             maxiValTemp = maxiValTemp.upperRight(position);
         }
-        
+
         return visualizer.draw(miniValTemp, maxiValTemp);
     }
 
