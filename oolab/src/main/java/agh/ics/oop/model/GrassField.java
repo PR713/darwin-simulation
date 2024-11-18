@@ -12,7 +12,6 @@ public class GrassField extends AbstractWorldMap {
     private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     private Vector2d maxiValTemp = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
     private Vector2d miniValTemp = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    private final List<WorldElement> elements = new ArrayList<>();
 
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
