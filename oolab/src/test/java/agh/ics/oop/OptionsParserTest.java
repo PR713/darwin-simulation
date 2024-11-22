@@ -38,13 +38,10 @@ public class OptionsParserTest {
     void testParser_WithIncorrectInput() {
         String[] arguments = {"f", "l", "abc", "a,", ",", "l", "b"};
 
-        List<MoveDirection> result = OptionsParser.parser(arguments);
-        List<MoveDirection> expected = List.of(
-                MoveDirection.FORWARD,
-                MoveDirection.LEFT,
-                MoveDirection.LEFT,
-                MoveDirection.BACKWARD);
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> OptionsParser.parser(arguments)
+        );
 
-        assertEquals(expected, result);
     }
 }

@@ -5,7 +5,7 @@ import agh.ics.oop.model.*;
 import java.util.List;
 
 public class World {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IncorrectPositionException {
         GrassField map = new GrassField(1);
         Animal animal = new Animal(new Vector2d(1,1));
         Animal animal1 = new Animal(new Vector2d(1,0));
@@ -14,6 +14,8 @@ public class World {
 
         System.out.println(map);
         //jeśli * trafi na ^ to rysuje ^ OK
+        Vector2d vector2d = new Vector2d(1,2);
+        System.out.println(vector2d);
     }
 
 

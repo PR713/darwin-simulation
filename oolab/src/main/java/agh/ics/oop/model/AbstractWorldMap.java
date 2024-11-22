@@ -18,12 +18,13 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public boolean place(Animal animal) {
+    public void place(Animal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
-            return true;
+        } else {
+            throw new IncorrectPositionException(animal.getPosition());
         }
-        return false;
+
     }
 
 

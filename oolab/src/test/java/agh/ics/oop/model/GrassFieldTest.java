@@ -27,7 +27,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void testPlaceAnimalOnGrass() {
+    public void testPlaceAnimalOnGrass() throws IncorrectPositionException {
         GrassField map = new GrassField(6);
 
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
@@ -53,7 +53,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void testCanMoveTo() {
+    public void testCanMoveTo() throws IncorrectPositionException {
         GrassField map = new GrassField(5);
 
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
@@ -70,7 +70,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void testGetElements() {
+    public void testGetElements() throws IncorrectPositionException {
         GrassField map = new GrassField(2);
         Vector2d vector1 = new Vector2d(2, 2);
         Vector2d vector2 = new Vector2d(1, 2);
@@ -110,7 +110,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void objectAtReturnsAnimalsAndGrass() {
+    public void objectAtReturnsAnimalsAndGrass() throws IncorrectPositionException {
         GrassField map = new GrassField(1);
         Vector2d vector = new Vector2d(1, 3);
         Vector2d vector1 = new Vector2d(2, 1);
