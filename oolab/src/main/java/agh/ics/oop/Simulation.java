@@ -24,6 +24,8 @@ public class Simulation {
             System.out.println(map.toString());
         }
     }
+
+
     public void run() {
         for (int index = 0; index < listOfMoves.size(); index++) {
             int animalIndex = index % animals.size();
@@ -32,6 +34,7 @@ public class Simulation {
             System.out.println(map.toString());
         }
     }
+
 
     public List<Animal> getAnimals() {
         return Collections.unmodifiableList(animals); //only view on animals List
