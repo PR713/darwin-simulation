@@ -1,23 +1,20 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.util.MapVisualizer;
+import agh.ics.oop.model.util.RandomPositionGenerator;
 
 import java.util.*;
 
 public class GrassField extends AbstractWorldMap {
-    private final int numOfGrassFields;
     private final int maxDimensionOfGrassFields;
-    private final MapVisualizer visualizer;
+    private final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     private static final Vector2d MIN_VALUE = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
     private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    private Vector2d maxiValTemp = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
-    private Vector2d miniValTemp = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    private Vector2d maxiValTemp = MIN_VALUE;
+    private Vector2d miniValTemp = MAX_VALUE;
 
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
-        this.numOfGrassFields = numOfGrassFields;
         this.maxDimensionOfGrassFields = (int) Math.floor(Math.sqrt(numOfGrassFields*10));
-        this.visualizer = new MapVisualizer(this);
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxDimensionOfGrassFields, maxDimensionOfGrassFields, numOfGrassFields);
         Iterator<Vector2d> positionsIterator = randomPositionGenerator.iterator();
@@ -43,13 +40,9 @@ public class GrassField extends AbstractWorldMap {
 
 
     @Override
-    public boolean canMoveTo(Vector2d position) {
-        return !super.isOccupied(position);
-    }
-
-
-    @Override
     public String toString(){
+        maxiValTemp = MIN_VALUE;
+        miniValTemp = MAX_VALUE;
 
         for (Vector2d position : animals.keySet()) {
             miniValTemp = miniValTemp.lowerLeft(position);
@@ -69,11 +62,11 @@ public class GrassField extends AbstractWorldMap {
     public List<WorldElement> getElements(){
         List<WorldElement> allElements = new ArrayList<>(super.getElements());
         allElements.addAll(grassTufts.values());
-        return List.copyOf(allElements);
+        return Collections.unmodifiableList(allElements);
     }
 
 
-    public Map<Vector2d, Grass> getGrassTufts() {
+    Map<Vector2d, Grass> getGrassTufts() {
         return Collections.unmodifiableMap(grassTufts);
     }
 }

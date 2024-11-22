@@ -1,4 +1,4 @@
-import agh.ics.oop.World;
+
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +31,16 @@ public class GrassFieldTest {
         GrassField map = new GrassField(6);
 
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
+        //List<WorldElement> allElements = map.getElements();
+        //int amountOfGrassTufts = 0;
+        //for (WorldElement element : allElements) {
+        //    if (element.getClass() == Grass.class) {
+        //        amountOfGrassTufts += 1;
+        //    }
+        //} + tworzenie listy od nowa itd...
+        //assertEquals(6, amountOfGrassTufts);
+        //ewentualnie tak zamiast package private allGrassTufts()
         assertEquals(6, allGrassTufts.size());
-
         Vector2d occupiedPosition = allGrassTufts.keySet().iterator().next();
         Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
 
