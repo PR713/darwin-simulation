@@ -48,7 +48,7 @@ public class RectangularMapTest {
 
 
     @Test
-    public void moveAnimalsWithChangingOrienationsOrPositions() {
+    public void moveAnimalsWithChangingOrientationsOrPositions() {
         RectangularMap map = new RectangularMap(7, 7);
         Vector2d vector1 = new Vector2d(2, 3);
         Animal animal1 = new Animal(vector1);

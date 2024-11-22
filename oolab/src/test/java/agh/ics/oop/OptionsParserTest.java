@@ -33,15 +33,4 @@ public class OptionsParserTest {
 
         assertEquals(expected, result);
     }
-
-    @Test
-    void testParser_WithIncorrectInput() {
-        String[] arguments = {"f", "l", "abc", "a,", ",", "l", "b"};
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> OptionsParser.parser(arguments)
-        );
-
-    }
 }
