@@ -1,16 +1,19 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.MapVisualizer;
+
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     protected final Map<Vector2d, Animal> animals = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
+    protected final MapVisualizer visualizer;
 
     public AbstractWorldMap(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
+        this.visualizer = new MapVisualizer(this);
     }
 
 
@@ -46,6 +49,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public WorldElement objectAt(Vector2d position) {
         return animals.get(position);
+    }
+
+
+    @Override
+    public boolean canMoveTo(Vector2d position) {
+        return !animals.containsKey(position);
     }
 
 

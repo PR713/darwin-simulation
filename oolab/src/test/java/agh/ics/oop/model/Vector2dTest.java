@@ -1,4 +1,5 @@
-import agh.ics.oop.model.Vector2d;
+package agh.ics.oop.model;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
