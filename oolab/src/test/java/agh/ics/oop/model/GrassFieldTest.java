@@ -1,5 +1,5 @@
 
-import agh.ics.oop.model.*;
+package agh.ics.oop.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,5 +1,5 @@
-import agh.ics.oop.OptionsParser;
-import agh.ics.oop.Simulation;
+package agh.ics.oop;
+
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 

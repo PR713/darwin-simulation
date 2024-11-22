@@ -5,16 +5,13 @@ import agh.ics.oop.model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class GrassField extends AbstractWorldMap {
-    private final int maxDimensionOfGrassFields;
     private final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     private static final Vector2d MIN_VALUE = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
     private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    private Vector2d maxiValTemp = MIN_VALUE;
-    private Vector2d miniValTemp = MAX_VALUE;
 
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
-        this.maxDimensionOfGrassFields = (int) Math.floor(Math.sqrt(numOfGrassFields*10));
+        int maxDimensionOfGrassFields = (int) Math.floor(Math.sqrt(numOfGrassFields * 10));
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxDimensionOfGrassFields, maxDimensionOfGrassFields, numOfGrassFields);
         Iterator<Vector2d> positionsIterator = randomPositionGenerator.iterator();
@@ -41,8 +38,8 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public String toString(){
-        maxiValTemp = MIN_VALUE;
-        miniValTemp = MAX_VALUE;
+        Vector2d maxiValTemp = MIN_VALUE;
+        Vector2d miniValTemp = MAX_VALUE;
 
         for (Vector2d position : animals.keySet()) {
             miniValTemp = miniValTemp.lowerLeft(position);
