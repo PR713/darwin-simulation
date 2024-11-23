@@ -9,6 +9,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
+    private final List<MapChangeListener> observers = new ArrayList<>();
 
     public AbstractWorldMap(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
@@ -64,4 +65,33 @@ public abstract class AbstractWorldMap implements WorldMap {
         return List.copyOf(animals.values());
     }
 
+
+    @Override
+    public abstract Boundary getCurrentBounds();
+
+
+    public void addObserver(MapChangeListener observer){
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+
+    public void removeObserver(MapChangeListener observer){
+        observers.remove(observer);
+    }
+
+
+    protected void mapChanged(String message){
+        for (MapChangeListener observer : observers) {
+            observer.mapChanged(this, message);
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        Boundary bounds = getCurrentBounds();
+        return visualizer.draw(bounds.bottomLeft(), bounds.topRight());
+    }
 }
