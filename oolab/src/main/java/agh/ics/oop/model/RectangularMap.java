@@ -1,9 +1,11 @@
 package agh.ics.oop.model;
 
 public class RectangularMap extends AbstractWorldMap  {
+    private final Boundary boundaries;
 
     public RectangularMap(int width, int height) {
         super(new Vector2d(0, 0), new Vector2d(width - 1, height - 1));
+        boundaries = new Boundary(lowerLeft, upperRight);
     }
 
 
@@ -15,6 +17,6 @@ public class RectangularMap extends AbstractWorldMap  {
 
     @Override
     public Boundary getCurrentBounds(){
-        return new Boundary(lowerLeft, upperRight);
+        return boundaries;
     }
 }
