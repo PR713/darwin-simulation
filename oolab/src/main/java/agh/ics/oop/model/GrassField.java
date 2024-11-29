@@ -9,6 +9,7 @@ public class GrassField extends AbstractWorldMap {
     private static final Vector2d MIN_VALUE = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
     private static final Vector2d MAX_VALUE = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
+
     public GrassField(int numOfGrassFields){
         super(MIN_VALUE, MAX_VALUE);
         int maxDimensionOfGrassFields = (int) Math.floor(Math.sqrt(numOfGrassFields * 10));
@@ -37,7 +38,7 @@ public class GrassField extends AbstractWorldMap {
 
 
     @Override
-    public String toString(){
+    public Boundary getCurrentBounds(){
         Vector2d maxiValTemp = MIN_VALUE;
         Vector2d miniValTemp = MAX_VALUE;
 
@@ -51,7 +52,7 @@ public class GrassField extends AbstractWorldMap {
             maxiValTemp = maxiValTemp.upperRight(position);
         }
 
-        return visualizer.draw(miniValTemp, maxiValTemp);
+        return new Boundary(miniValTemp, maxiValTemp);
     }
 
 

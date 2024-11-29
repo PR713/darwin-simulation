@@ -20,7 +20,7 @@ public class Vector2d {
     }
 
     public String toString() {
-        return "(" + x + ", " + y + ")";
+        return String.format("(%s, %s)", x, y);
     }
 
     public boolean precedes(Vector2d other) {

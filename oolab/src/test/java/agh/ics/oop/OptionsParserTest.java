@@ -13,7 +13,7 @@ public class OptionsParserTest {
     void testParser_WithValidInput_ReturnsCorrectDirections() {
         String[] arguments = {"f", "b", "r", "r", "l"};
 
-        List<MoveDirection> result = OptionsParser.parser(arguments);
+        List<MoveDirection> result = OptionsParser.parseToMoveDirection(arguments);
         List<MoveDirection> expected = List.of(
                 MoveDirection.FORWARD,
                 MoveDirection.BACKWARD,
@@ -28,7 +28,7 @@ public class OptionsParserTest {
     void testParser_WithEmptyInput() {
         String[] arguments = {};
 
-        List<MoveDirection> result = OptionsParser.parser(arguments);
+        List<MoveDirection> result = OptionsParser.parseToMoveDirection(arguments);
         List<MoveDirection> expected = List.of();
 
         assertEquals(expected, result);
@@ -38,13 +38,10 @@ public class OptionsParserTest {
     void testParser_WithIncorrectInput() {
         String[] arguments = {"f", "l", "abc", "a,", ",", "l", "b"};
 
-        List<MoveDirection> result = OptionsParser.parser(arguments);
-        List<MoveDirection> expected = List.of(
-                MoveDirection.FORWARD,
-                MoveDirection.LEFT,
-                MoveDirection.LEFT,
-                MoveDirection.BACKWARD);
-
-        assertEquals(expected, result);
+        IllegalArgumentException exception = (assertThrows(
+                IllegalArgumentException.class,
+                () -> OptionsParser.parseToMoveDirection(arguments)
+        ));
     }
 }
+

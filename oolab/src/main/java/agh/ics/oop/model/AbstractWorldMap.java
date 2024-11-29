@@ -1,5 +1,6 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
@@ -9,6 +10,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
+    private final List<MapChangeListener> observers = new ArrayList<>();
 
     public AbstractWorldMap(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
@@ -18,12 +20,14 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public boolean place(Animal animal) {
+    public void place(Animal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
-            return true;
+            mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
+        } else {
+            throw new IncorrectPositionException(animal.getPosition());
         }
-        return false;
+
     }
 
 
@@ -36,6 +40,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (!oldPosition.equals(newPosition)) {
             animals.remove(oldPosition);
             animals.put(newPosition, animal);
+            mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
     }
 
@@ -63,4 +68,33 @@ public abstract class AbstractWorldMap implements WorldMap {
         return List.copyOf(animals.values());
     }
 
+
+    @Override
+    public abstract Boundary getCurrentBounds();
+
+
+    public void addObserver(MapChangeListener observer){
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+
+    public void removeObserver(MapChangeListener observer){
+        observers.remove(observer);
+    }
+
+
+    protected void mapChanged(String message){
+        for (MapChangeListener observer : observers) {
+            observer.mapChanged(this, message);
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        Boundary bounds = getCurrentBounds();
+        return visualizer.draw(bounds.bottomLeft(), bounds.topRight());
+    }
 }

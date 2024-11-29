@@ -1,5 +1,6 @@
 
 package agh.ics.oop.model;
+import agh.ics.oop.exceptions.IncorrectPositionException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class GrassFieldTest {
         Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
 
         Animal animal = new Animal(occupiedPosition);
-        map.place(animal);
+        assertDoesNotThrow(() -> map.place(animal));
 
         assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition));
         assertEquals(animal, map.objectAt(occupiedPosition));
@@ -63,8 +64,8 @@ public class GrassFieldTest {
         Vector2d vector1 = new Vector2d(1, 2);
         Animal animal = new Animal(vector);
         Animal animal1 = new Animal(vector1);
-        map.place(animal);
-        map.place(animal1);
+        assertDoesNotThrow(() -> map.place(animal));
+        assertDoesNotThrow(() -> map.place(animal1));
         assertFalse(map.canMoveTo(vector));
     }
 
@@ -77,8 +78,8 @@ public class GrassFieldTest {
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> result = map.getElements();
         List<WorldElement> expected = new ArrayList<>();
@@ -119,9 +120,9 @@ public class GrassFieldTest {
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal);
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal));
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> allElements = map.getElements();
 
