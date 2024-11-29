@@ -28,7 +28,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void testPlaceAnimalOnGrass() throws IncorrectPositionException {
+    public void testPlaceAnimalOnGrass() {
         GrassField map = new GrassField(6);
 
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
@@ -46,7 +46,7 @@ public class GrassFieldTest {
         Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
 
         Animal animal = new Animal(occupiedPosition);
-        map.place(animal);
+        assertDoesNotThrow(() -> map.place(animal));
 
         assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition));
         assertEquals(animal, map.objectAt(occupiedPosition));
@@ -54,7 +54,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void testCanMoveTo() throws IncorrectPositionException {
+    public void testCanMoveTo() {
         GrassField map = new GrassField(5);
 
         Map<Vector2d, Grass> allGrassTufts = map.getGrassTufts();
@@ -64,22 +64,22 @@ public class GrassFieldTest {
         Vector2d vector1 = new Vector2d(1, 2);
         Animal animal = new Animal(vector);
         Animal animal1 = new Animal(vector1);
-        map.place(animal);
-        map.place(animal1);
+        assertDoesNotThrow(() -> map.place(animal));
+        assertDoesNotThrow(() -> map.place(animal1));
         assertFalse(map.canMoveTo(vector));
     }
 
 
     @Test
-    public void testGetElements() throws IncorrectPositionException {
+    public void testGetElements() {
         GrassField map = new GrassField(2);
         Vector2d vector1 = new Vector2d(2, 2);
         Vector2d vector2 = new Vector2d(1, 2);
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> result = map.getElements();
         List<WorldElement> expected = new ArrayList<>();
@@ -111,7 +111,7 @@ public class GrassFieldTest {
 
 
     @Test
-    public void objectAtReturnsAnimalsAndGrass() throws IncorrectPositionException {
+    public void objectAtReturnsAnimalsAndGrass() {
         GrassField map = new GrassField(1);
         Vector2d vector = new Vector2d(1, 3);
         Vector2d vector1 = new Vector2d(2, 1);
@@ -120,9 +120,9 @@ public class GrassFieldTest {
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal);
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal));
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> allElements = map.getElements();
 

@@ -10,15 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RectangularMapTest {
     @Test
-    public void placingAnimalsOnMap() throws IncorrectPositionException {
+    public void placingAnimalsOnMap() {
         RectangularMap map = new RectangularMap(5, 5);
         Vector2d vector1 = new Vector2d(2, 2);
         Vector2d vector2 = new Vector2d(1, 3);
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         assertTrue(map.isOccupied(vector1));
         assertTrue(map.isOccupied(vector2));
@@ -30,13 +30,19 @@ public class RectangularMapTest {
 
 
     @Test
-    public void placingAnimalsOnMapWithTheSamePositions() throws IncorrectPositionException {
+    public void placingAnimalsOnMapWithTheSamePositions() {
         RectangularMap map = new RectangularMap(5, 5);
         Vector2d vector = new Vector2d(2, 2);
         Animal animal1 = new Animal(vector);
         Animal animal2 = new Animal(vector);
 
-        map.place(animal1);
+        assertDoesNotThrow(() -> map.place(animal1));
+        //try { lub tak
+        //    map.place(animal1);
+        //} catch (IncorrectPositionException e) {
+        //    fail("Expected no exception, but got: " + e);
+        //} a oczekujemy że nie ma co łapać
+
         IncorrectPositionException exception = assertThrows(
                 IncorrectPositionException.class,
                 () -> map.place(animal2)
@@ -96,15 +102,15 @@ public class RectangularMapTest {
 
 
     @Test
-    public void elementsRectangularMap() throws IncorrectPositionException {
+    public void elementsRectangularMap() {
         RectangularMap map = new RectangularMap(4, 4);
         Vector2d vector1 = new Vector2d(1, 3);
         Animal animal1 = new Animal(vector1);
         Vector2d vector2 = new Vector2d(3, 2);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> result = map.getElements();
         List<WorldElement> expected = new ArrayList<>();
@@ -120,7 +126,7 @@ public class RectangularMapTest {
 
 
     @Test
-    public void elementsButSameRectangularMap() throws IncorrectPositionException {
+    public void elementsButSameRectangularMap() {
         RectangularMap map = new RectangularMap(4, 4);
         Vector2d vector1 = new Vector2d(1, 3);
         Animal animal1 = new Animal(vector1);
@@ -129,15 +135,15 @@ public class RectangularMapTest {
         Vector2d vector3 = new Vector2d(3, 2);
         Animal animal3 = new Animal(vector3);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
-        IncorrectPositionException exception = assertThrows(
+        IncorrectPositionException exception3 = assertThrows(
                 IncorrectPositionException.class,
                 () -> map.place(animal3)
         );
 
-        assertEquals("Position (3, 2) is not correct", exception.getMessage());
+        assertEquals("Position (3, 2) is not correct", exception3.getMessage());
         List<WorldElement> result = map.getElements();
         List<WorldElement> expected = new ArrayList<>();
         expected.add(animal1);
@@ -149,15 +155,15 @@ public class RectangularMapTest {
     }
 
     @Test
-    public void getElementsButOnlyAnimals() throws IncorrectPositionException {
+    public void getElementsButOnlyAnimals() {
         RectangularMap map = new RectangularMap(5, 5);
         Vector2d vector1 = new Vector2d(2, 4);
         Vector2d vector2 = new Vector2d(1, 2);
         Animal animal1 = new Animal(vector1);
         Animal animal2 = new Animal(vector2);
 
-        map.place(animal1);
-        map.place(animal2);
+        assertDoesNotThrow(() -> map.place(animal1));
+        assertDoesNotThrow(() -> map.place(animal2));
 
         List<WorldElement> allAnimals = map.getElements();
 

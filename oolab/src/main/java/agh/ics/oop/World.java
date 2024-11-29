@@ -5,11 +5,11 @@ import agh.ics.oop.model.*;
 
 import java.util.List;
 
-import static agh.ics.oop.OptionsParser.parser;
+import static agh.ics.oop.OptionsParser.parseToMoveDirection;
 
 public class World {
     public static void main(String[] args) throws IncorrectPositionException {
-        List<MoveDirection> directions = parser(args);
+        List<MoveDirection> directions = parseToMoveDirection(args);
         AbstractWorldMap map1 = new GrassField(5);
         AbstractWorldMap map2 = new RectangularMap(5,5);
         List<Vector2d> positions = List.of(new Vector2d(1,1), new Vector2d(2,4),new Vector2d(1,3));

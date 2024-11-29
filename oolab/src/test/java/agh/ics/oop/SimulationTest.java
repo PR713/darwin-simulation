@@ -14,7 +14,7 @@ public class SimulationTest {
         Vector2d position1 = new Vector2d(2,2);
         Vector2d position2 = new Vector2d(3,4);
         List<Vector2d> positions = List.of(position1, position2);
-        List<MoveDirection> directions = OptionsParser.parser(new String[] {});
+        List<MoveDirection> directions = OptionsParser.parseToMoveDirection(new String[] {});
         WorldMap map = new RectangularMap(5,5);
         Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
@@ -29,7 +29,7 @@ public class SimulationTest {
     @Test
     void withChangingPositionAndOrientationNorthEast() {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4));
-        List<MoveDirection> directions = OptionsParser.parser(new String[] {"f","r","b","f"});
+        List<MoveDirection> directions = OptionsParser.parseToMoveDirection(new String[] {"f","r","b","f"});
         WorldMap map = new RectangularMap(5,5);
         Simulation simulation = new Simulation(positions, directions,map);
         simulation.run();
@@ -47,7 +47,7 @@ public class SimulationTest {
     @Test
     void withChangingPositionAndOrientationSouthWest() {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3));
-        List<MoveDirection> directions = OptionsParser.parser(new String[] {"r","f","r","l"});
+        List<MoveDirection> directions = OptionsParser.parseToMoveDirection(new String[] {"r","f","r","l"});
         WorldMap map = new RectangularMap(5,5);
         Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
@@ -67,7 +67,7 @@ public class SimulationTest {
         Vector2d position1 = new Vector2d(4,1);
         Vector2d position2 = new Vector2d(2,4);
         List<Vector2d> positions = List.of(position1, position2);
-        List<MoveDirection> directions = OptionsParser.parser(new String [] {"r","f","f"});
+        List<MoveDirection> directions = OptionsParser.parseToMoveDirection(new String [] {"r","f","f"});
         WorldMap map = new RectangularMap(5,5);
         Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
@@ -87,7 +87,7 @@ public class SimulationTest {
         Vector2d position1 = new Vector2d(0,1);
         Vector2d position2 = new Vector2d(2,0);
         List<Vector2d> positions = List.of(position1, position2);
-        List<MoveDirection> directions = OptionsParser.parser(new String [] {"l","b","f"});
+        List<MoveDirection> directions = OptionsParser.parseToMoveDirection(new String [] {"l","b","f"});
         WorldMap map = new RectangularMap(5,5);
         Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
