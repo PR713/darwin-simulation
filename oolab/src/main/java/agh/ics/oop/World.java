@@ -17,10 +17,10 @@ public class World {
         map2.addObserver(new ConsoleMapDisplay());
 
         Simulation simulation1 = new Simulation(positions, directions,  map1);
-        simulation1.run();
-
         Simulation simulation2 = new Simulation(positions, directions,  map2);
-        simulation2.run();
+        List<Simulation> simulations = List.of(simulation1, simulation2);
+        SimulationEngine engine = new SimulationEngine(simulations);
+        engine.runAsync();
     }
 
 
