@@ -15,12 +15,15 @@ public class World {
         List<Vector2d> positions = List.of(new Vector2d(1,1), new Vector2d(2,4),new Vector2d(1,3));
         map1.addObserver(new ConsoleMapDisplay());
         map2.addObserver(new ConsoleMapDisplay());
-
+        //sekwencyjnie place map1, place map2 potem move map1, move map2
         Simulation simulation1 = new Simulation(positions, directions,  map1);
         Simulation simulation2 = new Simulation(positions, directions,  map2);
         List<Simulation> simulations = List.of(simulation1, simulation2);
         SimulationEngine engine = new SimulationEngine(simulations);
+        //engine.runSync()
         engine.runAsync();
+        engine.awaitSimulationsEnd();
+        System.out.println("System zakończył działanie");
     }
 
 
