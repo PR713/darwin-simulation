@@ -3,6 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static agh.ics.oop.OptionsParser.parseToMoveDirection;
@@ -10,15 +11,18 @@ import static agh.ics.oop.OptionsParser.parseToMoveDirection;
 public class World {
     public static void main(String[] args) throws IncorrectPositionException {
         List<MoveDirection> directions = parseToMoveDirection(args);
-        AbstractWorldMap map1 = new GrassField(5);
-        AbstractWorldMap map2 = new RectangularMap(5,5);
+        //AbstractWorldMap map1 = new GrassField(5);
+        //AbstractWorldMap map2 = new RectangularMap(5,5);
         List<Vector2d> positions = List.of(new Vector2d(1,1), new Vector2d(2,4),new Vector2d(1,3));
-        map1.addObserver(new ConsoleMapDisplay());
-        map2.addObserver(new ConsoleMapDisplay());
-        //sekwencyjnie place map1, place map2 potem move map1, move map2
-        Simulation simulation1 = new Simulation(positions, directions,  map1);
-        Simulation simulation2 = new Simulation(positions, directions,  map2);
-        List<Simulation> simulations = List.of(simulation1, simulation2);
+        //sekwencyjnie place map1, place map2 potem move map1, move map2 dla runSync()
+
+        List<Simulation> simulations = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            AbstractWorldMap map = (i % 2 == 1) ? new GrassField(5) : new RectangularMap(5,5);
+            map.addObserver(new ConsoleMapDisplay());
+            simulations.add(new Simulation(positions, directions, map));
+        }
+
         SimulationEngine engine = new SimulationEngine(simulations);
         //engine.runSync()
         engine.runAsync();

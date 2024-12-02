@@ -1,7 +1,5 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.MapChangeListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +33,8 @@ public class SimulationEngine {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                System.err.println("Wątek został przerwany: " + thread.getName());
+                Thread.currentThread().interrupt();
             }
         }
     }

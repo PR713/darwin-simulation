@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Simulation implements Runnable {
+public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
     private final List<Animal> animals;
     private final List<MoveDirection> listOfMoves;
     private final WorldMap map;
