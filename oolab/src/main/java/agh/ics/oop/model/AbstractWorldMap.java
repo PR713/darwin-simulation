@@ -103,6 +103,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return visualizer.draw(bounds.bottomLeft(), bounds.topRight());
     }
 
+
     @Override
     public UUID getId(){
         return id;
