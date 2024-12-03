@@ -1,6 +1,5 @@
 package agh.ics.oop;
 
-import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.*;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class World {
 
         ConsoleMapDisplay display = new ConsoleMapDisplay();
         List<Simulation> simulations = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 3000; i++) {
             AbstractWorldMap map = (i % 2 == 1) ? new GrassField(5) : new RectangularMap(5,5);
             map.addObserver(display);
             simulations.add(new Simulation(positions, directions, map));
@@ -28,7 +27,10 @@ public class World {
         //engine.runSync()
         //engine.runAsync();
         engine.runAsyncInThreadPool();
-        engine.awaitSimulationsEnd();
+        try {engine.awaitSimulationsEnd();
+        } catch (InterruptedException e) {
+            System.err.println("Oczekiwanie na zakończenie symulacji zostało przerwane.");
+        }
         System.out.println("System zakończył działanie");
     }
 

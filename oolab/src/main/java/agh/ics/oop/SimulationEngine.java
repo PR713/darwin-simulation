@@ -29,23 +29,17 @@ public class SimulationEngine {
         }
     };
 
-    public void awaitSimulationsEnd(){
+    public void awaitSimulationsEnd() throws InterruptedException{
             executorService.shutdown();
-            try {
-                if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
-                    System.err.println("Pula wątków nie zakończyła działania w ciągu 10 sekund");
-                    executorService.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                System.err.println("Oczekiwanie na zakończenie puli zostało przerwane.");
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+                System.err.println("Pula wątków nie zakończyła działania w ciągu 10 sekund");
                 executorService.shutdownNow();
-                Thread.currentThread().interrupt();
-                }
+            }
 
 //            for (Thread thread : threads) { //belongs to runAsync()
 //                try {
 //                    thread.join();
-//                } catch (InterruptedException e) {
+//                } catch (InterruptedException e) { //lub lepiej throws do maina
 //                    System.err.println("Wątek został przerwany: " + thread.getName());
 //                    Thread.currentThread().interrupt();
 //                }
