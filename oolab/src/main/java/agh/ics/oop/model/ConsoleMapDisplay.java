@@ -11,6 +11,6 @@ public class ConsoleMapDisplay implements MapChangeListener {
             System.out.println(message);
             System.out.println(map);
             System.out.printf("Map %s update %d %n%n%n", map.getId(), updateCount.incrementAndGet());
-        }
+        } // lub bez synchronized i wszystko w jeden System.out.printf(...) :)
     }
 }

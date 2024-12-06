@@ -9,10 +9,13 @@ import java.util.concurrent.TimeUnit;
 public class SimulationEngine {
     private final List<Simulation> simulationsList;
     private final List<Thread> threads = new ArrayList<>();
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     public SimulationEngine(List<Simulation> simulationsList) {
         this.simulationsList = simulationsList;
+        this.executorService = Executors.newFixedThreadPool(4);
+        //lepiej tutaj executorService inicjalizować żeby przypadkiem jak ktoś
+        //dwa razy wywoła runAsyncInThreadPool nie stracić poprzedniego executorService
     };
 
     public void runSync(){ //synchronicznie -> sekwencyjnie
@@ -30,24 +33,18 @@ public class SimulationEngine {
     };
 
     public void awaitSimulationsEnd() throws InterruptedException{
-            executorService.shutdown();
+            executorService.shutdown(); // dla ThreadPool
             if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 System.err.println("Pula wątków nie zakończyła działania w ciągu 10 sekund");
                 executorService.shutdownNow();
             }
-
-//            for (Thread thread : threads) { //belongs to runAsync()
-//                try {
-//                    thread.join();
-//                } catch (InterruptedException e) { //lub lepiej throws do maina
-//                    System.err.println("Wątek został przerwany: " + thread.getName());
-//                    Thread.currentThread().interrupt();
-//                }
-//            }
+            //jeśli runAsync()
+            for (Thread thread : threads) { //belongs to runAsync()
+                    thread.join();
+            }
     }
 
     public void runAsyncInThreadPool(){
-        executorService = Executors.newFixedThreadPool(4);
         for (Simulation simulation : simulationsList){
             executorService.submit(simulation);
         }
