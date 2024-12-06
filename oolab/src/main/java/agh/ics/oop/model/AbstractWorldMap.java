@@ -11,11 +11,16 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
     private final List<MapChangeListener> observers = new ArrayList<>();
+    //observers w przyszłości jak WorldElement może mieć różne typy obiektów a implementację MapChangeListener
+    //już w swoich klasach jak Animal i Grass = WorldElement
+    private final UUID id;
 
     public AbstractWorldMap(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
         this.visualizer = new MapVisualizer(this);
+        this.id = UUID.randomUUID();
+
     }
 
 
@@ -96,5 +101,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     public String toString() {
         Boundary bounds = getCurrentBounds();
         return visualizer.draw(bounds.bottomLeft(), bounds.topRight());
+    }
+
+
+    @Override
+    public UUID getId(){
+        return id;
     }
 }
