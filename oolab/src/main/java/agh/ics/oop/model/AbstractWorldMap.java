@@ -77,7 +77,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public abstract Boundary getCurrentBounds();
 
-
+    @Override
     public void addObserver(MapChangeListener observer){
         if (!observers.contains(observer)) {
             observers.add(observer);

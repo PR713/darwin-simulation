@@ -1,11 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
-import javafx.application.Application;
-
 import java.util.List;
-
-import static agh.ics.oop.OptionsParser.parseToMoveDirection;
 
 public class World {
     public static void main(String[] args) {
@@ -35,8 +31,7 @@ public class World {
 
 
 
-
-        Application.launch(SimulationApp.class, args);
+        //Application.launch(SimulationApp.class, args);
     }
 
 

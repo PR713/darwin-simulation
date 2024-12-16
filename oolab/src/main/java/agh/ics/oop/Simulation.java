@@ -34,6 +34,14 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             int animalIndex = index % animals.size();
             Animal animal = animals.get(animalIndex);
             map.move(animal, listOfMoves.get(index));
+
+            try {
+                Thread.sleep(500);
+
+            } catch (InterruptedException e) {
+                System.err.println("Symulacja przerwana: " + e.getMessage());
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
