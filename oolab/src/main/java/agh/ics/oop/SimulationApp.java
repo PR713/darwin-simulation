@@ -37,7 +37,7 @@ public class SimulationApp extends Application {
         BorderPane viewRoot = loader.load();
         SimulationPresenter presenter = loader.getController();
 
-        WorldMap map = new GrassField(5);
+        GrassField map = new GrassField(5);
         presenter.setWorldMap(map);
         map.addObserver(presenter);
         ConsoleMapDisplay consoleDisplay = new ConsoleMapDisplay();

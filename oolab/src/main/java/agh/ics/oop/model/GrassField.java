@@ -34,6 +34,7 @@ public class GrassField extends AbstractWorldMap {
     public WorldElement objectAt(Vector2d position) {
         WorldElement animalExist = super.objectAt(position);
         return (animalExist != null) ? animalExist : grassTufts.get(position);
+        //get(position) jeśli nie ma to da nulla
     }
 
 
