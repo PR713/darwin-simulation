@@ -20,11 +20,12 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="10" maxWidth="-Infinity">
-            <GridPane fx:id="mapGrid" gridLinesVisible="true"/>
+        <VBox  spacing="10" alignment="CENTER">
+            <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>
 <!--            <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>-->
             <Button text="Start" onAction="#onSimulationStartClicked"/>
             <Button text="New Simulation" onAction="#newGame"/>
         </VBox>
     </center>
+
 </BorderPane>
