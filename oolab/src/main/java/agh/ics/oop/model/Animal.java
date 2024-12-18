@@ -55,8 +55,8 @@ public class Animal implements WorldElement {
                 newPosition = this.position.subtract(this.orientation.toUnitVector());
                 break;
         };
-        if (validator.canMoveTo(newPosition)){
-            this.position = newPosition;
+        if (validator.canMoveTo(newPosition)){ //validator to mapa
+            this.position = newPosition; //wywołane na animal
         }
     }
 }
