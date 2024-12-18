@@ -37,11 +37,12 @@ public class SimulationApp extends Application {
         BorderPane viewRoot = loader.load();
         SimulationPresenter presenter = loader.getController();
 
-        GrassField map = new GrassField(5);
-        presenter.setWorldMap(map);
-        map.addObserver(presenter);
-        ConsoleMapDisplay consoleDisplay = new ConsoleMapDisplay();
-        map.addObserver(consoleDisplay);
+        //to do Lab8 bez extra
+        //GrassField map = new GrassField(5);
+        //presenter.setWorldMap(map);
+        //map.addObserver(presenter);
+        //ConsoleMapDisplay consoleDisplay = new ConsoleMapDisplay();
+        //map.addObserver(consoleDisplay);
 
         configureStage(primaryStage, viewRoot);
         primaryStage.show();

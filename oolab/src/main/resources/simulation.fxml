@@ -19,12 +19,12 @@
         </VBox>
     </top>
 
-
     <center>
         <VBox alignment="CENTER" spacing="10" maxWidth="-Infinity">
             <GridPane fx:id="mapGrid" gridLinesVisible="true"/>
 <!--            <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>-->
-            <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked"/>
+            <Button text="Start" onAction="#onSimulationStartClicked"/>
+            <Button text="New Simulation" onAction="#newGame"/>
         </VBox>
     </center>
 </BorderPane>

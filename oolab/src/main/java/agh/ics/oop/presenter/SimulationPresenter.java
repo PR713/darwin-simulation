@@ -2,23 +2,23 @@ package agh.ics.oop.presenter;
 
 
 import agh.ics.oop.Simulation;
+import agh.ics.oop.SimulationApp;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
+
 
 import static agh.ics.oop.OptionsParser.parseToMoveDirection;
 
@@ -26,8 +26,8 @@ public class SimulationPresenter implements MapChangeListener {
 
     private WorldMap worldMap;
 
-    @FXML
-    private Label infoLabel;
+    //@FXML
+    //private Label infoLabel;
 
     @FXML
     private Label infoLabelMove;
@@ -36,13 +36,11 @@ public class SimulationPresenter implements MapChangeListener {
     private TextField movementTextField;
 
     @FXML
-    private Button startButton;
-
-    @FXML
     private GridPane mapGrid;
 
     private static final double CELL_WIDTH = 50.0;
     private static final double CELL_HEIGHT = 50.0;
+
 
     public void setWorldMap(WorldMap map) {
         this.worldMap = map;
@@ -50,6 +48,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
+        setWorldMap(worldMap);
         Platform.runLater(()-> {
             drawMap(message);
             infoLabelMove.setText(message);
@@ -109,17 +108,8 @@ public class SimulationPresenter implements MapChangeListener {
         }
 
         //infoLabel.setText(worldMap.toString());
-
     }
 
-    public void onSimulationStartClicked(ActionEvent actionEvent){
-        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
-        List<MoveDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
-
-        Simulation simulationGrassField = new Simulation(positions, moves, worldMap);
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
-        simulationEngine.runAsync();
-    }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
@@ -128,5 +118,38 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
 
+    @FXML
+    private void onSimulationStartClicked(ActionEvent actionEvent){
+        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
+        List<MoveDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
+        AbstractWorldMap map = new GrassField(5);
+        map.addObserver(this);
 
+        Simulation simulationGrassField = new Simulation(positions, moves, map);
+
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
+
+        simulationEngine.runAsync();
+        new Thread(() -> {
+            try {
+                simulationEngine.awaitSimulationsEnd();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        //bez awaitSimulationsEnd() bo wtedy join() blokuje główny wątek GUI,
+        //lub jak wyżej uruchamiamy to w nowym wątku i już nie blokuje wątku GUI
+    }
+
+
+    @FXML
+    private void newGame() {
+        SimulationApp simulationApp = new SimulationApp();
+        try {
+            simulationApp.start(new Stage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
