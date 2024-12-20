@@ -9,11 +9,10 @@ import java.util.concurrent.TimeUnit;
 public class SimulationEngine {
     private final List<Simulation> simulationsList;
     private final List<Thread> threads = new ArrayList<>();
-    private final ExecutorService executorService;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(4);
 
     public SimulationEngine(List<Simulation> simulationsList) {
         this.simulationsList = simulationsList;
-        this.executorService = Executors.newFixedThreadPool(4);
         //lepiej tutaj executorService inicjalizować żeby przypadkiem jak ktoś
         //dwa razy wywoła runAsyncInThreadPool nie stracić poprzedniego executorService
     };
@@ -33,10 +32,10 @@ public class SimulationEngine {
     };
 
     public void awaitSimulationsEnd() throws InterruptedException{
-            executorService.shutdown(); // dla ThreadPool
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+            threadPool.shutdown(); // dla ThreadPool
+            if (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
                 System.err.println("Pula wątków nie zakończyła działania w ciągu 10 sekund");
-                executorService.shutdownNow();
+                threadPool.shutdownNow();
             }
             //jeśli runAsync()
             for (Thread thread : threads) { //belongs to runAsync()
@@ -46,7 +45,7 @@ public class SimulationEngine {
 
     public void runAsyncInThreadPool(){
         for (Simulation simulation : simulationsList){
-            executorService.submit(simulation);
+            threadPool.submit(simulation);
         }
     }
 }
