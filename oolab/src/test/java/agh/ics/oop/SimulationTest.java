@@ -19,7 +19,7 @@ public class SimulationTest {
         Simulation simulation = new Simulation(positions, directions, map);
         simulation.run();
 
-        List<Animal> animals = simulation.getAnimals();
+        List<AbstractAnimal> animals = simulation.getAnimals();
         List<Vector2d> expectedPositions = List.of(position1, position2);
 
         assertTrue(animals.get(0).isAt(expectedPositions.get(0)));
@@ -35,7 +35,7 @@ public class SimulationTest {
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(new Vector2d(2,2), new Vector2d(4,4));
-        List<Animal> animals = simulation.getAnimals();
+        List<AbstractAnimal> animals = simulation.getAnimals();
 
         assertTrue(animals.get(0).isAt(expectedPositions.get(0)));
         assertEquals(MapDirection.NORTH, animals.get(0).getOrientation());
@@ -53,7 +53,7 @@ public class SimulationTest {
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(new Vector2d(2,2), new Vector2d(3,4));
-        List<Animal> animals = simulation.getAnimals();
+        List<AbstractAnimal> animals = simulation.getAnimals();
 
         assertTrue(animals.get(0).isAt(expectedPositions.get(0)));
         assertEquals(MapDirection.SOUTH, animals.get(0).getOrientation());
@@ -73,7 +73,7 @@ public class SimulationTest {
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(position1, position2);
-        List<Animal> animals = simulation.getAnimals();
+        List<AbstractAnimal> animals = simulation.getAnimals();
 
         assertTrue(animals.get(0).isAt(expectedPositions.get(0)));
         assertEquals(MapDirection.EAST, animals.get(0).getOrientation());
@@ -93,7 +93,7 @@ public class SimulationTest {
         simulation.run();
 
         List<Vector2d> expectedPositions = List.of(position1, position2);
-        List<Animal> animals = simulation.getAnimals();
+        List<AbstractAnimal> animals = simulation.getAnimals();
 
         assertTrue(animals.get(0).isAt(expectedPositions.get(0)));
         assertEquals(MapDirection.WEST, animals.get(0).getOrientation());

@@ -6,7 +6,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, Animal> animals = new HashMap<>();
+    protected final Map<Vector2d, AbstractAnimal> animals = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -25,7 +25,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public void place(Animal animal) throws IncorrectPositionException {
+    public void place(AbstractAnimal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
             mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
@@ -37,7 +37,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public void move(Animal animal, MoveDirection direction) {
+    public void move(AbstractAnimal animal, MoveDirection direction) {
         Vector2d oldPosition = animal.getPosition();
         animal.move(this, direction);
         Vector2d newPosition = animal.getPosition();

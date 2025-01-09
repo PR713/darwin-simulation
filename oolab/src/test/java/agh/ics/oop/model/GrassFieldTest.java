@@ -1,6 +1,5 @@
 
 package agh.ics.oop.model;
-import agh.ics.oop.exceptions.IncorrectPositionException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class GrassFieldTest {
         Vector2d occupiedPosition = allGrassTufts.keySet().iterator().next();
         Grass alreadyExisting = allGrassTufts.get(occupiedPosition);
 
-        Animal animal = new Animal(occupiedPosition);
+        AbstractAnimal animal = new AbstractAnimal(occupiedPosition);
         assertDoesNotThrow(() -> map.place(animal));
 
         assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition));
@@ -62,8 +61,8 @@ public class GrassFieldTest {
 
         Vector2d vector = new Vector2d(1, 1);
         Vector2d vector1 = new Vector2d(1, 2);
-        Animal animal = new Animal(vector);
-        Animal animal1 = new Animal(vector1);
+        AbstractAnimal animal = new AbstractAnimal(vector);
+        AbstractAnimal animal1 = new AbstractAnimal(vector1);
         assertDoesNotThrow(() -> map.place(animal));
         assertDoesNotThrow(() -> map.place(animal1));
         assertFalse(map.canMoveTo(vector));
@@ -75,8 +74,8 @@ public class GrassFieldTest {
         GrassField map = new GrassField(2);
         Vector2d vector1 = new Vector2d(2, 2);
         Vector2d vector2 = new Vector2d(1, 2);
-        Animal animal1 = new Animal(vector1);
-        Animal animal2 = new Animal(vector2);
+        AbstractAnimal animal1 = new AbstractAnimal(vector1);
+        AbstractAnimal animal2 = new AbstractAnimal(vector2);
 
         assertDoesNotThrow(() -> map.place(animal1));
         assertDoesNotThrow(() -> map.place(animal2));
@@ -116,9 +115,9 @@ public class GrassFieldTest {
         Vector2d vector = new Vector2d(1, 3);
         Vector2d vector1 = new Vector2d(2, 1);
         Vector2d vector2 = new Vector2d(0, 1);
-        Animal animal = new Animal(vector);
-        Animal animal1 = new Animal(vector1);
-        Animal animal2 = new Animal(vector2);
+        AbstractAnimal animal = new AbstractAnimal(vector);
+        AbstractAnimal animal1 = new AbstractAnimal(vector1);
+        AbstractAnimal animal2 = new AbstractAnimal(vector2);
 
         assertDoesNotThrow(() -> map.place(animal));
         assertDoesNotThrow(() -> map.place(animal1));
@@ -129,8 +128,8 @@ public class GrassFieldTest {
         for (WorldElement element : allElements) {
             WorldElement object = map.objectAt(element.getPosition());
 
-            if (object.getClass() == Animal.class){
-                if (element.getClass() == Animal.class){
+            if (object.getClass() == AbstractAnimal.class){
+                if (element.getClass() == AbstractAnimal.class){
                     assertEquals(element, object);
                 } else assertNotEquals(element, object);//zwierzak przysłania
             } else assertEquals(element, object);

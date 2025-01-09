@@ -1,4 +1,4 @@
 package agh.ics.oop.model;
 
-public class Animal {
+public record Gene() {
 }

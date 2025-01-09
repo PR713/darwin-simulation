@@ -8,7 +8,7 @@ public class AnimalTest {
 
     @Test
     void correctPositionDefault() {
-        Animal animal = new Animal();
+        AbstractAnimal animal = new AbstractAnimal();
 
         assertEquals(new Vector2d(2,2), animal.getPosition());
     }
@@ -16,7 +16,7 @@ public class AnimalTest {
     @Test
     void correctPositionSet() {
         Vector2d position = new Vector2d(1,3);
-        Animal animal = new Animal(position);
+        AbstractAnimal animal = new AbstractAnimal(position);
 
         assertEquals(new Vector2d(1,3), animal.getPosition());
     }
@@ -28,10 +28,10 @@ public class AnimalTest {
         Vector2d position3 = new Vector2d(0,4);
         Vector2d position4 = new Vector2d(4,0);
 
-        Animal animal1 = new Animal(position1);
-        Animal animal2 = new Animal(position2);
-        Animal animal3 = new Animal(position3);
-        Animal animal4 = new Animal(position4);
+        AbstractAnimal animal1 = new AbstractAnimal(position1);
+        AbstractAnimal animal2 = new AbstractAnimal(position2);
+        AbstractAnimal animal3 = new AbstractAnimal(position3);
+        AbstractAnimal animal4 = new AbstractAnimal(position4);
 
         assertEquals(position1, animal1.getPosition());
         assertEquals(position2, animal2.getPosition());
@@ -41,17 +41,17 @@ public class AnimalTest {
 
     @Test
     void defaultOrientation() {
-        Animal animal = new Animal();
+        AbstractAnimal animal = new AbstractAnimal();
 
         assertEquals(MapDirection.NORTH, animal.getOrientation());
     }
 
     @Test
     void moveAllDirections(){
-        Animal animal1 = new Animal(new Vector2d(2,3));
-        Animal animal2 = new Animal(new Vector2d(2,3));
-        Animal animal3 = new Animal(new Vector2d(2,3));
-        Animal animal4 = new Animal(new Vector2d(2,3));
+        AbstractAnimal animal1 = new AbstractAnimal(new Vector2d(2,3));
+        AbstractAnimal animal2 = new AbstractAnimal(new Vector2d(2,3));
+        AbstractAnimal animal3 = new AbstractAnimal(new Vector2d(2,3));
+        AbstractAnimal animal4 = new AbstractAnimal(new Vector2d(2,3));
         WorldMap map = new RectangularMap(5,5);
         animal1.move(map,MoveDirection.LEFT);
         animal2.move(map,MoveDirection.RIGHT);
@@ -72,7 +72,7 @@ public class AnimalTest {
     @Test
     void isAt() {
         Vector2d position = new Vector2d(2,3);
-        Animal animal = new Animal(position);
+        AbstractAnimal animal = new AbstractAnimal(position);
 
         assertTrue(animal.isAt(position));
     }
@@ -80,14 +80,14 @@ public class AnimalTest {
     @Test
     void isNotAt() {
         Vector2d position = new Vector2d(0,1);
-        Animal animal = new Animal(new Vector2d(2,4));
+        AbstractAnimal animal = new AbstractAnimal(new Vector2d(2,4));
 
         assertFalse(animal.isAt(position));
     }
 
     @Test
     void toStringAnimal() {
-        Animal animal = new Animal(new Vector2d(2,3));
+        AbstractAnimal animal = new AbstractAnimal(new Vector2d(2,3));
 
         assertEquals("^", animal.toString());
     }
