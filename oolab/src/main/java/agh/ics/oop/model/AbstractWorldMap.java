@@ -6,7 +6,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
+    protected final Map<Vector2d, List<WorldElement>> animals = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;

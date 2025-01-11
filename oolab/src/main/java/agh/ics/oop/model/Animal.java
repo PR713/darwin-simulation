@@ -60,4 +60,8 @@ public class Animal extends AbstractAnimal {
     public void setPassedAway(boolean passedAway) {
         this.passedAway = passedAway;
     }
+
+    public int getNumberOfDaysAlive() {
+        return numberOfDaysAlive;
+    }
 }
