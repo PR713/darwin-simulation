@@ -9,16 +9,16 @@ import java.util.List;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
     private final List<AbstractAnimal> animals;
-    private final List<MoveDirection> listOfMoves;
+    private final List<MapDirection> listOfMoves;
     private final WorldMap map;
 
-    public Simulation(List<Vector2d> startPositions, List<MoveDirection> listOfMoves, WorldMap map) {
+    public Simulation(List<Vector2d> startPositions, List<MapDirection> listOfMoves, WorldMap map) {
         this.animals = new ArrayList<>();
         this.listOfMoves = listOfMoves;
         this.map = map;
 
         for (Vector2d position : startPositions) {
-            AbstractAnimal animal = new AbstractAnimal(position);
+            AbstractAnimal animal = new Animal(position);
             try {
                 map.place(animal);
                 animals.add(animal);

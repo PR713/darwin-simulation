@@ -10,4 +10,10 @@ public interface MoveValidator {
      * @return True if the object can move to that position.
      */
     boolean canMoveTo(Vector2d position);
+
+    boolean isMovingBeyondBordersHorizontally(Vector2d position);
+
+    boolean isMovingBeyondBordersVertically(Vector2d position);
+
+    Vector2d getUpperRight();
 }

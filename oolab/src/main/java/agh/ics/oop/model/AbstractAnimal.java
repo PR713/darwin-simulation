@@ -1,6 +1,4 @@
 package agh.ics.oop.model;
-//move to samo, canMoveTo mają ograniczone
-
 
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
@@ -51,9 +49,25 @@ public class AbstractAnimal implements WorldElement {
         if (validator.canMoveTo(newPosition)) {
             this.position = newPosition;
             this.orientation = newOrientation;
+        } else {
+            if (validator.isMovingBeyondBordersHorizontally(newPosition)
+                    && validator.isMovingBeyondBordersVertically(newPosition)) {
+                //position doesn't change
+                this.orientation = newOrientation.reverseOrientation();
+
+                //mapa o lowerLeft w (0,0)
+            } else if (validator.isMovingBeyondBordersHorizontally(newPosition)) {
+                this.position = this.position.getX() > validator.getUpperRight().getX() ?
+                        new Vector2d(0, this.position.getY()) :
+                        new Vector2d(validator.getUpperRight().getX(), this.position.getY());
+                this.orientation = newOrientation.reverseOrientation();
+            } else { // vertically but not in corners, position doesn't change
+                this.orientation = newOrientation.reverseOrientation();
+            }
+
         }
     }
-
-
 }
+
+
 

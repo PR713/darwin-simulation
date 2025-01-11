@@ -21,34 +21,6 @@ public enum MapDirection {
     }
 
 
-//    public MapDirection next(){
-//        return switch (this) {
-//            case N -> NE;
-//            case NE -> E;
-//            case E -> SE;
-//            case SE -> S;
-//            case S -> SW;
-//            case SW -> W;
-//            case W -> NW;
-//            case NW -> N;
-//        };
-//    }
-//
-//
-//    public MapDirection previous() {
-//        return switch (this) {
-//            case N -> NW;
-//            case NW -> W;
-//            case W -> SW;
-//            case SW -> S;
-//            case S -> SE;
-//            case SE -> E;
-//            case E -> NE;
-//            case NE -> N;
-//        };
-//    }
-
-
     public Vector2d toMapDirectionVector() {
         return this.mapDirectionVector;
     }
@@ -70,6 +42,12 @@ public enum MapDirection {
             default -> throw new IllegalArgumentException("Invalid numeric value: " + numericValue);
         };
     }
+
+
+    public MapDirection reverseOrientation(){
+        return fromNumericValue((this.getNumericValue() + 4) % 8);
+    }
+
 
     @Override
     public String toString(){

@@ -6,7 +6,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, AbstractAnimal> animals = new HashMap<>();
+    protected final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -27,7 +27,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public void place(AbstractAnimal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
-            animals.put(animal.getPosition(), animal);
+            addAnimalToMap(animal);
             mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
         } else {
             throw new IncorrectPositionException(animal.getPosition());
@@ -35,16 +35,27 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
+    public void addAnimalToMap(AbstractAnimal animal){
+        animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add(animal);
+    }
+
+    public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal){
+        animals.get(position).remove(animal);
+
+        if (animals.get(position).isEmpty()) {
+            animals.remove(position);
+        }
+    }
 
     @Override
-    public void move(AbstractAnimal animal, MoveDirection direction) {
+    public void move(AbstractAnimal animal, MapDirection direction) {
         Vector2d oldPosition = animal.getPosition();
-        animal.move(this, direction);
+        animal.move(this, direction.getNumericValue());
         Vector2d newPosition = animal.getPosition();
 
         if (!oldPosition.equals(newPosition)) {
-            animals.remove(oldPosition);
-            animals.put(newPosition, animal);
+            removeAnimalFromMap(oldPosition, animal);
+            addAnimalToMap(animal);
             mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
     }
@@ -57,16 +68,32 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public WorldElement objectAt(Vector2d position) {
+    public List<WorldElement> objectAt(Vector2d position) {
         return animals.get(position);
     }
 
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return !animals.containsKey(position);
+        return position.follows(lowerLeft) && position.precedes(upperRight);
     }
 
+
+    @Override
+    public boolean isMovingBeyondBordersHorizontally(Vector2d position) {
+        return (position.getX() > upperRight.getX() || position.getX() < lowerLeft.getX());
+    }
+
+    @Override
+    public boolean isMovingBeyondBordersVertically(Vector2d position) {
+        return (position.getY() > upperRight.getY() || position.getY() < lowerLeft.getY());
+    }
+
+
+
+    public Vector2d getUpperRight(){
+        return upperRight;
+    }
 
     @Override
     public List<WorldElement> getElements(){
@@ -83,7 +110,6 @@ public abstract class AbstractWorldMap implements WorldMap {
             observers.add(observer);
         }
     }
-
 
     public void removeObserver(MapChangeListener observer){
         observers.remove(observer);
