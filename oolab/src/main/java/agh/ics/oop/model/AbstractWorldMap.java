@@ -7,6 +7,7 @@ import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<Vector2d, List<WorldElement>> animals = new HashMap<>();
+    protected final Map<Vector2d, List<WorldElement>> grassTufts = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -14,10 +15,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     //observers w przyszłości jak WorldElement może mieć różne typy obiektów a implementację MapChangeListener
     //już w swoich klasach jak Animal i Grass = WorldElement
     private final UUID id;
+    protected final int initialPlantCount;
+    protected final int dailyPlantGrowth;
 
-    public AbstractWorldMap(Vector2d lowerLeft, Vector2d upperRight) {
-        this.lowerLeft = lowerLeft;
-        this.upperRight = upperRight;
+
+    public AbstractWorldMap(int height, int width) {
+        this.lowerLeft = new Vector2d(0, 0);
+        this.upperRight = new Vector2d(width - 1, height - 1);
         this.visualizer = new MapVisualizer(this);
         this.id = UUID.randomUUID();
 

@@ -2,11 +2,11 @@ package agh.ics.oop.model;
 
 public class Animal extends AbstractAnimal {
     private final int defaultEnergySpawnedWith;
-    private String typeOfGenome;
     private int energyProvidedByPlant;
     private int currentEnergy;
     private final int energyLossPerDay;
     private final int energyLossPerReproduction;
+    private final boolean isReadyToReproduce = false;
     private int numberOfChildren;
     private int numberOfDescendants;
     private int numberOfDaysAlive;

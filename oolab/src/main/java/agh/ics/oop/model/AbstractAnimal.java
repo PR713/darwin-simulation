@@ -1,14 +1,18 @@
 package agh.ics.oop.model;
 
+import java.util.List;
+
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
 public class AbstractAnimal implements WorldElement {
     protected MapDirection orientation;
     protected Vector2d position;
+    protected List<Integer> typeOfGenome;
 
     public AbstractAnimal(Vector2d vector, MapDirection orientation) {
         this.position = vector;
         this.orientation = orientation;
+        //this.typeOfGenome = .... ();
     }
 
 

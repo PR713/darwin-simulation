@@ -4,10 +4,11 @@ public class WildOwlBearMap extends AbstractWorldMap {
 
     private final Vector2d owlBearAreaLowerLeft;
     private final Vector2d owlBearAreaUpperRight;
+    private final boolean oldAgeBehaviour = false;
 
-    public WildOwlBearMap(Vector2d lowerLeft, Vector2d upperRight,
+    public WildOwlBearMap(int height, int width,
                           Vector2d owlBearAreaLowerLeft, Vector2d owlBearAreaUpperRight) {
-        super(lowerLeft, upperRight);
+        super(height, width);
         this.owlBearAreaLowerLeft = owlBearAreaLowerLeft;
         this.owlBearAreaUpperRight = owlBearAreaUpperRight;
     }

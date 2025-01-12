@@ -121,7 +121,7 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private void onSimulationStartClicked(ActionEvent actionEvent){
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
-        List<MoveDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
+        List<MapDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
         AbstractWorldMap map = new GrassField(5);
         map.addObserver(this);
 
