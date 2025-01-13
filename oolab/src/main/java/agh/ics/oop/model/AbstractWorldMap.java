@@ -7,7 +7,7 @@ import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<Vector2d, List<WorldElement>> animals = new HashMap<>();
-    protected final Map<Vector2d, List<WorldElement>> grassTufts = new HashMap<>();
+    protected final Map<Vector2d, WorldElement> grassTufts = new HashMap<>();
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -17,13 +17,27 @@ public abstract class AbstractWorldMap implements WorldMap {
     private final UUID id;
     protected final int initialPlantCount;
     protected final int dailyPlantGrowth;
+    protected int currentPlantCount;
+    protected int currentAnimalCount;
+    protected int emptyPositionCount;
+    protected List<Integer> theMostPopularGenome;
+    protected double averageAnimalsEnergy;
+    protected double averageDeathAnimalsAgeFromTheStart;
+    protected double averageAliveAnimalsNumberOfChildren;
+    protected Vector2d lowerLeftEquatorialForest;
+    protected Vector2d upperRightEquatorialForest;
+    protected GrassPlacer grassPlacer;
 
-
-    public AbstractWorldMap(int height, int width) {
+    public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.visualizer = new MapVisualizer(this);
         this.id = UUID.randomUUID();
+        this.initialPlantCount = initialPlantCount;
+        this.dailyPlantGrowth = dailyPlantGrowth;
+        this.lowerLeftEquatorialForest = new Vector2d(0, (int) (0.4 * height));
+        this.upperRightEquatorialForest = new Vector2d(width - 1, (int) (0.6 * height));
+        this.grassPlacer = new GrassPlacer(grassTufts, lowerLeft, upperRight, lowerLeftEquatorialForest, upperRightEquatorialForest, consumeEnergy);
 
     }
 
@@ -39,11 +53,11 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
-    public void addAnimalToMap(AbstractAnimal animal){
+    public void addAnimalToMap(AbstractAnimal animal) {
         animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add(animal);
     }
 
-    public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal){
+    public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
         animals.get(position).remove(animal);
 
         if (animals.get(position).isEmpty()) {
@@ -94,13 +108,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-
-    public Vector2d getUpperRight(){
+    public Vector2d getUpperRight() {
         return upperRight;
     }
 
     @Override
-    public List<WorldElement> getElements(){
+    public List<WorldElement> getElements() {
         return List.copyOf(animals.values());
     }
 
@@ -109,18 +122,18 @@ public abstract class AbstractWorldMap implements WorldMap {
     public abstract Boundary getCurrentBounds();
 
 
-    public void addObserver(MapChangeListener observer){
+    public void addObserver(MapChangeListener observer) {
         if (!observers.contains(observer)) {
             observers.add(observer);
         }
     }
 
-    public void removeObserver(MapChangeListener observer){
+    public void removeObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
 
 
-    protected void mapChanged(String message){
+    protected void mapChanged(String message) {
         for (MapChangeListener observer : observers) {
             observer.mapChanged(this, message);
         }
@@ -135,7 +148,22 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public UUID getId(){
+    public UUID getId() {
         return id;
     }
+
+    public void addGrassTuft(Vector2d position, Grass grassTuft) {
+        grassPlacer.addGrassTuft();
+    }
+
+    public void eatGrassIfPossible(Animal animal) {
+        Vector2d position = animal.getPosition();
+        if (grassTufts.containsKey(position)) {
+            grassTufts.remove(position);
+            currentPlantCount--;
+            emptyPositionCount++;
+            animal.setCurrentEnergy(animal.getEnergy() + grassPlacer.consumeEnergy);
+        }
+    }
+
 }

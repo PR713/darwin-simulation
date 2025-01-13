@@ -1,27 +1,24 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.Animal;
+
+import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class OldAgeGlobeMap extends GlobeMap {
 
-    private final int oldAgeBeginsOn;
-
     public OldAgeGlobeMap(int height, int width, int oldAgeBeginsOn) {
         super(height, width);
-        this.oldAgeBeginsOn = oldAgeBeginsOn;
     }
 
 
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
         Vector2d oldPosition = animal.getPosition();
-        Animal animal1 = (Animal) animal;
-        if (animal1.getNumberOfDaysAlive() >= oldAgeBeginsOn) {
-            // jakaś logika z klasy OldAgeGenes co pomija ruch
-            if (true){
-                return;
-            }
+        //lub osobna klasa dla OldAgeAnimal i każda klasa metodę MovementBehavior sama implementuje
+        //tu nie ma prawa być OwlBear
+        if (isMoveSkippedDueToAge((Animal) animal)) {
+            return;
         }
+
 
         animal.move(this, direction.getNumericValue());
         Vector2d newPosition = animal.getPosition();
@@ -32,9 +29,4 @@ public class OldAgeGlobeMap extends GlobeMap {
             mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
     }
-
-    public int getOldAgeBeginsOn() {
-        return oldAgeBeginsOn;
-    }
-
 }

@@ -36,6 +36,8 @@ public class Animal extends AbstractAnimal {
     public void move(MoveValidator validator, int direction) {
         if (currentEnergy - energyLossPerDay > 0) {
             super.move(validator, direction);
+            AbstractWorldMap map = (AbstractWorldMap) validator;
+            map.eatGrassIfPossible(this);
             currentEnergy -= energyLossPerDay;
         }
         else setPassedAway(true);
@@ -63,5 +65,9 @@ public class Animal extends AbstractAnimal {
 
     public int getNumberOfDaysAlive() {
         return numberOfDaysAlive;
+    }
+
+    public void setCurrentEnergy(int currentEnergy) {
+        this.currentEnergy = currentEnergy;
     }
 }

@@ -31,12 +31,11 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
     public void run() {
         for (int index = 0; index < listOfMoves.size(); index++) {
+
+            //co chwilę dodawanie roślin LOGIKA DODAĆ
             int animalIndex = index % animals.size();
             AbstractAnimal animal = animals.get(animalIndex);
             map.move(animal, listOfMoves.get(index));
-
-            //tutaj logika jeśli animal.getNumberOfDaysAlive() > animal.typeOfGenome.getOldAgeBeginsOn()
-            //max 80% że pominie ruch następny
 
             try {
                 Thread.sleep(500);

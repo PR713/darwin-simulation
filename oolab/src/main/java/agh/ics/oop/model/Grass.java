@@ -2,10 +2,8 @@ package agh.ics.oop.model;
 
 public class Grass implements WorldElement {
     private final Vector2d tuftPosition;
-    private final int consumeEnergy;
 
-    public Grass(Vector2d tuftPosition, int consumeEnergy){
-        this.consumeEnergy = consumeEnergy;
+    public Grass(Vector2d tuftPosition){
         this.tuftPosition = tuftPosition;
     }
 

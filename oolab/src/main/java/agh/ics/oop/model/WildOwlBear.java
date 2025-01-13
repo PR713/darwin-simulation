@@ -5,8 +5,8 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public class WildOwlBear extends AbstractAnimal {
 
 
-    public WildOwlBear(Vector2d vector, MapDirection orientation) {
-        super(vector, orientation);
+    public WildOwlBear(Vector2d position, MapDirection orientation) {
+        super(position, orientation);
     }
 
 
