@@ -116,4 +116,5 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .thenComparing(animal -> animal.getPosition().getY()))
                 .toList();
     }
+
 }

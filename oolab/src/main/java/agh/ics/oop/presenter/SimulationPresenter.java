@@ -5,6 +5,7 @@ import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationApp;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
+import agh.ics.oop.view.WorldElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,12 +96,20 @@ public class SimulationPresenter implements MapChangeListener {
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
                 Optional<WorldElement> element = worldMap.objectAt(position);
-                Label label = element.map(e -> new Label(e.toString()))
-                                .orElse(new Label(" "));
 
-                GridPane.setHalignment(label, HPos.CENTER);
-                mapGrid.add(label, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
-                // label, column, row
+//                Label label = element.map(e -> new Label(e.toString()))
+//                                .orElse(new Label(" "));
+
+                if (element.isPresent()) {
+                    WorldElementBox box = new WorldElementBox(element.get(), position.toString());
+                    mapGrid.add(box.getContainer(), x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
+                } else {
+                    Label label = new Label(" ");
+                    GridPane.setHalignment(label, HPos.CENTER);
+                    mapGrid.add(label, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
+                    //label, column, row
+                }
+
             }
         }
 
@@ -120,11 +129,14 @@ public class SimulationPresenter implements MapChangeListener {
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
         List<MoveDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
         AbstractWorldMap map = new GrassField(5);
-        map.addObserver(this); //potem wywołujemy stąd mapChanged
+        map.addObserver(this); //potem wywołujemy dzięki temu tutaj mapChanged
         map.addObserver((source, message) -> {
             String timestamp = java.time.LocalDateTime.now().toString();
             System.out.println(timestamp + " " + message);
         });
+        //lambda dla metody oczekującej argumentu typu interfejsu MapChangeListener który jest typu SAM
+        //inaczej klasą anonimowa map.addObserver(new MapChangeListener(){
+        // void mapChanged(WorldMap map, String message){...} });
 
         map.addObserver(new FileMapDisplay(map.getId()));
 

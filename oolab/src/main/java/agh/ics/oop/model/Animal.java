@@ -59,4 +59,15 @@ public class Animal implements WorldElement {
             this.position = newPosition; //wywołane na animal
         }
     }
+
+    @Override
+    public String getResourceName() {
+        switch (this.orientation) {
+            case NORTH: return "up.png";
+            case EAST: return "right.png";
+            case SOUTH: return "down.png";
+            case WEST: return "left.png";
+            default: throw new IllegalStateException("Unexpected direction: " + this.orientation);
+        }
+    }
 }
