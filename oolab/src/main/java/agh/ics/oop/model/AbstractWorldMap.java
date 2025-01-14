@@ -111,7 +111,9 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public List<Animal> getOrderedAnimals(){
-        return animals.values().stream().sorted(Comparator.comparing((Animal animal) -> animal.getPosition().getX())
-                .thenComparing(animal -> animal.getPosition().getY())).toList();
+        return animals.values().stream()
+                .sorted(Comparator.comparing((Animal animal) -> animal.getPosition().getX())
+                .thenComparing(animal -> animal.getPosition().getY()))
+                .toList();
     }
 }

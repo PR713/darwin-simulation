@@ -1,7 +1,10 @@
 package agh.ics.oop.model.util;
 
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.WorldElement;
 import agh.ics.oop.model.WorldMap;
+
+import java.util.Optional;
 
 /**
  * The map visualizer converts the {@link WorldMap} map into a string
@@ -75,10 +78,9 @@ public class MapVisualizer {
 
     private String drawObject(Vector2d currentPosition) {
         if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
-            if (object != null) {
-                return object.toString();
-            }
+            //i tak tylko WorldElement są na mapie, zmiana z Object object
+            Optional<WorldElement> optionalObject = this.map.objectAt(currentPosition);
+            return optionalObject.get().toString();
         }
         return EMPTY_CELL;
     }

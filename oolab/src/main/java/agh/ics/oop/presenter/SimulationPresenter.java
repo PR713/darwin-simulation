@@ -126,6 +126,8 @@ public class SimulationPresenter implements MapChangeListener {
             System.out.println(timestamp + " " + message);
         });
 
+        map.addObserver(new FileMapDisplay(map.getId()));
+
         Simulation simulationGrassField = new Simulation(positions, moves, map);
 
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
