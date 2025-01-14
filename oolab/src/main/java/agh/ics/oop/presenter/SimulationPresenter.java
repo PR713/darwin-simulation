@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 
 import static agh.ics.oop.OptionsParser.parseToMoveDirection;
@@ -93,13 +94,9 @@ public class SimulationPresenter implements MapChangeListener {
         for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++){
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
-                WorldElement element = worldMap.objectAt(position);
-                Label label;
-                if (element == null) {
-                    label = new Label(" ");
-                } else {
-                    label = new Label(element.toString());
-                }
+                Optional<WorldElement> element = worldMap.objectAt(position);
+                Label label = element.map(e -> new Label(e.toString()))
+                                .orElse(new Label(" "));
 
                 GridPane.setHalignment(label, HPos.CENTER);
                 mapGrid.add(label, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
@@ -123,7 +120,11 @@ public class SimulationPresenter implements MapChangeListener {
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
         List<MoveDirection> moves = parseToMoveDirection(movementTextField.getText().split(" "));
         AbstractWorldMap map = new GrassField(5);
-        map.addObserver(this);
+        map.addObserver(this); //potem wywołujemy stąd mapChanged
+        map.addObserver((source, message) -> {
+            String timestamp = java.time.LocalDateTime.now().toString();
+            System.out.println(timestamp + " " + message);
+        });
 
         Simulation simulationGrassField = new Simulation(positions, moves, map);
 

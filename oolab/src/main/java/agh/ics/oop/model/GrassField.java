@@ -2,7 +2,10 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
+import javax.swing.text.html.Option;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GrassField extends AbstractWorldMap {
     private final Map<Vector2d, Grass> grassTufts = new HashMap<>();
@@ -31,9 +34,9 @@ public class GrassField extends AbstractWorldMap {
 
 
     @Override
-    public WorldElement objectAt(Vector2d position) {
-        WorldElement animalExist = super.objectAt(position);
-        return (animalExist != null) ? animalExist : grassTufts.get(position);
+    public Optional<WorldElement> objectAt(Vector2d position) {
+        Optional<WorldElement> animalExist = super.objectAt(position);
+        return animalExist.isPresent() ? animalExist : Optional.ofNullable(grassTufts.get(position));
         //get(position) jeśli nie ma to da nulla
     }
 
@@ -59,9 +62,8 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public List<WorldElement> getElements(){
-        List<WorldElement> allElements = new ArrayList<>(super.getElements());
-        allElements.addAll(grassTufts.values());
-        return Collections.unmodifiableList(allElements);
+        return Stream.concat(super.getElements().stream(), grassTufts.values().stream())
+                .collect(Collectors.toUnmodifiableList());
     }
 
 

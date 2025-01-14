@@ -1,12 +1,10 @@
 
 package agh.ics.oop.model;
+
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,8 +46,9 @@ public class GrassFieldTest {
         Animal animal = new Animal(occupiedPosition);
         assertDoesNotThrow(() -> map.place(animal));
 
-        assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition));
-        assertEquals(animal, map.objectAt(occupiedPosition));
+        assertNotEquals(alreadyExisting, map.objectAt(occupiedPosition).get());
+        assertEquals(animal, map.objectAt(occupiedPosition).get());
+        //ponownie nie musimy sprawdzać object.isPresent()
     }
 
 
@@ -105,7 +104,7 @@ public class GrassFieldTest {
         Map<Vector2d, Grass> allGrass = map.getGrassTufts();
 
         for (Grass grass : allGrass.values()) {
-            assertEquals(grass, map.objectAt(grass.getPosition()));
+            assertEquals(grass, map.objectAt(grass.getPosition()).get());
         }
     }
 
@@ -127,13 +126,17 @@ public class GrassFieldTest {
         List<WorldElement> allElements = map.getElements();
 
         for (WorldElement element : allElements) {
-            WorldElement object = map.objectAt(element.getPosition());
+            Optional<WorldElement> object = map.objectAt(element.getPosition());
+            //nie trzeba sprawdzać object.isPresent() bo skoro jest w
+            //allElements to jest również na pozycji element.getPosition()
+            WorldElement foundElement = object.get();
 
-            if (object.getClass() == Animal.class){
-                if (element.getClass() == Animal.class){
-                    assertEquals(element, object);
+            if (foundElement.getClass() == Animal.class) {
+                if (element.getClass() == Animal.class) {
+                    assertEquals(element, foundElement);
                 } else assertNotEquals(element, object);//zwierzak przysłania
-            } else assertEquals(element, object);
+            } else assertEquals(element, foundElement);
+
         }
     }
 }

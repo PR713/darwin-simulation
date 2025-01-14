@@ -22,10 +22,10 @@ public class RectangularMapTest {
 
         assertTrue(map.isOccupied(vector1));
         assertTrue(map.isOccupied(vector2));
-        assertEquals(animal1, map.objectAt(vector1));
+        assertEquals(animal1, map.objectAt(vector1).get());
         //nie ma nadpisanego Equals w Animal, więc porównuje referencję
         //map.objectAt zwraca obiekt Animal więc ok
-        assertEquals(animal2, map.objectAt(vector2));
+        assertEquals(animal2, map.objectAt(vector2).get());
     }
 
 
@@ -50,7 +50,7 @@ public class RectangularMapTest {
 
         assertEquals("Position (2, 2) is not correct", exception.getMessage());
         assertTrue(map.isOccupied(vector));
-        assertEquals(animal1, map.objectAt(vector));
+        assertEquals(animal1, map.objectAt(vector).get());
     }
 
 
