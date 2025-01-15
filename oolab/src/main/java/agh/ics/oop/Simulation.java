@@ -22,7 +22,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             AbstractAnimal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength);
+                    genomeLength, startIndexOfGenome);
             try {
                 map.place(animal);
                 animals.add(animal);

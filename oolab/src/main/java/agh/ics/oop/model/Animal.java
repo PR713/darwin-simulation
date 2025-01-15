@@ -15,8 +15,8 @@ public class Animal extends AbstractAnimal {
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                  int energyNeededToReproduce, int genomeLength) {
-        super(position, orientation, genomeLength);
+                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome) {
+        super(position, orientation, genomeLength, startIndexOfGenome);
         this.defaultEnergySpawnedWith = defaultEnergySpawnedWith;
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
