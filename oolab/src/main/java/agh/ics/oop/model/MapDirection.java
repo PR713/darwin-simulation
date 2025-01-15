@@ -48,6 +48,9 @@ public enum MapDirection {
         return fromNumericValue((this.getNumericValue() + 4) % 8);
     }
 
+    public static MapDirection randomOrientation(){
+        return fromNumericValue((int) (Math.random() * 8));
+    }
 
     @Override
     public String toString(){

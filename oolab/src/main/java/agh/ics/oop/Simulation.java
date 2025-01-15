@@ -3,22 +3,26 @@ package agh.ics.oop;
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
     private final List<AbstractAnimal> animals;
-    private final List<MapDirection> listOfMoves;
     private final WorldMap map;
-
-    public Simulation(List<Vector2d> startPositions, List<MapDirection> listOfMoves, WorldMap map) {
+    private final int simulationDuration;
+    public Simulation(List<Vector2d> startPositions, WorldMap map,
+            int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
+                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration) {
         this.animals = new ArrayList<>();
-        this.listOfMoves = listOfMoves;
         this.map = map;
+        this.simulationDuration = simulationDuration;
 
         for (Vector2d position : startPositions) {
-            AbstractAnimal animal = new Animal(position);
+            MapDirection orientation = MapDirection.randomOrientation();
+            int startIndexOfGenome = (int) (Math.random() * genomeLength);
+            AbstractAnimal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
+                    defaultEnergySpawnedWith, energyLossPerDay,
+                    energyLossPerReproduction, energyNeededToReproduce,
+                    genomeLength);
             try {
                 map.place(animal);
                 animals.add(animal);
@@ -30,13 +34,13 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
 
     public void run() {
-        for (int index = 0; index < listOfMoves.size(); index++) {
+        for (int day = 1; day <= simulationDuration; day++) {
 
-            //co chwilę dodawanie roślin LOGIKA DODAĆ
-            int animalIndex = index % animals.size();
-            AbstractAnimal animal = animals.get(animalIndex);
-            map.move(animal, listOfMoves.get(index));
-
+            for (AbstractAnimal animal : animals) {
+                int direction = animal.getGenome()[animal.getCurrentIndexOfGenome()];
+                animal.move(map, direction);
+                animal.incrementIndex();
+            }
             try {
                 Thread.sleep(500);
 

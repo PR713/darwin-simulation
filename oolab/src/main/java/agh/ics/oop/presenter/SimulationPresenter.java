@@ -19,9 +19,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-
-import static agh.ics.oop.OptionsParser.parseToMoveDirection;
-
 public class SimulationPresenter implements MapChangeListener {
 
     private WorldMap worldMap;
@@ -58,8 +55,8 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void drawMap(String message){
         clearGrid();
-        Vector2d lowerLeft = worldMap.getCurrentBounds().bottomLeft();
-        Vector2d upperRight = worldMap.getCurrentBounds().topRight();
+        Vector2d lowerLeft = worldMap.getLowerLeft();
+        Vector2d upperRight = worldMap.getUpperRight();
 
         int numberOfRows = upperRight.getY() - lowerLeft.getY() + 1;
         int numberOfColumns = upperRight.getX() - lowerLeft.getX() + 1;
@@ -93,7 +90,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++){
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
-                WorldElement element = worldMap.objectAt(position);
+                List<? extends WorldElement> element = worldMap.objectAt(position);
                 Label label;
                 if (element == null) {
                     label = new Label(" ");

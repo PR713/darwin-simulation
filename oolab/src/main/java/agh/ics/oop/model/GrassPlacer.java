@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class GrassPlacer {
 
-    private final Map<Vector2d, WorldElement> grassTufts;
+    private final Map<Vector2d, Grass> grassTufts;
     private final Vector2d lowerLeftEquatorialForest;
     private final Vector2d upperRightEquatorialForest;
     private final Vector2d lowerLeft;

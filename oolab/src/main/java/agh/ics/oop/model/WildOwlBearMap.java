@@ -1,26 +1,46 @@
 package agh.ics.oop.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class WildOwlBearMap extends AbstractWorldMap {
 
     private final Vector2d owlBearAreaLowerLeft;
     private final Vector2d owlBearAreaUpperRight;
-    private final boolean oldAgeBehaviour = false;
     protected WildOwlBear wildOwlBear;
 
-    public WildOwlBearMap(int height, int width,
+    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy,
                           Vector2d owlBearAreaLowerLeft, Vector2d owlBearAreaUpperRight, WildOwlBear wildOwlBear) {
-        super(height, width);
+        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy);
         this.wildOwlBear = wildOwlBear;
         this.owlBearAreaLowerLeft = owlBearAreaLowerLeft;
         this.owlBearAreaUpperRight = owlBearAreaUpperRight;
     }
 
+    @Override
+    public void move(AbstractAnimal animal, MapDirection direction) {
+        //lub osobna klasa dla OldAgeAnimal i każda klasa metodę MovementBehavior sama implementuje
+        if (animal instanceof Animal) {
+                super.move(animal, direction);
+        }//else
+        Vector2d oldPosition = animal.getPosition();
+        animal.move(this, direction.getNumericValue());
+        Vector2d newPosition = animal.getPosition();
+
+        if (!oldPosition.equals(newPosition)) {
+            setOwlBearPosition(newPosition);
+            mapChanged(String.format("OwlBear moved from %s to %s", oldPosition, newPosition));
+        }
+    }
+
 
     @Override
-    public Boundary getCurrentBounds() {
-        return null; //?? to do?
+    public List<WorldElement> getAllWorldElements() {
+        return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
+                .collect(Collectors.toList());
     }
 
 
@@ -54,5 +74,9 @@ public class WildOwlBearMap extends AbstractWorldMap {
             wildOwlBear.incrementAnimalsEaten();
         }
         this.animals.remove(position);
+    }
+
+    protected void setOwlBearPosition(Vector2d position) {
+        this.wildOwlBear.position = position;
     }
 }

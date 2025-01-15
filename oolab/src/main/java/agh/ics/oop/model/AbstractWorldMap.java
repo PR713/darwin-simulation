@@ -123,8 +123,12 @@ public abstract class AbstractWorldMap implements WorldMap {
         return upperRight;
     }
 
+    public Vector2d getLowerLeft() {
+        return lowerLeft;
+    }
+
     @Override
-    public List<WorldElement> getAllGrassTufts() {
+    public List<Grass> getAllGrassTufts() {
         return List.copyOf(grassTufts.values());
     }
 
@@ -140,9 +144,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return Stream.concat(getAllAnimals().stream(), getAllGrassTufts().stream())
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public abstract Boundary getCurrentBounds();
 
 
     public void addObserver(MapChangeListener observer) {
@@ -165,8 +166,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public String toString() {
-        Boundary bounds = getCurrentBounds();
-        return visualizer.draw(bounds.bottomLeft(), bounds.topRight());
+        return visualizer.draw(lowerLeft, upperRight);
     }
 
 

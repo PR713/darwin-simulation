@@ -1,18 +1,19 @@
 package agh.ics.oop.model;
 
-import java.util.List;
 
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
 public abstract class AbstractAnimal implements WorldElement, Eatable {
     protected MapDirection orientation;
     protected Vector2d position;
-    protected List<Integer> typeOfGenome;
+    protected int[] genome;
+    private int currentIndexOfGenome;
 
-    public AbstractAnimal(Vector2d vector, MapDirection orientation) {
+    public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
         this.position = vector;
         this.orientation = orientation;
-        //this.typeOfGenome = .... ();
+        Gene genome = new Gene(genomeLength);
+        this.genome = genome.getGenes();
     }
 
 
@@ -75,6 +76,18 @@ public abstract class AbstractAnimal implements WorldElement, Eatable {
 
     @Override
     public abstract void eatIfIsPossible(AbstractWorldMap map);
+
+    public int[] getGenome() {
+        return this.genome;
+    }
+
+    public int getCurrentIndexOfGenome() {
+        return this.currentIndexOfGenome;
+    }
+
+    public void incrementIndex() {
+        currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.length;
+    }
 }
 
 

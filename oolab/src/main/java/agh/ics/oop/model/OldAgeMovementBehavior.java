@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import java.util.Random;
 
 public class OldAgeMovementBehavior {
 
@@ -11,7 +10,4 @@ public class OldAgeMovementBehavior {
         //rzadko, rzadko -> rośnie :), limes = 0.8
     }
 
-    public static boolean isMoveSkippedDueToAge(WildOwlBear owlBear) {
-        return false;
-    }
 }

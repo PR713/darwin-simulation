@@ -2,13 +2,8 @@ package agh.ics.oop.model;
 
 public class GlobeMap extends AbstractWorldMap {
 
-    public GlobeMap(int height, int width) {
-        super(height, width);
+    public GlobeMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
+        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy);
     }
 
-
-    @Override
-    public Boundary getCurrentBounds() {
-        return null; //TO DO?
-    }
 }

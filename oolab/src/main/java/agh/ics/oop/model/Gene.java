@@ -4,10 +4,10 @@ public class Gene {
     private final int[] genotype;
 
     public Gene(int genotypeLength) {
-        genotype = new int[genotypeLength];
+        this.genotype = new int[genotypeLength];
 
         for (int i = 0; i < genotypeLength; i++) {
-            genotype[i] = (int) (Math.random() * 8);
+            this.genotype[i] = (int) (Math.random() * 8);
         }
     }
 
@@ -15,20 +15,17 @@ public class Gene {
         return genotype;
     }
 
-    public int getGene(int index) {
-        return genotype[index];
-    }
+    // EWENTUALNIE NOWA KLASA!!!
+    public Gene cross(Animal animal1, Animal animal2) {
+        int[] newGenes = new int[genotype.length];
+        int[] animal1Genes = animal1.getGenome();
+        int[] animal2Genes = animal2.getGenome();
+        int animal1Energy = animal1.getEnergy();
+        int animal2Energy = animal2.getEnergy();
+        //...
 
-//    public Gene cross(Gene other) {
-//        int[] newGenes = new int[genotype.length];
-//        int crossPoint = (int) (Math.random() * genotype.length);
-//
-//        for (int i = 0; i < genotype.length; i++) {
-//            newGenes[i] = i < crossPoint ? genotype[i] : other.getGene(i);
-//        }
-//
-//        return new Gene(newGenes);
-//    }
+        return new Gene(newGenes);
+    }
 
 //    public Gene mutate() {
 //        int[] newGenes = genotype.clone();

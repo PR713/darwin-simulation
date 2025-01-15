@@ -55,15 +55,11 @@ public interface WorldMap extends MoveValidator {
      *
      * @return Kolekcja wszystkich elementów na mapie.
      */
-    List<WorldElement> getElements();
-
-    List<WorldElement> getAllGrassTufts();
+    List<Grass> getAllGrassTufts();
 
     List<Animal> getAllAnimals();
 
     List<WorldElement> getAllWorldElements();
-
-    Boundary getCurrentBounds();
 
     UUID getId();
 }

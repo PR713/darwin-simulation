@@ -2,24 +2,28 @@ package agh.ics.oop.model;
 
 public class Animal extends AbstractAnimal {
     private final int defaultEnergySpawnedWith;
-    private int energyProvidedByPlant;
     private int currentEnergy;
     private final int energyLossPerDay;
     private final int energyLossPerReproduction;
-    private final boolean isReadyToReproduce = false;
+    private boolean isReadyToReproduce = false;
+    private final int energyNeededToReproduce;
     private int numberOfChildren;
     private int numberOfDescendants;
     private int numberOfDaysAlive;
     private boolean passedAway = false;
 
 
-    public Animal(Vector2d position, MapDirection orientation, int plantEnergy,
-                  int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction) {
-        super(position, orientation);
+    public Animal(Vector2d position, MapDirection orientation,
+                  int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
+                  int energyNeededToReproduce, int genomeLength) {
+        super(position, orientation, genomeLength);
         this.defaultEnergySpawnedWith = defaultEnergySpawnedWith;
-        this.energyProvidedByPlant = plantEnergy;
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
+        this.energyNeededToReproduce = energyNeededToReproduce;
+        if (this.defaultEnergySpawnedWith > this.energyNeededToReproduce){
+            this.isReadyToReproduce = true;
+        }
     }
 
     public int getEnergy() {
@@ -28,7 +32,6 @@ public class Animal extends AbstractAnimal {
 
     public void setEnergy(int newEnergy) {
         this.currentEnergy = newEnergy;
-        //kwestia zjedzenia bądź nie rośliny
     }
 
 
@@ -38,22 +41,10 @@ public class Animal extends AbstractAnimal {
             super.move(validator, direction);
             AbstractWorldMap map = (AbstractWorldMap) validator;
             this.eatIfIsPossible(map);
-            currentEnergy -= energyLossPerDay;
+            setEnergy(currentEnergy - energyLossPerDay);
         }
         else setPassedAway(true);
     }
-
-
-//    @Override
-//    public String toString() {
-//        return "Animal{" +
-//                "position=" + getPosition() +
-//                ", orientation=" + getOrientation() +
-//                ", energy=" + energy +
-//                ", name='" + name + '\'' +
-//                '}';
-//    }
-
 
     public boolean hasPassedAway() {
         return passedAway;
