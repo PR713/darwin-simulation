@@ -4,10 +4,13 @@ import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, List<WorldElement>> animals = new HashMap<>();
-    protected final Map<Vector2d, WorldElement> grassTufts = new HashMap<>();
+    protected final Map<Vector2d, List<Animal>> animals = new HashMap<>();
+    protected final Map<Vector2d, Grass> grassTufts = new HashMap<>();
+
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -54,7 +57,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void addAnimalToMap(AbstractAnimal animal) {
-        animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add(animal);
+        animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
     }
 
     public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
@@ -78,15 +81,23 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-
     @Override
     public boolean isOccupied(Vector2d position) {
+        return isOccupiedByAnimal(position) || isOccupiedByGrass(position);
+    }
+
+    @Override
+    public boolean isOccupiedByAnimal(Vector2d position) {
         return animals.containsKey(position);
     }
 
+    @Override
+    public boolean isOccupiedByGrass(Vector2d position) {
+        return grassTufts.containsKey(position);
+    }
 
     @Override
-    public List<WorldElement> objectAt(Vector2d position) {
+    public List<? extends WorldElement> objectAt(Vector2d position) {
         return animals.get(position);
     }
 
@@ -113,10 +124,22 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public List<WorldElement> getElements() {
-        return List.copyOf(animals.values());
+    public List<WorldElement> getAllGrassTufts() {
+        return List.copyOf(grassTufts.values());
     }
 
+    @Override
+    public List<Animal> getAllAnimals() {
+        return animals.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WorldElement> getAllWorldElements() {
+        return Stream.concat(getAllAnimals().stream(), getAllGrassTufts().stream())
+                .collect(Collectors.toList());
+    }
 
     @Override
     public abstract Boundary getCurrentBounds();
@@ -154,16 +177,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addGrassTuft(Vector2d position, Grass grassTuft) {
         grassPlacer.addGrassTuft();
-    }
-
-    public void eatGrassIfPossible(Animal animal) {
-        Vector2d position = animal.getPosition();
-        if (grassTufts.containsKey(position)) {
-            grassTufts.remove(position);
-            currentPlantCount--;
-            emptyPositionCount++;
-            animal.setCurrentEnergy(animal.getEnergy() + grassPlacer.consumeEnergy);
-        }
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
-public class AbstractAnimal implements WorldElement {
+public abstract class AbstractAnimal implements WorldElement, Eatable {
     protected MapDirection orientation;
     protected Vector2d position;
     protected List<Integer> typeOfGenome;
@@ -71,6 +71,10 @@ public class AbstractAnimal implements WorldElement {
 
         }
     }
+
+
+    @Override
+    public abstract void eatIfIsPossible(AbstractWorldMap map);
 }
 
 

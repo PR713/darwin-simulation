@@ -5,8 +5,8 @@ import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 public class OldAgeWildOwlBearMap extends WildOwlBearMap {
 
     public OldAgeWildOwlBearMap( int height, int width, Vector2d owlBearAreaLowerLeft,
-              Vector2d owlBearAreaUpperRight, Vector2d owlBearPosition, Vector2d owlBearOrientation) {
-        super(height, width, owlBearAreaLowerLeft, owlBearAreaUpperRight);
+              Vector2d owlBearAreaUpperRight, WildOwlBear wildOwlBear) {
+        super(height, width, owlBearAreaLowerLeft, owlBearAreaUpperRight, wildOwlBear);
     }
 
 
@@ -15,7 +15,7 @@ public class OldAgeWildOwlBearMap extends WildOwlBearMap {
         Vector2d oldPosition = animal.getPosition();
         //lub osobna klasa dla OldAgeAnimal i każda klasa metodę MovementBehavior sama implementuje
         if ( animal instanceof Animal) {
-            if (isMoveSkippedDueToAge((Animal) animal)) {
+            if (isMoveSkippedDueToAge( animal)) {
                 return;
             }
         }

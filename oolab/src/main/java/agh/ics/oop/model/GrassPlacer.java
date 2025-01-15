@@ -13,8 +13,8 @@ public class GrassPlacer {
     private final Vector2d upperRight;
     final int consumeEnergy;
 
-    public GrassPlacer(Map<Vector2d, WorldElement> grassTufts, Vector2d lowerLeft, Vector2d upperRight,
-                Vector2d lowerLeftEquatorialForest, Vector2d upperRightEquatorialForest, int consumeEnergy) {
+    public GrassPlacer(Map<Vector2d, Grass> grassTufts, Vector2d lowerLeft, Vector2d upperRight,
+                       Vector2d lowerLeftEquatorialForest, Vector2d upperRightEquatorialForest, int consumeEnergy) {
         this.grassTufts = grassTufts;
         this.lowerLeftEquatorialForest = lowerLeftEquatorialForest;
         this.upperRightEquatorialForest = upperRightEquatorialForest;

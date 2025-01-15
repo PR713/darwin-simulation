@@ -10,4 +10,8 @@ public class OldAgeMovementBehavior {
         return Math.random() < (1 - Math.exp(-0.001 * animalAge)) * maxChance;
         //rzadko, rzadko -> rośnie :), limes = 0.8
     }
+
+    public static boolean isMoveSkippedDueToAge(WildOwlBear owlBear) {
+        return false;
+    }
 }

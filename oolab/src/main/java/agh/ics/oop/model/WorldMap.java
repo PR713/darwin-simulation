@@ -38,13 +38,17 @@ public interface WorldMap extends MoveValidator {
      */
     boolean isOccupied(Vector2d position);
 
+    boolean isOccupiedByAnimal(Vector2d position);
+
+    boolean isOccupiedByGrass(Vector2d position);
+
     /**
      * Return an animal at a given position.
      *
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    List<WorldElement> objectAt(Vector2d position);
+    List<? extends WorldElement> objectAt(Vector2d position);
 
     /**
      * Zwraca kolekcję wszystkich elementów na mapie (trawy i zwierzęta).
@@ -52,6 +56,12 @@ public interface WorldMap extends MoveValidator {
      * @return Kolekcja wszystkich elementów na mapie.
      */
     List<WorldElement> getElements();
+
+    List<WorldElement> getAllGrassTufts();
+
+    List<Animal> getAllAnimals();
+
+    List<WorldElement> getAllWorldElements();
 
     Boundary getCurrentBounds();
 

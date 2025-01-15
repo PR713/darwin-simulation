@@ -37,7 +37,7 @@ public class Animal extends AbstractAnimal {
         if (currentEnergy - energyLossPerDay > 0) {
             super.move(validator, direction);
             AbstractWorldMap map = (AbstractWorldMap) validator;
-            map.eatGrassIfPossible(this);
+            this.eatIfIsPossible(map);
             currentEnergy -= energyLossPerDay;
         }
         else setPassedAway(true);
@@ -69,5 +69,16 @@ public class Animal extends AbstractAnimal {
 
     public void setCurrentEnergy(int currentEnergy) {
         this.currentEnergy = currentEnergy;
+    }
+
+    @Override
+    public void eatIfIsPossible(AbstractWorldMap map) {
+        Vector2d position = this.getPosition();
+        if (map.isOccupiedByGrass(position)) {
+            map.grassTufts.remove(position);
+            map.currentPlantCount--;
+            map.emptyPositionCount++;
+            this.setCurrentEnergy(this.getEnergy() + map.grassPlacer.consumeEnergy);
+        }
     }
 }
