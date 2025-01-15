@@ -13,27 +13,21 @@ import java.util.Map;
 public class WorldElementBox extends VBox {
 
     private static final Map<String, Image> imageCache = new HashMap<>();
-    private final VBox container;
 
-    public WorldElementBox(WorldElement element, String positionLabel) {
+    public WorldElementBox(WorldElement element) {
 
         String resourceName = element.getResourceName();
         Image image = imageCache.computeIfAbsent(resourceName, res ->
-                new Image(getClass().getResourceAsStream("/" + res))
-        );
+                new Image(resourceName));
         //Image image = new Image(getClass().getResourceAsStream("/" + element.getResourceName()));
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
+        imageView.setPreserveRatio(true);
 
-        Label label = new Label(positionLabel);
+        Label label = new Label(element.getPosition().toString());
 
-        container = new VBox();
-        container.getChildren().addAll(imageView, label);
-        container.setAlignment(Pos.CENTER);
-    }
-
-    public VBox getContainer() {
-        return container;
+        this.getChildren().addAll(imageView, label);
+        this.setAlignment(Pos.CENTER);
     }
 }
