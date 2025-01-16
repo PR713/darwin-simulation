@@ -5,11 +5,9 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public class WildOwlBear extends AbstractAnimal {
 
     private int animalsEaten = 0;
-    private final Genome genome;
 
-    public WildOwlBear(Vector2d position, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
-        super(position, orientation, genomeLength, startIndexOfGenome);
-        this.genome = new Genome(genomeLength);
+    public WildOwlBear(Vector2d position, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
+        super(position, orientation, genomeLength, startIndexOfGenome, genome);
     }
 
 
@@ -36,23 +34,8 @@ public class WildOwlBear extends AbstractAnimal {
             } else { // vertically but not in corners, position doesn't change
                 this.orientation = newOrientation.reverseOrientation();
             }
-
-            this.eatIfIsPossible(map);
         }
     }
-
-    @Override
-    public void eatIfIsPossible(AbstractWorldMap map) {
-        WildOwlBearMap castedMap = (WildOwlBearMap) map;
-        Vector2d position = this.getPosition();
-        if (castedMap.isOccupiedByAnimal(position)) {
-            castedMap.owlBearAteAnAnimal(position);
-            castedMap.animals.remove(position);
-            castedMap.currentPlantCount--;
-            castedMap.emptyPositionCount++;
-        }
-    }
-
 
     public void incrementAnimalsEaten() {
         this.animalsEaten = this.animalsEaten + 1;

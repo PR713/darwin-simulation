@@ -55,22 +55,19 @@ public class WildOwlBearMap extends AbstractWorldMap {
         return this.owlBearAreaLowerLeft;
     }
 
-    protected void owlBearAteAnAnimal(Vector2d position) {
-        List<? extends WorldElement> animalsAteByOwlBear = this.animals.get(position);
-        for (WorldElement animal : animalsAteByOwlBear) {
-            ((Animal) animal).setPassedAway(true);
-            this.currentAnimalCount--;
-            wildOwlBear.incrementAnimalsEaten();
-        }
-        this.animals.remove(position);
-    }
-
     protected void setOwlBearPosition(Vector2d position) {
         this.wildOwlBear.position = position;
     }
 
 
-    public void updateMap(){
-
+    public void updateEaten(){
+        Vector2d position = this.wildOwlBear.getPosition();
+        if (this.animals.containsKey(position)) {
+            for ( Animal animal : this.animals.get(position)){
+                animal.setPassedAway(true);
+                wildOwlBear.incrementAnimalsEaten();
+            }
+        }
+        super.updateEaten();
     }
 }

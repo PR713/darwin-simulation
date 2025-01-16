@@ -184,6 +184,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void deleteDeadAnimals() {
         for (List<Animal> animalList : animals.values()) {
             animalList.removeIf(Animal::hasPassedAway);
+            this.currentAnimalCount--;
         }
     }
 
@@ -192,6 +193,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Vector2d grassPosition : grassTufts.keySet()) {
             List<Animal> animalsOnPosition = animals.get(grassPosition);
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPosition);
+            animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
         }
     }
 
