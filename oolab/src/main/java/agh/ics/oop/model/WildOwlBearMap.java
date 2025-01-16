@@ -1,5 +1,6 @@
 package agh.ics.oop.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,6 +58,8 @@ public class WildOwlBearMap extends AbstractWorldMap {
     public boolean canMoveTo(Vector2d position) {
         return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
     }
+
+    //List<WorldElement> worldElement = new ArrayList<>(getAllGrassTufts());
 
     public Vector2d getOwlBearAreaUpperRight() {
         return this.owlBearAreaUpperRight;

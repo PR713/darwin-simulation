@@ -1,13 +1,21 @@
 package agh.ics.oop.model;
 
-public class Gene {
+public class Genome {
     private final int[] genotype;
 
-    public Gene(int genotypeLength) {
+    public Genome(int genotypeLength) {
         this.genotype = new int[genotypeLength];
 
-        for (int i = 0; i < genotypeLength; i++) {
-            this.genotype[i] = (int) (Math.random() * 8);
+        for (int i = 0; i < genotypeLength; i++) { //nazwa genomeLength
+            this.genotype[i] = (int) (Math.random() * 8); //genom a nie genotyp
+        }
+    }
+
+    public Genome(Genome g1, Genome g2, g1Ene) {
+        this.genotype = new int[genotypeLength];
+
+        for (int i = 0; i < genotypeLength; i++) { //nazwa genomeLength
+            this.genotype[i] = (int) (Math.random() * 8); //genom a nie genotyp
         }
     }
 
@@ -16,15 +24,16 @@ public class Gene {
     }
 
     // EWENTUALNIE NOWA KLASA!!!
-    public Gene cross(Animal animal1, Animal animal2) {
+    public Genome cross(Animal animal1, Animal animal2) {
         int[] newGenes = new int[genotype.length];
         int[] animal1Genes = animal1.getGenome();
         int[] animal2Genes = animal2.getGenome();
         int animal1Energy = animal1.getEnergy();
         int animal2Energy = animal2.getEnergy();
+        //animal 3 nazwa genotyp
         //...
 
-        return new Gene(newGenes);
+        return new Genome(newGenes);
     }
 
 //    public Gene mutate() {

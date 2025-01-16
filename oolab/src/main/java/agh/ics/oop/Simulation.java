@@ -11,7 +11,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
     private final int simulationDuration;
     public Simulation(List<Vector2d> startPositions, WorldMap map,
             int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
-                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration) {
+                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration, boolean isAging) {
         this.animals = new ArrayList<>();
         this.map = map;
         this.simulationDuration = simulationDuration;
@@ -22,7 +22,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             AbstractAnimal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength, startIndexOfGenome);
+                    genomeLength, startIndexOfGenome, isAging);
             try {
                 map.place(animal);
                 animals.add(animal);
@@ -48,6 +48,8 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
                 System.err.println("Symulacja przerwana: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
+
+            //updateMap() -> owlBear je zwierzaki, animal trawę
         }
     }
 

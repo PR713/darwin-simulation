@@ -25,6 +25,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int emptyPositionCount;
     protected List<Integer> theMostPopularGenome;
     protected double averageAnimalsEnergy;
+    protected int deadAnimalsCount; // N*x + energy) / (N+1)
     protected double averageDeathAnimalsAgeFromTheStart;
     protected double averageAliveAnimalsNumberOfChildren;
     protected Vector2d lowerLeftEquatorialForest;

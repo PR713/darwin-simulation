@@ -15,11 +15,6 @@ public class OldAgeWildOwlBearMap extends WildOwlBearMap {
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
         //lub osobna klasa dla OldAgeAnimal i każda klasa metodę MovementBehavior sama implementuje
-        if (animal instanceof Animal) {
-            if (isMoveSkippedDueToAge((Animal) animal)) {
-                return;
-            }
-        }
-        super.move(animal, direction);
+        animal.move(this, direction.getNumericValue());
     }
 }

@@ -6,14 +6,14 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public abstract class AbstractAnimal implements WorldElement, Eatable {
     protected MapDirection orientation;
     protected Vector2d position;
-    protected int[] genome;
+    private Genome genome;
     private int currentIndexOfGenome;
 
     public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
         this.position = vector;
         this.orientation = orientation;
-        Gene genome = new Gene(genomeLength);
-        this.genome = genome.getGenes();
+        this.genome = new Genome(genomeLength);
+        //przechowywać private Gene gene = new Gene(genomeLength);
     }
 
 
@@ -77,7 +77,7 @@ public abstract class AbstractAnimal implements WorldElement, Eatable {
     @Override
     public abstract void eatIfIsPossible(AbstractWorldMap map);
 
-    public int[] getGenome() {
+    public Genome getGenome() {
         return this.genome;
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractAnimal implements WorldElement, Eatable {
     }
 
     public void incrementIndex() {
-        currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.length;
+        currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.getGenes().length;
     }
 }
 
