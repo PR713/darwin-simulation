@@ -64,4 +64,12 @@ public interface WorldMap extends MoveValidator {
     UUID getId();
 
     void addGrassTufts();
+
+    void deleteDeadAnimals();
+
+    void updateEaten();
+
+    Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition);
+
+    void updateReproduction();
 }

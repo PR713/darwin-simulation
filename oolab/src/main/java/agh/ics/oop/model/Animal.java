@@ -19,6 +19,7 @@ public class Animal extends AbstractAnimal {
     private List<UUID> ancestorsIDs; //
     private boolean passedAway = false;
     private final boolean isAging;
+    private boolean hasAlreadyMoved;
 
 
     public Animal(Vector2d position, MapDirection orientation,
@@ -50,10 +51,9 @@ public class Animal extends AbstractAnimal {
             if (isAging && isMoveSkippedDueToAge(this)) {
                 return;
             }
-
+            setHasAlreadyMoved(true);
             super.move(validator, direction);
-            AbstractWorldMap map = (AbstractWorldMap) validator;
-            this.eatIfIsPossible(map); // to i ^ przenieść do map
+
             setEnergy(currentEnergy - energyLossPerDay);
         }
         else setPassedAway(true);
@@ -81,5 +81,17 @@ public class Animal extends AbstractAnimal {
 
     public List<UUID> getAncestorsIDs(){
         return List.copyOf(ancestorsIDs);
+    }
+
+    public void setHasAlreadyMoved(boolean hasAlreadyMoved) {
+        this.hasAlreadyMoved = hasAlreadyMoved;
+    }
+
+    public boolean getHasAlreadyMoved() {
+        return this.hasAlreadyMoved;
+    }
+
+    public int getNumberOfChildren() {
+        return numberOfChildren;
     }
 }

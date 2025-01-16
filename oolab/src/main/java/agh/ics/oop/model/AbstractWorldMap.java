@@ -180,7 +180,96 @@ public abstract class AbstractWorldMap implements WorldMap {
         grassPlacer.addGrassTufts();
     }
 
-    public void updateMap(){
+    @Override
+    public void deleteDeadAnimals() {
+        for (List<Animal> animalList : animals.values()) {
+            animalList.removeIf(Animal::hasPassedAway);
+        }
+    }
 
+    @Override
+    public void updateEaten() {
+        for (Vector2d grassPosition : grassTufts.keySet()) {
+            List<Animal> animalsOnPosition = animals.get(grassPosition);
+            Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPosition);
+        }
+    }
+
+    @Override
+    public void updateReproduction() {
+        Set<Vector2d> positionsWithAnimalAt = animals.keySet();
+        for (Vector2d position : positionsWithAnimalAt) {
+            while (true) {
+                List<Animal> animalsOnPosition = animals.get(position);
+                if (animalsOnPosition.size() < 2) {
+                    continue;
+                }
+
+                Animal animalWinner1 = solveConflictsBetweenAnimals(animalsOnPosition);
+                animalsOnPosition.remove(animalWinner1);
+                Animal animalWinner2 = solveConflictsBetweenAnimals(animalsOnPosition);
+                animalsOnPosition.add(animalWinner1);
+
+                addAnimalToMap(reproduceAnimals(animalWinner1, animalWinner2));
+            }
+        }
+    }
+
+    private Animal reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
+        Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(), animalWinner1.getEnergy(), animalWinner2.getEnergy());
+        Animal animal;
+        MapDirection orientation = MapDirection.randomOrientation();
+        int startIndexOfGenome = (int) (Math.random() * newBornedAnimal.getGenome().getGenes().length);
+
+        try {
+            place(newBornedAnimal);
+        } catch (IncorrectPositionException e) {
+            System.out.println("Cannot place the animal: " + e.getMessage());
+        }
+        addAnimalToMap(newBornedAnimal);
+        return newBornedAnimal
+    }
+
+    @Override
+    public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
+        int maxAnimalEnergy = animalsOnPosition.stream().mapToInt(Animal::getEnergy).max().orElse(-1);
+        List<Animal> strongestAnimals = animalsOnPosition.stream()
+                .filter(animal -> animal.getEnergy() == maxAnimalEnergy)
+                .toList();
+
+        if (strongestAnimals.size() == 1) {
+            return strongestAnimals.get(0);
+        }
+
+
+        int maxLifespan = strongestAnimals.stream()
+                .mapToInt(Animal::getNumberOfDaysAlive)
+                .max()
+                .orElse(-1);
+
+        List<Animal> oldestAnimals = strongestAnimals.stream()
+                .filter(animal -> animal.getNumberOfDaysAlive() == maxLifespan)
+                .toList();
+
+        if (oldestAnimals.size() == 1) {
+            return oldestAnimals.get(0);
+        }
+
+
+        int maxNumberOfChildren = oldestAnimals.stream()
+                .mapToInt(Animal::getNumberOfChildren)
+                .max()
+                .orElse(-1);
+
+        List<Animal> mostProlificAnimals = oldestAnimals.stream()
+                .filter(animal -> animal.getNumberOfChildren() == maxNumberOfChildren)
+                .toList();
+
+        if (mostProlificAnimals.size() == 1) {
+            return mostProlificAnimals.get(0);
+        }
+
+
+        return mostProlificAnimals.get((int) (Math.random() * mostProlificAnimals.size()));
     }
 }

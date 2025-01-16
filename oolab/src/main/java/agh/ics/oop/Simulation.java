@@ -6,11 +6,12 @@ import agh.ics.oop.model.*;
 import java.util.*;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
-    private final List<AbstractAnimal> animals;
+    private List<Animal> animals;
     private final WorldMap map;
     private final int simulationDuration;
+
     public Simulation(List<Vector2d> startPositions, WorldMap map,
-            int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
+                      int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
                       int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration, boolean isAging) {
         this.animals = new ArrayList<>();
         this.map = map;
@@ -19,7 +20,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         for (Vector2d position : startPositions) {
             MapDirection orientation = MapDirection.randomOrientation();
             int startIndexOfGenome = (int) (Math.random() * genomeLength);
-            AbstractAnimal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
+            Animal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
                     genomeLength, startIndexOfGenome, isAging);
@@ -35,8 +36,10 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
     public void run() {
         for (int day = 1; day <= simulationDuration; day++) {
-
-            for (AbstractAnimal animal : animals) {
+            map.deleteDeadAnimals();
+            this.animals = map.getAllAnimals(); // jeśli się nowe urodziły
+            for (Animal animal : animals) {
+                animal.setHasAlreadyMoved(false);
                 int direction = animal.getGenome().getGenes()[animal.getCurrentIndexOfGenome()];
                 animal.move(map, direction);
                 animal.incrementIndex();
@@ -49,8 +52,8 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
                 Thread.currentThread().interrupt();
             }
 
-            //updateMap() -> owlBear je zwierzaki, animal trawę
-
+            map.updateEaten();
+            map.updateReproduction();
             map.addGrassTufts();
         }
 
