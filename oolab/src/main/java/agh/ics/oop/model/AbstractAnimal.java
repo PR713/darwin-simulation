@@ -2,16 +2,17 @@ package agh.ics.oop.model;
 
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
-public abstract class AbstractAnimal implements WorldElement, Eatable {
+public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection orientation;
     protected Vector2d position;
     private final Genome genome;
     private int currentIndexOfGenome;
 
-    public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
+    public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
         this.position = vector;
         this.orientation = orientation;
-        this.genome = new Genome(genomeLength);
+        this.genome = genome;
+        this.currentIndexOfGenome = startIndexOfGenome;
     }
 
 
@@ -70,10 +71,6 @@ public abstract class AbstractAnimal implements WorldElement, Eatable {
 
         }
     }
-
-
-    @Override
-    public abstract void eatIfIsPossible(AbstractWorldMap map);
 
     public Genome getGenome() {
         return this.genome;

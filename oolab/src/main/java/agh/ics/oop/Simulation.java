@@ -20,10 +20,11 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         for (Vector2d position : startPositions) {
             MapDirection orientation = MapDirection.randomOrientation();
             int startIndexOfGenome = (int) (Math.random() * genomeLength);
+            Genome genome = new Genome(genomeLength);
             Animal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength, startIndexOfGenome, isAging);
+                    genomeLength, startIndexOfGenome, isAging, genome);
             try {
                 map.place(animal);
                 animals.add(animal);
@@ -37,7 +38,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
     public void run() {
         for (int day = 1; day <= simulationDuration; day++) {
             map.deleteDeadAnimals();
-            this.animals = map.getAllAnimals(); // jeśli się nowe urodziły
+            this.animals = getAnimals(); // jeśli się nowe urodziły
             for (Animal animal : animals) {
                 animal.setHasAlreadyMoved(false);
                 int direction = animal.getGenome().getGenes()[animal.getCurrentIndexOfGenome()];
@@ -61,8 +62,8 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
     }
 
 
-    public List<AbstractAnimal> getAnimals() {
-        return Collections.unmodifiableList(animals); //only view on animals List
+    public List<Animal> getAnimals() {
+        return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List
     }
 }
 

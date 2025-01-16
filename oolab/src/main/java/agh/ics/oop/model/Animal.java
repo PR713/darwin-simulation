@@ -24,8 +24,8 @@ public class Animal extends AbstractAnimal {
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging) {
-        super(position, orientation, genomeLength, startIndexOfGenome);
+                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging, Genome genome) {
+        super(position, orientation, genomeLength, startIndexOfGenome, genome);
         this.defaultEnergySpawnedWith = defaultEnergySpawnedWith;
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
@@ -93,5 +93,25 @@ public class Animal extends AbstractAnimal {
 
     public int getNumberOfChildren() {
         return numberOfChildren;
+    }
+
+    public int getEnergyNeededToReproduce() {
+        return energyNeededToReproduce;
+    }
+
+    public int getDefaultEnergySpawnedWith() {
+        return defaultEnergySpawnedWith;
+    }
+
+    public int getEnergyLossPerDay() {
+        return energyLossPerDay;
+    }
+
+    public int getEnergyLossPerReproduction() {
+        return energyLossPerReproduction;
+    }
+
+    public boolean getIsAging() {
+        return isAging;
     }
 }

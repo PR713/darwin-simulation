@@ -210,6 +210,10 @@ public abstract class AbstractWorldMap implements WorldMap {
                 Animal animalWinner2 = solveConflictsBetweenAnimals(animalsOnPosition);
                 animalsOnPosition.add(animalWinner1);
 
+                if (animalWinner1.getEnergy() < animalWinner1.getEnergyNeededToReproduce() || animalWinner2.getEnergy() < animalWinner2.getEnergyNeededToReproduce()) {
+                    break;
+                }
+
                 addAnimalToMap(reproduceAnimals(animalWinner1, animalWinner2));
             }
         }
@@ -217,18 +221,22 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     private Animal reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
         Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(), animalWinner1.getEnergy(), animalWinner2.getEnergy());
-        Animal animal;
-        MapDirection orientation = MapDirection.randomOrientation();
-        int startIndexOfGenome = (int) (Math.random() * newBornedAnimal.getGenome().getGenes().length);
 
+        MapDirection orientation = MapDirection.randomOrientation();
+        int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);
+        Animal newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
+                animalWinner1.getDefaultEnergySpawnedWith(), animalWinner1.getEnergyLossPerDay(),
+                animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
+                animalWinner1.getGenome().getGenes().length, startIndexOfGenome, animalWinner1.getIsAging(), newGene);
         try {
             place(newBornedAnimal);
         } catch (IncorrectPositionException e) {
             System.out.println("Cannot place the animal: " + e.getMessage());
         }
         addAnimalToMap(newBornedAnimal);
-        return newBornedAnimal
+        return newBornedAnimal;
     }
+
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
