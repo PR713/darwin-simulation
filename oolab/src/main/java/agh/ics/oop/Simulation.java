@@ -37,7 +37,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         for (int day = 1; day <= simulationDuration; day++) {
 
             for (AbstractAnimal animal : animals) {
-                int direction = animal.getGenome()[animal.getCurrentIndexOfGenome()];
+                int direction = animal.getGenome().getGenes()[animal.getCurrentIndexOfGenome()];
                 animal.move(map, direction);
                 animal.incrementIndex();
             }
@@ -50,7 +50,11 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             }
 
             //updateMap() -> owlBear je zwierzaki, animal trawę
+
+            map.addGrassTufts();
         }
+
+
     }
 
 

@@ -18,10 +18,8 @@ public class Animal extends AbstractAnimal {
     private UUID parentID; //
     private List<UUID> ancestorsIDs; //
     private boolean passedAway = false;
-    private boolean isAging;
+    private final boolean isAging;
 
-
-    //przenieść jedzenie trawy
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
@@ -75,17 +73,6 @@ public class Animal extends AbstractAnimal {
 
     public void setCurrentEnergy(int currentEnergy) {
         this.currentEnergy = currentEnergy;
-    }
-
-    @Override
-    public void eatIfIsPossible(AbstractWorldMap map) {
-        Vector2d position = this.getPosition();
-        if (map.isOccupiedByGrass(position)) {
-            map.grassTufts.remove(position);
-            map.currentPlantCount--;
-            map.emptyPositionCount++;
-            this.setCurrentEnergy(this.getEnergy() + map.grassPlacer.consumeEnergy);
-        }
     }
 
     public UUID getParentID(){

@@ -1,11 +1,8 @@
 package agh.ics.oop.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class WildOwlBearMap extends AbstractWorldMap {
 
@@ -23,18 +20,7 @@ public class WildOwlBearMap extends AbstractWorldMap {
 
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
-        //lub osobna klasa dla OldAgeAnimal i każda klasa metodę MovementBehavior sama implementuje
-        if (animal instanceof Animal) {
-                super.move(animal, direction);
-        }//else
-        Vector2d oldPosition = animal.getPosition();
-        animal.move(this, direction.getNumericValue());
-        Vector2d newPosition = animal.getPosition();
-
-        if (!oldPosition.equals(newPosition)) {
-            setOwlBearPosition(newPosition);
-            mapChanged(String.format("OwlBear moved from %s to %s", oldPosition, newPosition));
-        }
+        super.move(animal, direction);
     }
 
 
@@ -81,5 +67,10 @@ public class WildOwlBearMap extends AbstractWorldMap {
 
     protected void setOwlBearPosition(Vector2d position) {
         this.wildOwlBear.position = position;
+    }
+
+
+    public void updateMap(){
+
     }
 }

@@ -5,9 +5,11 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public class WildOwlBear extends AbstractAnimal {
 
     private int animalsEaten = 0;
+    private final Genome genome;
 
-    public WildOwlBear(Vector2d position, MapDirection orientation) {
-        super(position, orientation);
+    public WildOwlBear(Vector2d position, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
+        super(position, orientation, genomeLength, startIndexOfGenome);
+        this.genome = new Genome(genomeLength);
     }
 
 

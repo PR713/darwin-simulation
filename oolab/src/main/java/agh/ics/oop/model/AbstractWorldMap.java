@@ -18,8 +18,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     //observers w przyszłości jak WorldElement może mieć różne typy obiektów a implementację MapChangeListener
     //już w swoich klasach jak Animal i Grass = WorldElement
     private final UUID id;
-    protected final int initialPlantCount;
-    protected final int dailyPlantGrowth;
     protected int currentPlantCount;
     protected int currentAnimalCount;
     protected int emptyPositionCount;
@@ -32,16 +30,16 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d upperRightEquatorialForest;
     protected GrassPlacer grassPlacer;
 
-    public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
+
+    public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth, int consumeEnergy) {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.visualizer = new MapVisualizer(this);
         this.id = UUID.randomUUID();
-        this.initialPlantCount = initialPlantCount;
-        this.dailyPlantGrowth = dailyPlantGrowth;
         this.lowerLeftEquatorialForest = new Vector2d(0, (int) (0.4 * height));
         this.upperRightEquatorialForest = new Vector2d(width - 1, (int) (0.6 * height));
-        this.grassPlacer = new GrassPlacer(grassTufts, lowerLeft, upperRight, lowerLeftEquatorialForest, upperRightEquatorialForest, consumeEnergy);
+        this.grassPlacer = new GrassPlacer(grassTufts, lowerLeft, upperRight, lowerLeftEquatorialForest, upperRightEquatorialForest,
+                consumeEnergy, dailyGrassGrowth, initialPlantCount);
 
     }
 
@@ -176,8 +174,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         return id;
     }
 
-    public void addGrassTuft(Vector2d position, Grass grassTuft) {
-        grassPlacer.addGrassTuft();
+
+    @Override
+    public void addGrassTufts() {
+        grassPlacer.addGrassTufts();
     }
 
+    public void updateMap(){
+
+    }
 }

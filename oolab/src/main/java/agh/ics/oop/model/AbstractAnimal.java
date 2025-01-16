@@ -1,19 +1,17 @@
 package agh.ics.oop.model;
 
-
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
 public abstract class AbstractAnimal implements WorldElement, Eatable {
     protected MapDirection orientation;
     protected Vector2d position;
-    private Genome genome;
+    private final Genome genome;
     private int currentIndexOfGenome;
 
     public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome) {
         this.position = vector;
         this.orientation = orientation;
         this.genome = new Genome(genomeLength);
-        //przechowywać private Gene gene = new Gene(genomeLength);
     }
 
 

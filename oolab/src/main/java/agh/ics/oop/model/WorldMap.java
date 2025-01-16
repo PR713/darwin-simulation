@@ -62,4 +62,6 @@ public interface WorldMap extends MoveValidator {
     List<WorldElement> getAllWorldElements();
 
     UUID getId();
+
+    void addGrassTufts();
 }
