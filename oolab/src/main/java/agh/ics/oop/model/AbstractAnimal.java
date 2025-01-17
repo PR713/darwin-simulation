@@ -7,12 +7,14 @@ public abstract class AbstractAnimal implements WorldElement {
     protected Vector2d position;
     private final Genome genome;
     private int currentIndexOfGenome;
+    private static int genomeLength;
 
     public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
         this.position = vector;
         this.orientation = orientation;
         this.genome = genome;
         this.currentIndexOfGenome = startIndexOfGenome;
+        AbstractAnimal.genomeLength = genome.getGenes().length;
     }
 
 
@@ -82,6 +84,10 @@ public abstract class AbstractAnimal implements WorldElement {
 
     public void incrementIndex() {
         currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.getGenes().length;
+    }
+
+    public static int getGenomeLength(){
+        return genomeLength;
     }
 }
 

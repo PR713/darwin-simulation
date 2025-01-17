@@ -12,18 +12,24 @@ public class WildOwlBearMap extends AbstractWorldMap {
     private final Vector2d owlBearAreaUpperRight;
     protected WildOwlBear wildOwlBear;
 
-    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy, WildOwlBear wildOwlBear) {
+    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
         super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy);
-        this.wildOwlBear = wildOwlBear;
 
         List<Vector2d> owlBearAreaCords = getOwlBearAreaCords(this.lowerLeft, this.upperRight);
         this.owlBearAreaLowerLeft = owlBearAreaCords.get(0);
         this.owlBearAreaUpperRight = owlBearAreaCords.get(1);
+        this.wildOwlBear = new WildOwlBear(getRandomPosition(owlBearAreaLowerLeft, owlBearAreaUpperRight), MapDirection.randomOrientation(),
+                AbstractAnimal.getGenomeLength(), startindex, genome);
     }
 
 
     public List<Vector2d> getOwlBearAreaCords(Vector2d lowerLeft, Vector2d upperRight) {
         //WYBÓR kwadratowej podpamy ... TO DO
+        return null;
+    }
+
+
+    public Vector2d getRandomPosition(Vector2d lowerLeft, Vector2d upperRight){
         return null;
     }
 
