@@ -54,6 +54,11 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             }
 
             map.updateEaten();
+            for (Animal animal : animals) {
+                if (!animal.hasPassedAway()){
+                    animal.incrementNumberOfDaysAlive();
+                }
+            }
             map.updateReproduction();
             map.addGrassTufts();
         }

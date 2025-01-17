@@ -34,6 +34,7 @@ public class Animal extends AbstractAnimal {
         if (this.defaultEnergySpawnedWith > this.energyNeededToReproduce){
             this.isReadyToReproduce = true;
         }
+        this.numberOfDaysAlive = 0;
     }
 
     public int getEnergy() {
@@ -71,10 +72,6 @@ public class Animal extends AbstractAnimal {
 
     public int getNumberOfDaysAlive() {
         return numberOfDaysAlive;
-    }
-
-    public void setCurrentEnergy(int currentEnergy) {
-        this.currentEnergy = currentEnergy;
     }
 
     public UUID getParentID(){
@@ -120,5 +117,9 @@ public class Animal extends AbstractAnimal {
     public void hasReproduced() {
         this.isReadyToReproduce = false;
         currentEnergy -= energyNeededToReproduce;
+    }
+
+    public void incrementNumberOfDaysAlive(){
+        this.numberOfDaysAlive += 1;
     }
 }

@@ -5,7 +5,7 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection orientation;
     protected Vector2d position;
-    private final Genome genome;
+    protected final Genome genome;
     private int currentIndexOfGenome;
     private static int genomeLength;
 
