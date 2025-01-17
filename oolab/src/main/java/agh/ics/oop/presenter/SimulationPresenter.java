@@ -118,10 +118,10 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private void onSimulationStartClicked(ActionEvent actionEvent){
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
-        AbstractWorldMap map = new OldAgeGlobeMap(5, 5, 5, 2, 1);
+        AbstractWorldMap map = new GlobeMap(5, 5, 5, 2, 1);
         map.addObserver(this);
 
-        Simulation simulationGrassField = new Simulation(positions, map, 6, 6, 1, 3, 4, 100);
+        Simulation simulationGrassField = new Simulation(positions, map, 6, 6, 1, 3, 4, 100, true);
 
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
 
