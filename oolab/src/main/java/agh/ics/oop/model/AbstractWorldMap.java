@@ -19,20 +19,25 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int currentPlantCount;
     protected int currentAnimalCount;
     protected int emptyPositionCount;
+    protected int countOfDeadAnimals;
+    protected final int maxNumberOfMutations;
+    protected final int minNumberOfMutations;
     protected List<Integer> theMostPopularGenome;
-    protected double averageAnimalsEnergy;
-    protected int deadAnimalsCount; // N*x + energy) / (N+1)
-    protected double averageDeathAnimalsAgeFromTheStart;
-    protected double averageAliveAnimalsNumberOfChildren;
+    protected double averageAliveAnimalsEnergy;
+    protected double averageDeadAnimalsAge;
+    protected double averageAliveAnimalsNumberOfChildren = 0;
     protected Vector2d lowerLeftEquatorialForest;
     protected Vector2d upperRightEquatorialForest;
     protected GrassPlacer grassPlacer;
 
 
-    public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth, int consumeEnergy) {
+    public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth,
+                            int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations) {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.visualizer = new MapVisualizer(this);
+        this.maxNumberOfMutations = maxNumberOfMutations;
+        this.minNumberOfMutations = minNumberOfMutations;
         this.id = UUID.randomUUID();
         this.lowerLeftEquatorialForest = new Vector2d(0, (int) (0.4 * height));
         this.upperRightEquatorialForest = new Vector2d(width - 1, (int) (0.6 * height));
@@ -194,10 +199,20 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void deleteDeadAnimals() {
+        int previousCountOfDeadAnimals = this.countOfDeadAnimals;
+        int totalDeadAgeToday = 0;
         for (List<Animal> animalList : animals.values()) {
-            animalList.removeIf(Animal::hasPassedAway);
-            this.currentAnimalCount--;
+            for (Animal animal : animalList) {
+                if (animal.hasPassedAway()) {
+                    removeAnimalFromMap(animal.getPosition(), animal);
+                    this.currentAnimalCount--;
+                    this.countOfDeadAnimals++;
+                    totalDeadAgeToday += animal.getNumberOfDaysAlive();
+                }
+            }
         }
+        averageDeadAnimalsAge = (averageDeadAnimalsAge * previousCountOfDeadAnimals
+                + totalDeadAgeToday) / countOfDeadAnimals;
     }
 
 
@@ -209,8 +224,11 @@ public abstract class AbstractWorldMap implements WorldMap {
                     .filter(Animal::getHasAlreadyMoved)
                     .toList();
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
+            currentPlantCount -= 1;
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
         }
+
+        this.emptyPositionCount = grassPlacer.findEmptySpots(lowerLeft, upperRight).size();
     }
 
 
@@ -247,7 +265,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         MapDirection orientation = MapDirection.randomOrientation();
         int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);
         Animal newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
-                2*animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
+                2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                 animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
                 animalWinner1.getGenome().getGenes().length, startIndexOfGenome, animalWinner1.getIsAging(), newGene);
         try {
@@ -256,14 +274,19 @@ public abstract class AbstractWorldMap implements WorldMap {
             System.out.println("Cannot place the animal: " + e.getMessage());
         }
         addAnimalToMap(newBornedAnimal);
+        updateAverageAliveAnimalsNumberOfChildren();
+        currentAnimalCount++;
+        updateCountOfChildren(animalWinner1, animalWinner2);
         return newBornedAnimal;
     }
 
 
-    public void updateChildrens(Animal animal) {
-        animal.incrementNumberOfChildren();
+    public void updateCountOfChildren(Animal animal1, Animal animal2) {
+        animal1.incrementNumberOfChildren();
+        animal2.incrementNumberOfChildren();
 
     }
+
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
@@ -306,5 +329,34 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
         return mostProlificAnimals.get((int) (Math.random() * mostProlificAnimals.size()));
+    }
+
+
+    public void updateAverageAliveAnimalsNumberOfChildren() {
+        averageAliveAnimalsNumberOfChildren = (averageAliveAnimalsNumberOfChildren * currentAnimalCount + 1) / (currentAnimalCount + 1);
+    }
+
+
+    public void updateAverageAliveAnimalsEnergy() {
+        int currentAnimalEnergy = 0;
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.hasPassedAway()) {
+                    continue;
+                }
+                currentAnimalEnergy += animal.getEnergy();
+            }
+        }
+        averageAliveAnimalsEnergy = (double) currentAnimalEnergy / currentAnimalCount;
+    }
+
+    public void updateAnimalsLifespan(){
+        for (List<Animal> animalsOnPosition : animals.values()) {
+            for (Animal animal : animalsOnPosition) {
+                if (!animal.hasPassedAway()){
+                    animal.incrementNumberOfDaysAlive();
+                }
+            }
+        }
     }
 }

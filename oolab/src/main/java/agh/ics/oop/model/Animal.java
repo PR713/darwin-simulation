@@ -6,7 +6,6 @@ import java.util.UUID;
 import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class Animal extends AbstractAnimal {
-    private final int defaultEnergySpawnedWith;
     private int currentEnergy;
     private final int energyLossPerDay;
     private final int energyLossPerReproduction;
@@ -26,12 +25,11 @@ public class Animal extends AbstractAnimal {
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
                   int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging, Genome genome) {
         super(position, orientation, genomeLength, startIndexOfGenome, genome);
-        this.defaultEnergySpawnedWith = defaultEnergySpawnedWith;
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
         this.energyNeededToReproduce = energyNeededToReproduce;
         this.isAging = isAging;
-        if (this.defaultEnergySpawnedWith > this.energyNeededToReproduce){
+        if (defaultEnergySpawnedWith > this.energyNeededToReproduce) {
             this.isReadyToReproduce = true;
         }
         this.numberOfDaysAlive = 0;
@@ -58,8 +56,7 @@ public class Animal extends AbstractAnimal {
 
             setEnergy(currentEnergy - energyLossPerDay);
             isReadyToReproduce = currentEnergy >= energyNeededToReproduce;
-        }
-        else setPassedAway(true);
+        } else setPassedAway(true);
     }
 
     public boolean hasPassedAway() {
@@ -74,11 +71,11 @@ public class Animal extends AbstractAnimal {
         return numberOfDaysAlive;
     }
 
-    public UUID getParentID(){
+    public UUID getParentID() {
         return parentID;
     }
 
-    public List<UUID> getAncestorsIDs(){
+    public List<UUID> getAncestorsIDs() {
         return List.copyOf(ancestorsIDs);
     }
 
@@ -119,7 +116,7 @@ public class Animal extends AbstractAnimal {
         currentEnergy -= energyNeededToReproduce;
     }
 
-    public void incrementNumberOfDaysAlive(){
-        this.numberOfDaysAlive += 1;
+    public void incrementNumberOfDaysAlive() {
+        this.numberOfDaysAlive++;
     }
 }

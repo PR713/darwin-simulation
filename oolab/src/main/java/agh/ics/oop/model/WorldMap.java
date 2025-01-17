@@ -72,4 +72,6 @@ public interface WorldMap extends MoveValidator {
     Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition);
 
     void updateReproduction();
+
+    void updateAnimalsLifespan();
 }

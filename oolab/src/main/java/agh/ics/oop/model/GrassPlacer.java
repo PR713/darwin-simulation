@@ -11,7 +11,6 @@ public class GrassPlacer {
     private final Vector2d upperRight;
     final int consumeEnergy;
     private int dailyGrassGrowth;
-    private final int initialPlantCount;
 
     public GrassPlacer(Map<Vector2d, Grass> grassTufts, Vector2d lowerLeft, Vector2d upperRight,
                        Vector2d lowerLeftEquatorialForest, Vector2d upperRightEquatorialForest, int consumeEnergy,
@@ -22,7 +21,6 @@ public class GrassPlacer {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
         this.consumeEnergy = consumeEnergy;
-        this.initialPlantCount = initialPlantCount;
         this.dailyGrassGrowth = initialPlantCount;
         addGrassTufts();
         this.dailyGrassGrowth = dailyGrassGrowth;

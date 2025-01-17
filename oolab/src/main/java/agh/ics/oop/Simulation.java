@@ -12,7 +12,8 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
     public Simulation(List<Vector2d> startPositions, WorldMap map,
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
-                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration, boolean isAging) {
+                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration,
+                      boolean isAging) {
         this.animals = new ArrayList<>();
         this.map = map;
         this.simulationDuration = simulationDuration;
@@ -54,11 +55,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             }
 
             map.updateEaten();
-            for (Animal animal : animals) {
-                if (!animal.hasPassedAway()){
-                    animal.incrementNumberOfDaysAlive();
-                }
-            }
+            map.updateAnimalsLifespan();
             map.updateReproduction();
             map.addGrassTufts();
         }
