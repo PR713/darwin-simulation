@@ -15,8 +15,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
     private final List<MapChangeListener> observers = new ArrayList<>();
-    //observers w przyszłości jak WorldElement może mieć różne typy obiektów a implementację MapChangeListener
-    //już w swoich klasach jak Animal i Grass = WorldElement
     private final UUID id;
     protected int currentPlantCount;
     protected int currentAnimalCount;
@@ -55,9 +53,11 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
+
     public void addAnimalToMap(AbstractAnimal animal) {
         animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
     }
+
 
     public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
         animals.get(position).remove(animal);
@@ -66,6 +66,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             animals.remove(position);
         }
     }
+
 
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
@@ -80,20 +81,24 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+
     @Override
     public boolean isOccupied(Vector2d position) {
         return isOccupiedByAnimal(position) || isOccupiedByGrass(position);
     }
+
 
     @Override
     public boolean isOccupiedByAnimal(Vector2d position) {
         return animals.containsKey(position);
     }
 
+
     @Override
     public boolean isOccupiedByGrass(Vector2d position) {
         return grassTufts.containsKey(position);
     }
+
 
     @Override
     public List<? extends WorldElement> objectAt(Vector2d position) {
@@ -112,6 +117,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return (position.getX() > upperRight.getX() || position.getX() < lowerLeft.getX());
     }
 
+
     @Override
     public boolean isMovingBeyondBordersVertically(Vector2d position) {
         return (position.getY() > upperRight.getY() || position.getY() < lowerLeft.getY());
@@ -122,14 +128,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         return upperRight;
     }
 
+
     public Vector2d getLowerLeft() {
         return lowerLeft;
     }
+
 
     @Override
     public List<Grass> getAllGrassTufts() {
         return List.copyOf(grassTufts.values());
     }
+
 
     @Override
     public List<Animal> getAllAnimals() {
@@ -137,6 +146,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<WorldElement> getAllWorldElements() {
@@ -150,6 +160,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             observers.add(observer);
         }
     }
+
 
     public void removeObserver(MapChangeListener observer) {
         observers.remove(observer);
@@ -180,6 +191,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         grassPlacer.addGrassTufts();
     }
 
+
     @Override
     public void deleteDeadAnimals() {
         for (List<Animal> animalList : animals.values()) {
@@ -188,14 +200,19 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+
     @Override
     public void updateEaten() {
         for (Vector2d grassPosition : grassTufts.keySet()) {
             List<Animal> animalsOnPosition = animals.get(grassPosition);
-            Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPosition);
+            List<Animal> animalsOnPositionThatMoved = animalsOnPosition.stream()
+                    .filter(Animal::getHasAlreadyMoved)
+                    .toList();
+            Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
         }
     }
+
 
     @Override
     public void updateReproduction() {
@@ -217,9 +234,12 @@ public abstract class AbstractWorldMap implements WorldMap {
                 }
 
                 addAnimalToMap(reproduceAnimals(animalWinner1, animalWinner2));
+                animalWinner1.hasReproduced();
+                animalWinner2.hasReproduced();
             }
         }
     }
+
 
     private Animal reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
         Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(), animalWinner1.getEnergy(), animalWinner2.getEnergy());
@@ -227,7 +247,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         MapDirection orientation = MapDirection.randomOrientation();
         int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);
         Animal newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
-                animalWinner1.getDefaultEnergySpawnedWith(), animalWinner1.getEnergyLossPerDay(),
+                2*animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                 animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
                 animalWinner1.getGenome().getGenes().length, startIndexOfGenome, animalWinner1.getIsAging(), newGene);
         try {
@@ -239,6 +259,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         return newBornedAnimal;
     }
 
+
+    public void updateChildrens(Animal animal) {
+        animal.incrementNumberOfChildren();
+
+    }
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {

@@ -47,6 +47,7 @@ public class Animal extends AbstractAnimal {
 
     @Override
     public void move(MoveValidator validator, int direction) {
+        setHasAlreadyMoved(false);
         if (currentEnergy - energyLossPerDay > 0) {
             if (isAging && isMoveSkippedDueToAge(this)) {
                 return;
@@ -55,6 +56,7 @@ public class Animal extends AbstractAnimal {
             super.move(validator, direction);
 
             setEnergy(currentEnergy - energyLossPerDay);
+            isReadyToReproduce = currentEnergy >= energyNeededToReproduce;
         }
         else setPassedAway(true);
     }
@@ -99,10 +101,6 @@ public class Animal extends AbstractAnimal {
         return energyNeededToReproduce;
     }
 
-    public int getDefaultEnergySpawnedWith() {
-        return defaultEnergySpawnedWith;
-    }
-
     public int getEnergyLossPerDay() {
         return energyLossPerDay;
     }
@@ -113,5 +111,14 @@ public class Animal extends AbstractAnimal {
 
     public boolean getIsAging() {
         return isAging;
+    }
+
+    public void incrementNumberOfChildren() {
+        this.numberOfChildren++;
+    }
+
+    public void hasReproduced() {
+        this.isReadyToReproduce = false;
+        currentEnergy -= energyNeededToReproduce;
     }
 }

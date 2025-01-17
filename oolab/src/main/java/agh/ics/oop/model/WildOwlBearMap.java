@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.exceptions.IncorrectPositionException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,13 +12,26 @@ public class WildOwlBearMap extends AbstractWorldMap {
     private final Vector2d owlBearAreaUpperRight;
     protected WildOwlBear wildOwlBear;
 
-    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy,
-                          Vector2d owlBearAreaLowerLeft, Vector2d owlBearAreaUpperRight, WildOwlBear wildOwlBear) {
+    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy, WildOwlBear wildOwlBear) {
         super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy);
         this.wildOwlBear = wildOwlBear;
-        this.owlBearAreaLowerLeft = owlBearAreaLowerLeft;
-        this.owlBearAreaUpperRight = owlBearAreaUpperRight;
+
+        List<Vector2d> owlBearAreaCords = getOwlBearAreaCords(this.lowerLeft, this.upperRight);
+        this.owlBearAreaLowerLeft = owlBearAreaCords.get(0);
+        this.owlBearAreaUpperRight = owlBearAreaCords.get(1);
     }
+
+
+    public List<Vector2d> getOwlBearAreaCords(Vector2d lowerLeft, Vector2d upperRight) {
+        //WYBÓR kwadratowej podpamy ... TO DO
+        return null;
+    }
+
+
+    public void placeWildOwlBear() throws IncorrectPositionException {
+        this.place(wildOwlBear);
+    }
+
 
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
@@ -53,10 +68,6 @@ public class WildOwlBearMap extends AbstractWorldMap {
 
     public Vector2d getOwlBearAreaLowerLeft() {
         return this.owlBearAreaLowerLeft;
-    }
-
-    protected void setOwlBearPosition(Vector2d position) {
-        this.wildOwlBear.position = position;
     }
 
 
