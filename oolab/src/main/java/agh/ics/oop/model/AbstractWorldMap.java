@@ -359,4 +359,15 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
     }
+
+
+    public void updateAnimalDescedants(){
+        getDescedants();
+    }
+
+    public List<Animal> getDescedants(){
+        return null;
+    }
+
+
 }
