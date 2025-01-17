@@ -3,22 +3,28 @@ package agh.ics.oop;
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
-    private final List<Animal> animals;
-    private final List<MoveDirection> listOfMoves;
+    private List<Animal> animals;
     private final WorldMap map;
+    private final int simulationDuration;
 
-    public Simulation(List<Vector2d> startPositions, List<MoveDirection> listOfMoves, WorldMap map) {
+    public Simulation(List<Vector2d> startPositions, WorldMap map,
+                      int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
+                      int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration, boolean isAging) {
         this.animals = new ArrayList<>();
-        this.listOfMoves = listOfMoves;
         this.map = map;
+        this.simulationDuration = simulationDuration;
 
         for (Vector2d position : startPositions) {
-            Animal animal = new Animal(position);
+            MapDirection orientation = MapDirection.randomOrientation();
+            int startIndexOfGenome = (int) (Math.random() * genomeLength);
+            Genome genome = new Genome(genomeLength);
+            Animal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),
+                    defaultEnergySpawnedWith, energyLossPerDay,
+                    energyLossPerReproduction, energyNeededToReproduce,
+                    genomeLength, startIndexOfGenome, isAging, genome);
             try {
                 map.place(animal);
                 animals.add(animal);
@@ -30,11 +36,15 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
 
     public void run() {
-        for (int index = 0; index < listOfMoves.size(); index++) {
-            int animalIndex = index % animals.size();
-            Animal animal = animals.get(animalIndex);
-            map.move(animal, listOfMoves.get(index));
-
+        for (int day = 1; day <= simulationDuration; day++) {
+            map.deleteDeadAnimals();
+            this.animals = getAnimals(); // jeśli się nowe urodziły
+            for (Animal animal : animals) {
+                animal.setHasAlreadyMoved(false);
+                int direction = animal.getGenome().getGenes()[animal.getCurrentIndexOfGenome()];
+                animal.move(map, direction);
+                animal.incrementIndex();
+            }
             try {
                 Thread.sleep(500);
 
@@ -42,12 +52,18 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
                 System.err.println("Symulacja przerwana: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
+
+            map.updateEaten();
+            map.updateReproduction();
+            map.addGrassTufts();
         }
+
+
     }
 
 
     public List<Animal> getAnimals() {
-        return Collections.unmodifiableList(animals); //only view on animals List
+        return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List
     }
 }
 

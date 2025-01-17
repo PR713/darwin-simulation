@@ -1,62 +1,117 @@
 package agh.ics.oop.model;
 
-public class Animal implements WorldElement {
-    private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position;
-    private static final Vector2d upperRight = new Vector2d(4,4);
-    private static final Vector2d lowerLeft = new Vector2d(0,0);
+import java.util.List;
+import java.util.UUID;
 
-    public Animal() {
-        this.position = new Vector2d(2,2);
-    }
+import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
-    public Animal(Vector2d vector) {
-        this.position = vector;
-    }
-
-
-    @Override
-    public String toString(){
-        return switch (this.getOrientation()) {
-            case NORTH -> "^";
-            case EAST -> ">";
-            case SOUTH -> "v";
-            case WEST -> "<";
-        };
-    }
+public class Animal extends AbstractAnimal {
+    private final int defaultEnergySpawnedWith;
+    private int currentEnergy;
+    private final int energyLossPerDay;
+    private final int energyLossPerReproduction;
+    private boolean isReadyToReproduce = false;
+    private final int energyNeededToReproduce;
+    private int numberOfChildren;
+    private int numberOfDescendants;
+    private int numberOfDaysAlive;
+    private UUID parentID; //
+    private List<UUID> ancestorsIDs; //
+    private boolean passedAway = false;
+    private final boolean isAging;
+    private boolean hasAlreadyMoved;
 
 
-    public boolean isAt(Vector2d position) {
-        return this.position.equals(position);
-    }
-
-
-    public MapDirection getOrientation(){
-        return this.orientation;
-    }
-
-
-    @Override
-    public Vector2d getPosition(){
-        return this.position;
-    }
-
-    public void move(MoveValidator validator, MoveDirection direction) {
-        Vector2d newPosition = this.position;
-        switch(direction) {
-            case LEFT: this.orientation = orientation.previous();
-                break;
-            case RIGHT: this.orientation = orientation.next();
-                break;
-            case FORWARD:
-                newPosition = this.position.add(this.orientation.toUnitVector());
-                break;
-            case BACKWARD:
-                newPosition = this.position.subtract(this.orientation.toUnitVector());
-                break;
-        };
-        if (validator.canMoveTo(newPosition)){ //validator to mapa
-            this.position = newPosition; //wywołane na animal
+    public Animal(Vector2d position, MapDirection orientation,
+                  int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
+                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging, Genome genome) {
+        super(position, orientation, genomeLength, startIndexOfGenome, genome);
+        this.defaultEnergySpawnedWith = defaultEnergySpawnedWith;
+        this.energyLossPerDay = energyLossPerDay;
+        this.energyLossPerReproduction = energyLossPerReproduction;
+        this.energyNeededToReproduce = energyNeededToReproduce;
+        this.isAging = isAging;
+        if (this.defaultEnergySpawnedWith > this.energyNeededToReproduce){
+            this.isReadyToReproduce = true;
         }
+    }
+
+    public int getEnergy() {
+        return currentEnergy;
+    }
+
+    public void setEnergy(int newEnergy) {
+        this.currentEnergy = newEnergy;
+    }
+
+
+    @Override
+    public void move(MoveValidator validator, int direction) {
+        if (currentEnergy - energyLossPerDay > 0) {
+            if (isAging && isMoveSkippedDueToAge(this)) {
+                return;
+            }
+            setHasAlreadyMoved(true);
+            super.move(validator, direction);
+
+            setEnergy(currentEnergy - energyLossPerDay);
+        }
+        else setPassedAway(true);
+    }
+
+    public boolean hasPassedAway() {
+        return passedAway;
+    }
+
+    public void setPassedAway(boolean passedAway) {
+        this.passedAway = passedAway;
+    }
+
+    public int getNumberOfDaysAlive() {
+        return numberOfDaysAlive;
+    }
+
+    public void setCurrentEnergy(int currentEnergy) {
+        this.currentEnergy = currentEnergy;
+    }
+
+    public UUID getParentID(){
+        return parentID;
+    }
+
+    public List<UUID> getAncestorsIDs(){
+        return List.copyOf(ancestorsIDs);
+    }
+
+    public void setHasAlreadyMoved(boolean hasAlreadyMoved) {
+        this.hasAlreadyMoved = hasAlreadyMoved;
+    }
+
+    public boolean getHasAlreadyMoved() {
+        return this.hasAlreadyMoved;
+    }
+
+    public int getNumberOfChildren() {
+        return numberOfChildren;
+    }
+
+    public int getEnergyNeededToReproduce() {
+        return energyNeededToReproduce;
+    }
+
+    public int getDefaultEnergySpawnedWith() {
+        return defaultEnergySpawnedWith;
+    }
+
+    public int getEnergyLossPerDay() {
+        return energyLossPerDay;
+    }
+
+    public int getEnergyLossPerReproduction() {
+        return energyLossPerReproduction;
+    }
+
+    public boolean getIsAging() {
+        return isAging;
     }
 }

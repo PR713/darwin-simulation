@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.presenter.MenuPresenter;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,36 +14,10 @@ import java.io.IOException;
 public class SimulationApp extends Application {
     public void start(Stage primaryStage) throws IOException {
 
-//        List<String> parameters = getParameters().getRaw();
-//
-//        GrassField grassField = new GrassField(Integer.parseInt(parameters.get(0)));
-//        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4), new Vector2d(1, 3));
-//
-//        String[] directionsArray = new String[parameters.size() - 1];
-//        for (int i = 1; i < parameters.size(); i++){
-//            directionsArray[i-1] = parameters.get(i);
-//        }
-//
-//        List<MoveDirection> directions = parseToMoveDirection(directionsArray);
-//
-//        ConsoleMapDisplay consoleObserver = new ConsoleMapDisplay();
-//        grassField.addObserver(consoleObserver); //wypisywanie na konsolę
-//
-//        Simulation simulation = new Simulation(positions, directions, grassField);
-//        SimulationEngine engine = new SimulationEngine(List.of(simulation));
-//        engine.runAsync();
-
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("menu.fxml"));
         BorderPane viewRoot = loader.load();
-        SimulationPresenter presenter = loader.getController();
-
-        //to do Lab8 bez extra
-        //GrassField map = new GrassField(5);
-        //presenter.setWorldMap(map);
-        //map.addObserver(presenter);
-        //ConsoleMapDisplay consoleDisplay = new ConsoleMapDisplay();
-        //map.addObserver(consoleDisplay);
+        MenuPresenter presenter = loader.getController();
 
         configureStage(primaryStage, viewRoot);
         primaryStage.show();

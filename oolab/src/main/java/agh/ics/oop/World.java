@@ -33,16 +33,4 @@ public class World {
 
         //Application.launch(SimulationApp.class, args);
     }
-
-
-    private static void run(List<MoveDirection> directions){
-        for (MoveDirection dir : directions) {
-            switch (dir) {
-                case MoveDirection.FORWARD -> System.out.println("Zwierzak idzie do przodu");
-                case MoveDirection.BACKWARD -> System.out.println("Zwierzak idzie do tyłu");
-                case MoveDirection.LEFT -> System.out.println("Zwierzak idzie w lewo");
-                case MoveDirection.RIGHT -> System.out.println("Zwierzak idzie w prawo");
-            }
-        }
-    }
 }
