@@ -5,6 +5,7 @@ import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationApp;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.util.FileMapDisplay;
 import agh.ics.oop.view.WorldElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

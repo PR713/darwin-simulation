@@ -1,7 +1,11 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.util;
+
+import agh.ics.oop.model.MapChangeListener;
+import agh.ics.oop.model.WorldMap;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.UUID;
 
 public class FileMapDisplay implements MapChangeListener {
@@ -18,7 +22,7 @@ public class FileMapDisplay implements MapChangeListener {
             writer.write("Message: " + message + "\n");
             writer.write("Map state:\n" + worldMap + "\n");
             writer.write("-----------------------------\n");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error while saving to file: " + filename + ":" + e.getMessage());
         }
     }
