@@ -64,7 +64,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    public void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
+    protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
         animals.get(position).remove(animal);
 
         if (animals.get(position).isEmpty()) {
@@ -250,8 +250,10 @@ public abstract class AbstractWorldMap implements WorldMap {
                 if (animalWinner1.getEnergy() < animalWinner1.getEnergyNeededToReproduce() || animalWinner2.getEnergy() < animalWinner2.getEnergyNeededToReproduce()) {
                     break;
                 }
-
-                addAnimalToMap(reproduceAnimals(animalWinner1, animalWinner2));
+                Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
+                addAnimalToMap(newAnimal);
+                animalWinner1.addChild(newAnimal);
+                animalWinner2.addChild(newAnimal);
                 animalWinner1.hasReproduced();
                 animalWinner2.hasReproduced();
             }
@@ -260,7 +262,9 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     private Animal reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
-        Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(), animalWinner1.getEnergy(), animalWinner2.getEnergy());
+        Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(),
+                animalWinner1.getEnergy(), animalWinner2.getEnergy(),
+                minNumberOfMutations, maxNumberOfMutations);
 
         MapDirection orientation = MapDirection.randomOrientation();
         int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);

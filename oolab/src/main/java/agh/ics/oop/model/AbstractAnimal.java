@@ -33,11 +33,6 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
 
-    public boolean isAt(Vector2d position) {
-        return this.position.equals(position);
-    }
-
-
     public MapDirection getOrientation() {
         return this.orientation;
     }

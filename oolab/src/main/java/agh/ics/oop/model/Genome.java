@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,9 +15,9 @@ public class Genome {
         }
     }
 
-    public Genome(Genome g1, Genome g2, int g1Energy, int g2Energy) {
+    public Genome(Genome g1, Genome g2, int g1Energy, int g2Energy,
+                  int minNumberOfMutations, int maxNumberOfMutations) {
         int genomeLength = g1.getGenes().length;
-        this.genome = new int[genomeLength];
 
         double genotypeDivisionRatio = (double) g1Energy / (g1Energy + g2Energy);
 
@@ -26,40 +25,43 @@ public class Genome {
 
         int divisionPoint = (int) Math.round(genotypeDivisionRatio * genomeLength);
 
-        if (g1LeftSide)  {
+        int[] tempGenome = new int[genomeLength];
+
+        if (g1LeftSide) {
             for (int i = 0; i < divisionPoint; i++) {
-                this.genome[i] = g1.getGenes()[i];
+                tempGenome[i] = g1.getGenes()[i];
             }
             for (int i = divisionPoint; i < genomeLength; i++) {
-                this.genome[i] = g2.getGenes()[i];
+                tempGenome[i] = g2.getGenes()[i];
             }
         } else {
             for (int i = 0; i < divisionPoint; i++) {
-                this.genome[i] = g2.getGenes()[i];
+                tempGenome[i] = g2.getGenes()[i];
             }
             for (int i = divisionPoint; i < genomeLength; i++) {
-                this.genome[i] = g1.getGenes()[i];
+                tempGenome[i] = g1.getGenes()[i];
             }
         }
 
-        mutate(this.genome);
-
+        this.genome = mutate(tempGenome, minNumberOfMutations, maxNumberOfMutations);
     }
 
-    public void mutate(int[] genome) {
-        int genesToMutate = (int) (Math.random() * genome.length);
+    public int[] mutate(int[] genome, int minNumberOfMutations, int maxNumberOfMutations) {
+        int range = maxNumberOfMutations - minNumberOfMutations + 1;
+        int genesToMutate = minNumberOfMutations + (int) (Math.random() * range);
         List<Integer> indexes = new ArrayList<>();
 
-        for ( int i = 0; i < genome.length; i++) {
+        for (int i = 0; i < genome.length; i++) {
             indexes.add(i);
         }
 
-
         Collections.shuffle(indexes);
 
-        for ( int index : indexes) {
+        for (int i = 0; i < genesToMutate; i++) {
+            int index = indexes.get(i);
             genome[index] = (int) (Math.random() * 8);
         }
+        return genome;
     }
 
     public int[] getGenes() {

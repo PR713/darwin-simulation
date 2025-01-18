@@ -1,7 +1,7 @@
 package agh.ics.oop.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
@@ -14,8 +14,8 @@ public class Animal extends AbstractAnimal {
     private int numberOfChildren;
     private int numberOfDescendants;
     private int numberOfDaysAlive;
-    private UUID parentID; //
-    private List<UUID> ancestorsIDs; //
+    private List<Animal> children = new ArrayList<>(); //
+    private List<Animal> descedants = new ArrayList<>(); //
     private boolean passedAway = false;
     private final boolean isAging;
     private boolean hasAlreadyMoved;
@@ -23,7 +23,8 @@ public class Animal extends AbstractAnimal {
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging, Genome genome) {
+                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging,
+                  Genome genome) {
         super(position, orientation, genomeLength, startIndexOfGenome, genome);
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
@@ -33,6 +34,7 @@ public class Animal extends AbstractAnimal {
             this.isReadyToReproduce = true;
         }
         this.numberOfDaysAlive = 0;
+        this.numberOfDescendants = 0;
     }
 
     public int getEnergy() {
@@ -69,14 +71,6 @@ public class Animal extends AbstractAnimal {
 
     public int getNumberOfDaysAlive() {
         return numberOfDaysAlive;
-    }
-
-    public UUID getParentID() {
-        return parentID;
-    }
-
-    public List<UUID> getAncestorsIDs() {
-        return List.copyOf(ancestorsIDs);
     }
 
     public void setHasAlreadyMoved(boolean hasAlreadyMoved) {
@@ -118,5 +112,21 @@ public class Animal extends AbstractAnimal {
 
     public void incrementNumberOfDaysAlive() {
         this.numberOfDaysAlive++;
+    }
+
+
+    public void addChild(Animal animal) {
+        this.children.add(animal);
+    }
+
+    public List<Animal> getDescendants(){
+        List<Animal> descendants = new ArrayList<>();
+        for (Animal child : children) {
+            descendants.add(child);
+            descendants.addAll(child.getDescendants());
+        }
+        return descendants.stream()
+                .distinct()
+                .toList();
     }
 }
