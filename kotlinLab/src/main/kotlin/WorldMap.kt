@@ -32,7 +32,7 @@ interface WorldMap : MoveValidator {
      * Zwraca kolekcję wszystkich elementów na mapie.
      * @return Kolekcja elementów na mapie.
      */
-    fun getElements(): List<WorldElement>
+    fun getAnimals(): List<WorldElement>
 
 //    /**
 //     * Zwraca aktualne granice mapy.

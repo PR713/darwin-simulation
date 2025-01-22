@@ -42,8 +42,8 @@ class BouncyMap(private val width: Int, private val height: Int) : WorldMap {
         return animals.containsKey(position)
     }
 
-    override fun getElements(): List<WorldElement> {
-        return animals.values.toList()
+    override fun getAnimals(): List<WorldElement> {
+        return animals.values.toList() //domyślnie unmodifiable
     }
 
 }
