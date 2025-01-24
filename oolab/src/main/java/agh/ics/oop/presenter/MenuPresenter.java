@@ -5,11 +5,13 @@ import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.AbstractWorldMap;
 import agh.ics.oop.model.GlobeMap;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.WorldMap;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -20,6 +22,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 public class MenuPresenter
 {
@@ -50,11 +54,19 @@ public class MenuPresenter
         }).start();*/
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
             Stage simulationStage = new Stage();
             simulationStage.setTitle("Simulation");
-            loader.setLocation(getClass().getClassLoader().getResource("menu.fxml"));
+
             BorderPane borderPane = loader.load();
+            Scene scene = new Scene(borderPane);
+            simulationStage.setScene(scene);
+            SimulationPresenter presenter = loader.getController();
             simulationStage.show();
+
+            WorldMap map = new GlobeMap(parseInt(xSizeField.getText()), parseInt(ySizeField.getText()), 5, 3, 6);
+            presenter.setWorldMap(map);
+
         }
         catch (IOException exception)
         {

@@ -7,25 +7,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
+            minHeight="800.0" minWidth="1200.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
-
-    <top>
-        <VBox alignment="CENTER" spacing="10">
-            <TextField fx:id="movementTextField" promptText="Wpisz ruchy, np. f b r l"/>
-            <Label fx:id="infoLabelMove" text="Symulacja ruchów"/>
-        </VBox>
-    </top>
-
     <center>
-        <VBox  spacing="10" alignment="CENTER">
-            <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>
-<!--            <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>-->
-            <Button text="Start" onAction="#onSimulationStartClicked"/>
-            <Button text="New Simulation" onAction="#newGame"/>
-        </VBox>
+        <HBox>
+            <VBox minWidth="300.0" prefWidth="300">
+                <Label minWidth="300.0" fx:id="moveInfoLabel">Dzien 1</Label>
+                <Button minWidth="300.0" onAction="#onSimulationStartClicked">Start</Button>
+                <Button minWidth="100.0">Step</Button>
+            </VBox>
+            <VBox alignment="center" prefWidth="900">
+                <ScrollPane>
+                    <content>
+                        <StackPane alignment="CENTER">
+                            <GridPane alignment="CENTER" gridLinesVisible="true" fx:id="mapGrid"></GridPane>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </HBox>
     </center>
-
 </BorderPane>

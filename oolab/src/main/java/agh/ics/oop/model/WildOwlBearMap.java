@@ -13,7 +13,7 @@ public class WildOwlBearMap extends AbstractWorldMap {
     protected WildOwlBear wildOwlBear;
 
     public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
-        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy);
+        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy, 5, 2);
 
         List<Vector2d> owlBearAreaCords = getOwlBearAreaCords();
         this.owlBearAreaLowerLeft = owlBearAreaCords.get(0);

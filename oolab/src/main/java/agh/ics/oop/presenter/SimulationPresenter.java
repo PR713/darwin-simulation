@@ -9,12 +9,18 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import org.w3c.dom.css.Rect;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,12 +41,12 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
 
-    private static final double CELL_WIDTH = 50.0;
-    private static final double CELL_HEIGHT = 50.0;
-
+    private static final double CELL_WIDTH = 20.0;
+    private static final double CELL_HEIGHT = 20.0;
 
     public void setWorldMap(WorldMap map) {
         this.worldMap = map;
+        drawMap("");
     }
 
     @Override
@@ -54,6 +60,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void drawMap(String message){
+
         clearGrid();
         Vector2d lowerLeft = worldMap.getLowerLeft();
         Vector2d upperRight = worldMap.getUpperRight();
@@ -61,12 +68,17 @@ public class SimulationPresenter implements MapChangeListener {
         int numberOfRows = upperRight.getY() - lowerLeft.getY() + 1;
         int numberOfColumns = upperRight.getX() - lowerLeft.getX() + 1;
 
+        System.out.println("drawing " + numberOfRows + " " + numberOfColumns);
+
+
         for (int i = 0; i < numberOfColumns + 1; i++) {//+1 bo jeszcze kolumna na y/x, np -1,0,1,2...
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         }
         for (int i = 0; i < numberOfRows + 1; i++) { //-,,-
             mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
         }
+
+        //mapGrid.add(new Rectangle(20, 20), 1, 1);
 
         //indeksowanie osi
         Label labelYX = new Label("y/x");
@@ -103,10 +115,32 @@ public class SimulationPresenter implements MapChangeListener {
                 // label, column, row
             }
         }
-
+        StackPane newStackPane = getCellStackPane(new Vector2d(0, 0));
+        GridPane.setHalignment(newStackPane, HPos.CENTER);
+        GridPane.setValignment(newStackPane, VPos.CENTER);
+        mapGrid.add(newStackPane, 1, 1);
         //infoLabel.setText(worldMap.toString());
     }
 
+    StackPane getCellStackPane(Vector2d position)
+    {
+        StackPane pane = new StackPane();
+        pane.setMinSize(CELL_WIDTH-2, CELL_HEIGHT-2);
+        pane.setMaxSize(CELL_WIDTH-2, CELL_HEIGHT-2);
+
+        Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
+        r.setFill(new Color(1, 0, 1, 1));
+
+        pane.getChildren().add(r);
+
+        r = new Rectangle(CELL_WIDTH-9, CELL_HEIGHT-9);
+        StackPane.setAlignment(r, Pos.CENTER);
+        r.setFill(new Color(0, 1, 1, 1));
+
+        pane.getChildren().add(r);
+
+        return pane;
+    }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
