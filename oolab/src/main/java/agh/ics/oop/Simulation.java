@@ -19,7 +19,6 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         this.simulationDuration = simulationDuration;
 
         for (Vector2d position : startPositions) {
-            MapDirection orientation = MapDirection.randomOrientation();
             int startIndexOfGenome = (int) (Math.random() * genomeLength);
             Genome genome = new Genome(genomeLength);
             Animal animal = new Animal(position, MapDirection.fromNumericValue(startIndexOfGenome),

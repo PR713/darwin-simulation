@@ -1,5 +1,6 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.SimulationStatistics;
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.util.MapVisualizer;
 
@@ -29,6 +30,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d lowerLeftEquatorialForest;
     protected Vector2d upperRightEquatorialForest;
     protected GrassPlacer grassPlacer;
+    protected SimulationStatistics simulationStatistics = new SimulationStatistics();
+    //TO DO^^^^^
 
 
     public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth,
