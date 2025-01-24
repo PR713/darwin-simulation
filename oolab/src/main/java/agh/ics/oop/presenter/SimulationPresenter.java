@@ -103,6 +103,7 @@ public class SimulationPresenter implements MapChangeListener {
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
                 List<? extends WorldElement> element = worldMap.objectAt(position);
+                StackPane cell = getCellStackPane(true, null);
                 Label label;
                 if (element == null) {
                     label = new Label(" ");
@@ -110,19 +111,19 @@ public class SimulationPresenter implements MapChangeListener {
                     label = new Label(element.toString());
                 }
 
-                GridPane.setHalignment(label, HPos.CENTER);
-                mapGrid.add(label, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
+                GridPane.setHalignment(cell, HPos.CENTER);
+                mapGrid.add(cell, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
                 // label, column, row
             }
         }
-        StackPane newStackPane = getCellStackPane(new Vector2d(0, 0));
+        StackPane newStackPane = getCellStackPane(true, null);
         GridPane.setHalignment(newStackPane, HPos.CENTER);
         GridPane.setValignment(newStackPane, VPos.CENTER);
         mapGrid.add(newStackPane, 1, 1);
         //infoLabel.setText(worldMap.toString());
     }
 
-    StackPane getCellStackPane(Vector2d position)
+    StackPane getCellStackPane(boolean grass, WorldElement element)
     {
         StackPane pane = new StackPane();
         pane.setMinSize(CELL_WIDTH-2, CELL_HEIGHT-2);
@@ -138,7 +139,8 @@ public class SimulationPresenter implements MapChangeListener {
         r.setFill(new Color(0, 1, 1, 1));
 
         pane.getChildren().add(r);
-
+        final int l = 5;
+        pane.setOnMouseClicked(e -> System.out.println(l));
         return pane;
     }
 

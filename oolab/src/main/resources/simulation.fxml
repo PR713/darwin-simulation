@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="800.0" minWidth="1200.0"
+            minHeight="600.0" minWidth="1000.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
     <center>
         <HBox>
@@ -20,14 +20,8 @@
                 <Button minWidth="300.0" onAction="#onSimulationStartClicked">Start</Button>
                 <Button minWidth="100.0">Step</Button>
             </VBox>
-            <VBox alignment="center" prefWidth="900">
-                <ScrollPane>
-                    <content>
-                        <StackPane alignment="CENTER">
-                            <GridPane alignment="CENTER" gridLinesVisible="true" fx:id="mapGrid"></GridPane>
-                        </StackPane>
-                    </content>
-                </ScrollPane>
+            <VBox alignment="center" prefWidth="700">
+                <GridPane alignment="CENTER" gridLinesVisible="true" fx:id="mapGrid"></GridPane>
             </VBox>
         </HBox>
     </center>
