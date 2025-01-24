@@ -27,9 +27,6 @@ public class WildOwlBear extends AbstractAnimal {
                 this.orientation = newOrientation.reverseOrientation();
 
             } else if (map.isOwlBearMovingBeyondBordersHorizontally(newPosition)) {
-                this.position = this.position.getX() > map.getOwlBearAreaUpperRight().getX() ?
-                        new Vector2d(map.getOwlBearAreaLowerLeft().getX(), this.position.getY()) :
-                        new Vector2d(map.getOwlBearAreaUpperRight().getX(), this.position.getY());
                 this.orientation = newOrientation.reverseOrientation();
             } else { // vertically but not in corners, position doesn't change
                 this.orientation = newOrientation.reverseOrientation();

@@ -61,7 +61,6 @@ public abstract class AbstractAnimal implements WorldElement {
                 this.position = this.position.getX() > validator.getUpperRight().getX() ?
                         new Vector2d(0, this.position.getY()) :
                         new Vector2d(validator.getUpperRight().getX(), this.position.getY());
-                this.orientation = newOrientation.reverseOrientation();
             } else { // vertically but not in corners, position doesn't change
                 this.orientation = newOrientation.reverseOrientation();
             }
