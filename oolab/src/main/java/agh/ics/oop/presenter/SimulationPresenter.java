@@ -24,11 +24,33 @@ import javafx.stage.Stage;
 import org.w3c.dom.css.Rect;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
 
-    private WorldMap worldMap;
+    @FXML private Label animalDaysAliveStat;
+    @FXML private Label animalDescendantCountStat;
+    @FXML private Label animalChildCountStat;
+    @FXML private Label animalPlantsConsumedStat;
+    @FXML private Label animalEnergyStat;
+    @FXML private Label animalActiveGenomeStat;
+    @FXML private Label animalGenomeStat;
+
+    @FXML private GridPane animalDetailsGrid;
+
+    @FXML private Label grassCountStat;
+    @FXML private Label emptyCellsStat;
+    @FXML private Label bestGenomeStat;
+    @FXML private Label meanAnimalEnergyStat;
+    @FXML private Label meanLifeLengthStat;
+    @FXML private Label meanChildCountStat;
+    @FXML private Label animalCountStat;
+
+    private Animal selectedAnimal = null;
+
+    private AbstractWorldMap worldMap;
     private Simulation simulation;
 
     //@FXML
@@ -48,10 +70,12 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Button stopSimulationButton;
 
+
+
     private static final double CELL_WIDTH = 20.0;
     private static final double CELL_HEIGHT = 20.0;
 
-    public void setWorldMap(WorldMap map) {
+    public void setWorldMap(AbstractWorldMap map) {
         this.worldMap = map;
         drawMap("");
     }
@@ -63,7 +87,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
-        setWorldMap(worldMap);
+        setWorldMap((AbstractWorldMap)worldMap);
         Platform.runLater(()-> {
             drawMap(message);
             //infoLabelMove.setText(message);
@@ -114,13 +138,9 @@ public class SimulationPresenter implements MapChangeListener {
         for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++){
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
-                List<? extends WorldElement> element = worldMap.objectAt(position);
-                List<? extends WorldElement> elements = worldMap.objectAt(position);
-                WorldElement el = null;
-                if (elements != null && elements.size() > 0)
-                    el = elements.get(0);
+                WorldElement element = worldMap.objectAt(position);
 
-                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), el);
+                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), element);
                 Label label;
                 if (element == null) {
                     label = new Label(" ");
@@ -133,11 +153,40 @@ public class SimulationPresenter implements MapChangeListener {
                 // label, column, row
             }
         }
-        StackPane newStackPane = getCellStackPane(true, null);
-        GridPane.setHalignment(newStackPane, HPos.CENTER);
-        GridPane.setValignment(newStackPane, VPos.CENTER);
-        mapGrid.add(newStackPane, 1, 1);
-        //infoLabel.setText(worldMap.toString());
+
+        drawStatistics();
+    }
+
+    private void selectAnimal(Animal animal)
+    {
+        selectedAnimal = animal;
+        stopSimulation();
+        drawStatistics();
+    }
+
+    private void drawStatistics()
+    {
+        grassCountStat.setText(String.valueOf(worldMap.getAllGrassTufts().size()));
+        emptyCellsStat.setText(String.valueOf(worldMap.getEmptyPositionsCount()));
+        bestGenomeStat.setText(String.valueOf(worldMap.getMostPopularGenomes()));
+        meanAnimalEnergyStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsEnergy()));
+        meanChildCountStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsNumberOfChildren()));
+        meanLifeLengthStat.setText(String.valueOf(worldMap.getAverageDeadAnimalsAge()));
+        animalCountStat.setText(String.valueOf(worldMap.getAllAnimals().size()));
+
+        if (selectedAnimal != null)
+        {
+            animalDetailsGrid.setVisible(true);
+            animalDaysAliveStat.setText(String.valueOf(selectedAnimal.getNumberOfDaysAlive()));
+            animalDescendantCountStat.setText(String.valueOf(selectedAnimal.getDescendants().size()));
+            animalChildCountStat.setText(String.valueOf(selectedAnimal.getNumberOfChildren()));
+            animalPlantsConsumedStat.setText(String.valueOf(""));
+            animalEnergyStat.setText(String.valueOf(selectedAnimal.getEnergy()));
+            animalActiveGenomeStat.setText(String.valueOf("Index: " + selectedAnimal.getCurrentIndexOfGenome()));
+            animalGenomeStat.setText(String.valueOf(Arrays.stream(selectedAnimal.getGenome().getGenes()).mapToObj(String::valueOf).collect(Collectors.joining())));
+        }
+        else
+            animalDetailsGrid.setVisible(false);
     }
 
     StackPane getCellStackPane(boolean grass, WorldElement element)
@@ -158,8 +207,13 @@ public class SimulationPresenter implements MapChangeListener {
             r.setFill(element.getColor());
 
             pane.getChildren().add(r);
-            final int l = 5;
-            pane.setOnMouseClicked(e -> System.out.println(l));
+            if (element instanceof Animal animal)
+            {
+                pane.setOnMouseClicked(e -> selectAnimal(animal));
+
+                if (animal == selectedAnimal)
+                    r.setFill(new Color(1, 1, 0, 1));
+            }
         }
 
         return pane;

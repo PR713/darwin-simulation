@@ -32,32 +32,60 @@
                         </content>
 
                     </Tab>
-                    <Tab text="Statistics" closable="false">
+                    <Tab text="Statistics" closable="false" fx:id="statisticsTab">
                         <content>
-                            <VBox alignment="center">
-                                <GridPane fx:id="gridPane" layoutX="50" layoutY="50" hgap="10" vgap="10">
+                            <VBox alignment="center" spacing="30">
+                                <GridPane layoutX="50" layoutY="50" hgap="10" vgap="10">
                                     <columnConstraints>
-                                        <!-- First column: Fixed width -->
-                                        <ColumnConstraints prefWidth="100" />
-                                        <!-- Second column: Percentage width -->
+                                        <ColumnConstraints prefWidth="150" />
                                         <ColumnConstraints percentWidth="50" />
-                                        <!-- Third column: Minimum and maximum width -->
-                                        <ColumnConstraints minWidth="50" maxWidth="200" />
                                     </columnConstraints>
-                                    <Label text="Name 1:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                                    <Label text="Name 1:" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                                    <Label text="Animal count:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                    <Label text="123" GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="animalCountStat" />
 
-                                    <Label text="Name 1:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                                    <Label text="Name 1:" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                                    <Label text="Grass count:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="1" GridPane.columnIndex="1" fx:id="grassCountStat" />
 
-                                    <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                                    <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                                    <Label text="Empty cells:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="1" fx:id="emptyCellsStat" />
 
-                                    <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                                    <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                                    <Label text="Best genome:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="1" fx:id="bestGenomeStat" />
 
-                                    <Label text="Name 1:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-                                    <Label text="Name 1:" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                                    <Label text="Mean Animal Energy:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="4" GridPane.columnIndex="1" fx:id="meanAnimalEnergyStat" />
+
+                                    <Label text="Mean Life Length:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="5" GridPane.columnIndex="1" fx:id="meanLifeLengthStat" />
+
+                                    <Label text="Mean Child Count:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="6" GridPane.columnIndex="1" fx:id="meanChildCountStat" />
+                                </GridPane>
+                                <GridPane fx:id="animalDetailsGrid" visible="false" layoutX="50" layoutY="50" hgap="10" vgap="10">
+                                    <columnConstraints>
+                                        <ColumnConstraints prefWidth="150" />
+                                        <ColumnConstraints percentWidth="50" />
+                                    </columnConstraints>
+                                    <Label text="Genome:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <Label text="12345670" GridPane.rowIndex="0" GridPane.columnIndex="1" fx:id="animalGenomeStat"/>
+
+                                    <Label text="Active Genome:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                    <Label text="3456" GridPane.rowIndex="1" GridPane.columnIndex="1" fx:id="animalActiveGenomeStat"/>
+
+                                    <Label text="Energy:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                    <Label text="15" GridPane.rowIndex="2" GridPane.columnIndex="1" fx:id="animalEnergyStat"/>
+
+                                    <Label text="Plants consumed:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                    <Label text="23" GridPane.rowIndex="3" GridPane.columnIndex="1" fx:id="animalPlantsConsumedStat"/>
+
+                                    <Label text="Child count:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                    <Label text="3" GridPane.rowIndex="4" GridPane.columnIndex="1" fx:id="animalChildCountStat"/>
+
+                                    <Label text="Descendant count:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                    <Label text="6" GridPane.rowIndex="5" GridPane.columnIndex="1" fx:id="animalDescendantCountStat"/>
+
+                                    <Label text="Days alive:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                    <Label text="5" GridPane.rowIndex="6" GridPane.columnIndex="1" fx:id="animalDaysAliveStat"/>
                                 </GridPane>
                                 <Label minWidth="300.0" alignment="center">Dzien 1</Label>
                                 <Button prefWidth="180">Start</Button>

@@ -39,6 +39,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                             int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations) {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
+        this.averageDeadAnimalsAge = 0;
         this.visualizer = new MapVisualizer(this);
         this.maxNumberOfMutations = maxNumberOfMutations;
         this.minNumberOfMutations = minNumberOfMutations;
@@ -115,6 +116,8 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
+        if (animals.get(position) == null)
+            return null;
         Animal objectAtAnimal = animals.get(position).stream()
                 .max(Comparator.comparingInt(Animal::getEnergy))
                 .orElse(null);
@@ -228,8 +231,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Animal deadAnimal : animalsToRemove)
             removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
 
-        averageDeadAnimalsAge = (double) (averageDeadAnimalsAge * previousCountOfDeadAnimals
-                + totalDeadAgeToday) / countOfDeadAnimals;
+        if (countOfDeadAnimals > 0)
+        {
+            averageDeadAnimalsAge = (double) (averageDeadAnimalsAge * previousCountOfDeadAnimals
+                    + totalDeadAgeToday) / countOfDeadAnimals;
+        }
     }
 
 
@@ -397,6 +403,12 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .limit(1)
                 .map(Map.Entry::getKey)
                 .toList();
+
+        if (sortedGenomes.isEmpty())
+        {
+            theMostPopularGenome = "";
+            return theMostPopularGenome;
+        }
 
         this.theMostPopularGenome = sortedGenomes.getFirst();
         return theMostPopularGenome;
