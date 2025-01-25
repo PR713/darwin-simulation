@@ -55,31 +55,23 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
                 animal.incrementIndex();
             }
             try {
-                Thread.sleep(500);
-
+                do {
+                    Thread.sleep(500);
+                } while (paused);
             } catch (InterruptedException e) {
                 System.err.println("Symulacja przerwana: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
-            System.out.println("Sim update");
             map.updateEaten();
-            System.out.println("1");
             map.updateAnimalsLifespan();
-            System.out.println("2");
             map.updateReproduction();
-            System.out.println("3");
             map.addGrassTufts();
-            System.out.println("4");
-            System.out.println("Zwierze count: " + map.getAllAnimals().size());
             if (!map.getAllAnimals().isEmpty())
                 System.out.println(map.getAllAnimals().getFirst().getPosition());
-            
+
             Platform.runLater(presenter::drawMap);
         }
-
-
     }
-
 
     public List<Animal> getAnimals() {
         return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List

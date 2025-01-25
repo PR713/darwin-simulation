@@ -397,6 +397,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         if (currentAnimalsCount > 0) {
+            System.out.println("Energy sum: " + currentAnimalsEnergy + "    Animals: " + currentAnimalsCount);
             averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / currentAnimalsCount;
         }
     }
