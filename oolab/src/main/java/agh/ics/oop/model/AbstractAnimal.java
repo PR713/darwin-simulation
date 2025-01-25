@@ -58,7 +58,7 @@ public abstract class AbstractAnimal implements WorldElement {
 
                 //mapa o lowerLeft w (0,0)
             } else if (validator.isMovingBeyondBordersHorizontally(newPosition)) {
-                this.position = this.position.getX() > validator.getUpperRight().getX() ?
+                this.position = this.position.getX() >= validator.getUpperRight().getX() ?
                         new Vector2d(0, this.position.getY()) :
                         new Vector2d(validator.getUpperRight().getX(), this.position.getY());
             } else { // vertically but not in corners, position doesn't change
