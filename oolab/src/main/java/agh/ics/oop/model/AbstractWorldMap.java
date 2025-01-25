@@ -68,7 +68,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
-        animals.get(position).remove(animal);
+        System.out.println("Deletig animal");
+        if (animal == null)
+            return;
+        animals.get(position).remove((Animal)animal);
 
         if (animals.get(position).isEmpty()) {
             animals.remove(position);
@@ -204,16 +207,21 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void deleteDeadAnimals() {
         int previousCountOfDeadAnimals = this.countOfDeadAnimals;
         int totalDeadAgeToday = 0;
+        List<Animal> animalsToRemove = new LinkedList<>();
         for (List<Animal> animalList : animals.values()) {
             for (Animal animal : animalList) {
-                if (animal.hasPassedAway()) {
-                    removeAnimalFromMap(animal.getPosition(), animal);
-                    this.currentAnimalCount--;
-                    this.countOfDeadAnimals++;
-                    totalDeadAgeToday += animal.getNumberOfDaysAlive();
-                }
+                if (!animal.hasPassedAway() || animalsToRemove.contains(animal))
+                    continue;
+
+                animalsToRemove.add(animal);
+                System.out.println("Animal pos: " + animal.getPosition());
+                this.currentAnimalCount--;
+                this.countOfDeadAnimals++;
+                totalDeadAgeToday += animal.getNumberOfDaysAlive();
             }
         }
+        for (Animal deadAnimal : animalsToRemove)
+            removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
         averageDeadAnimalsAge = (averageDeadAnimalsAge * previousCountOfDeadAnimals
                 + totalDeadAgeToday) / countOfDeadAnimals;
     }
@@ -221,15 +229,22 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void updateEaten() {
+        List<Vector2d> tuftsToRemovePositions = new LinkedList<>();
         for (Vector2d grassPosition : grassTufts.keySet()) {
             List<Animal> animalsOnPosition = animals.get(grassPosition);
+            if (animalsOnPosition == null)
+                continue;
             List<Animal> animalsOnPositionThatMoved = animalsOnPosition.stream()
                     .filter(Animal::getHasAlreadyMoved)
                     .toList();
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
             currentPlantCount -= 1;
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
+            tuftsToRemovePositions.add(grassPosition);
         }
+
+        for (Vector2d positionToRemove : tuftsToRemovePositions)
+            grassTufts.remove(positionToRemove);
 
         this.emptyPositionCount = grassPlacer.findEmptySpots(lowerLeft, upperRight).size();
     }
@@ -242,7 +257,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             while (true) {
                 List<Animal> animalsOnPosition = animals.get(position);
                 if (animalsOnPosition.size() < 2) {
-                    continue;
+                    break;
                 }
 
                 Animal animalWinner1 = solveConflictsBetweenAnimals(animalsOnPosition);
@@ -303,21 +318,21 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .toList();
 
         if (strongestAnimals.size() == 1) {
-            return strongestAnimals.get(0);
+            return strongestAnimals.getFirst();
         }
 
 
-        int maxLifespan = strongestAnimals.stream()
+        int maxLifespan = animalsOnPosition.stream()
                 .mapToInt(Animal::getNumberOfDaysAlive)
                 .max()
                 .orElse(-1);
 
-        List<Animal> oldestAnimals = strongestAnimals.stream()
+        List<Animal> oldestAnimals = animalsOnPosition.stream()
                 .filter(animal -> animal.getNumberOfDaysAlive() == maxLifespan)
                 .toList();
 
         if (oldestAnimals.size() == 1) {
-            return oldestAnimals.get(0);
+            return oldestAnimals.getFirst();
         }
 
 
@@ -331,7 +346,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .toList();
 
         if (mostProlificAnimals.size() == 1) {
-            return mostProlificAnimals.get(0);
+            return mostProlificAnimals.getFirst();
         }
 
 

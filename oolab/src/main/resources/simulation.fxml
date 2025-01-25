@@ -26,7 +26,7 @@
                         <content>
                             <VBox alignment="center">
                                 <Label minWidth="300.0" fx:id="moveInfoLabel" alignment="center">Dzien 1</Label>
-                                <Button prefWidth="180">Start</Button>
+                                <Button prefWidth="180" onAction="#startSimulation">Start</Button>
                                 <Button prefWidth="180" disable="true">Stop</Button>
                             </VBox>
                         </content>

@@ -13,52 +13,61 @@
     <center>
         <VBox>
             <HBox alignment="CENTER" spacing="50" prefHeight="475">
-                <VBox alignment="CENTER" spacing="10">
+                <VBox alignment="CENTER">
                     <Label text="Map size"/>
                     <HBox alignment="CENTER" spacing="10">
                         <Label>X :</Label>
-                        <TextField fx:id="xSizeField" prefWidth="35" promptText="Enter map size X" text="10"/>
+                        <TextField fx:id="xSizeField" prefWidth="35" promptText="Enter map size X" text="10">20</TextField>
                         <Label> Y :</Label>
-                        <TextField fx:id="ySizeField" prefWidth="35" promptText="Enter map size Y" text="10"/>
+                        <TextField fx:id="ySizeField" prefWidth="35" promptText="Enter map size Y" text="10">20</TextField>
                     </HBox>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Start animal count</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Start grass count</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Energy from grass</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Minimal mutation count</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Genome length</Label>
-                    <TextField></TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Start animal count</Label>
+                    <TextField fx:id="animalCountField">5</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Start grass count</Label>
+                    <TextField fx:id="grassCountField">20</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Energy from grass</Label>
+                    <TextField fx:id="grassEnergyField">5</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Minimal mutation count</Label>
+                    <TextField fx:id="minMutationCountField">1</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Genome length</Label>
+                    <TextField fx:id="genomeLengthField">10</TextField>
                 </VBox>
-                <VBox alignment="CENTER" spacing="10">
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Daily grass growth</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Base animal energy</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Energy needed to reproduce</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Energy consumed during reproduce</Label>
-                    <TextField></TextField>
-                    <VBox prefHeight="1"></VBox>
-                    <Label>Maximum mutation count</Label>
-                    <TextField></TextField>
+                <VBox alignment="CENTER">
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Daily grass growth</Label>
+                    <TextField fx:id="grassGrowthField">3</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Base animal energy</Label>
+                    <TextField fx:id="baseAnimalEnergyField">15</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Energy needed to reproduce</Label>
+                    <TextField fx:id="energyToReproduceField">8</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Reproduction energy consumption</Label>
+                    <TextField  fx:id="reproductionEnergyConsumptionField">5</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Maximum mutation count</Label>
+                    <TextField fx:id="maxMutationCountField">5</TextField>
+                    <HBox spacing="5" prefHeight="30" alignment="BOTTOM_LEFT">
+                        <CheckBox fx:id="agingCheckbox"/>
+                        <Label>Aging</Label>
+                    </HBox>
+                    <HBox spacing="5" prefHeight="30" alignment="BOTTOM_LEFT">
+                        <CheckBox fx:id="owlBearCheckbox"/>
+                        <Label>Owl Bear</Label>
+                    </HBox>
+
                 </VBox>
                 <VBox alignment="CENTER" spacing="10">
                     <Label text="Config name:"/>
                     <TextField promptText="Enter new config name..." fx:id="configNameField"/>
                     <Button text="Save" onAction="#createNewConfig"/>
-                    <Label></Label>
+
                     <ScrollPane prefHeight="300">
                         <content>
                             <VBox fx:id="configList">
@@ -74,7 +83,7 @@
 
             <VBox alignment="CENTER" prefHeight="75">
                 <Button prefWidth="150" onAction="#onSimulationStartClicked">Run</Button>
-                <Label style="-fx-text-fill: red;">sizeX Value is invalid, please try again</Label>
+                <Label style="-fx-text-fill: red;" fx:id="errorMessageLabel"> </Label>
             </VBox>
 
         </VBox>

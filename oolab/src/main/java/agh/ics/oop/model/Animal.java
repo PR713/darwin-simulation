@@ -8,6 +8,7 @@ import java.util.List;
 import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class Animal extends AbstractAnimal {
+    private final int initialEnergy;
     private int currentEnergy;
     private final int energyLossPerDay;
     private final int energyLossPerReproduction;
@@ -28,6 +29,8 @@ public class Animal extends AbstractAnimal {
                   int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging,
                   Genome genome) {
         super(position, orientation, genomeLength, startIndexOfGenome, genome);
+        this.currentEnergy = defaultEnergySpawnedWith;
+        this.initialEnergy = defaultEnergySpawnedWith;
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
         this.energyNeededToReproduce = energyNeededToReproduce;
@@ -61,6 +64,7 @@ public class Animal extends AbstractAnimal {
             setEnergy(currentEnergy - energyLossPerDay);
             isReadyToReproduce = currentEnergy >= energyNeededToReproduce;
         } else setPassedAway(true);
+        System.out.println("New pos: " + getPosition());
     }
 
     public boolean hasPassedAway() {
@@ -134,6 +138,6 @@ public class Animal extends AbstractAnimal {
 
     @Override
     public Color getColor() {
-        return new Color(0, 0, currentEnergy * 0.1f, 1);
+        return new Color(0, 0, Math.clamp(currentEnergy * 0.5f * (1f/initialEnergy), 0, 1), 1);
     }
 }

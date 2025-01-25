@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -28,6 +29,7 @@ import java.util.List;
 public class SimulationPresenter implements MapChangeListener {
 
     private WorldMap worldMap;
+    private Simulation simulation;
 
     //@FXML
     //private Label infoLabel;
@@ -41,6 +43,11 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
 
+    @FXML
+    private Button startSimulationButton;
+    @FXML
+    private Button stopSimulationButton;
+
     private static final double CELL_WIDTH = 20.0;
     private static final double CELL_HEIGHT = 20.0;
 
@@ -49,12 +56,17 @@ public class SimulationPresenter implements MapChangeListener {
         drawMap("");
     }
 
+    public void setSimulation(Simulation simulation)
+    {
+        this.simulation = simulation;
+    }
+
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         setWorldMap(worldMap);
         Platform.runLater(()-> {
             drawMap(message);
-            infoLabelMove.setText(message);
+            //infoLabelMove.setText(message);
         });
 
     }
@@ -153,33 +165,29 @@ public class SimulationPresenter implements MapChangeListener {
         return pane;
     }
 
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
-
     @FXML
-    private void onSimulationStartClicked(ActionEvent actionEvent){
-        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
-        AbstractWorldMap map = new GlobeMap(5, 5, 5, 2, 1);
-        map.addObserver(this);
-
-        Simulation simulationGrassField = new Simulation(positions, map, 6, 6, 1, 3, 4, 100, true);
-
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
-
-        simulationEngine.runAsync();
+    private void startSimulation()
+    {
+        SimulationEngine engine = new SimulationEngine(List.of(simulation));
+        engine.runAsync();
         new Thread(() -> {
             try {
-                simulationEngine.awaitSimulationsEnd();
+                engine.awaitSimulationsEnd();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
-        //bez awaitSimulationsEnd() bo wtedy join() blokuje główny wątek GUI,
-        //lub jak wyżej uruchamiamy to w nowym wątku i już nie blokuje wątku GUI
+    }
+
+    private void stopSimulation()
+    {
+
+    }
+
+    private void clearGrid() {
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
     }
 
 
