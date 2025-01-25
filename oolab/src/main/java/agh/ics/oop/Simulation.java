@@ -8,12 +8,14 @@ import javafx.application.Platform;
 import java.util.*;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
+    public boolean paused = false;
+
     private List<Animal> animals;
     private final WorldMap map;
     private final SimulationPresenter presenter;
     private final int simulationDuration;
 
-    public Simulation(List<Vector2d> startPositions, WorldMap map,
+    public Simulation(int animalCount, WorldMap map,
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
                       int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration,
                       boolean isAging, SimulationPresenter presenter) {
@@ -21,6 +23,9 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         this.map = map;
         this.presenter = presenter;
         this.simulationDuration = simulationDuration;
+
+        List<Vector2d> startPositions = new LinkedList<>();
+        startPositions.add(new Vector2d(3,3));
 
         for (Vector2d position : startPositions) {
             int startIndexOfGenome = (int) (Math.random() * genomeLength);
@@ -50,28 +55,27 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
                 animal.incrementIndex();
             }
             try {
-                Thread.sleep(500);
+                do {
+                    Thread.sleep(500);
+                }
+                while (paused);
 
             } catch (InterruptedException e) {
                 System.err.println("Symulacja przerwana: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
-            System.out.println("Sim update");
             map.updateEaten();
-            System.out.println("1");
             map.updateAnimalsLifespan();
-            System.out.println("2");
             map.updateReproduction();
-            System.out.println("3");
             map.addGrassTufts();
-            System.out.println("4");
-            System.out.println("Zwierze count: " + map.getAllAnimals().size());
             if (!map.getAllAnimals().isEmpty())
                 System.out.println(map.getAllAnimals().getFirst().getPosition());
+
+            //TODO brzydkie
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    presenter.drawMap("");
+                    presenter.drawMap();
                 }
             });
 
@@ -79,7 +83,6 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
 
 
     }
-
 
     public List<Animal> getAnimals() {
         return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List

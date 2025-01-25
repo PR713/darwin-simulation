@@ -26,8 +26,8 @@
                         <content>
                             <VBox alignment="center">
                                 <Label minWidth="300.0" fx:id="moveInfoLabel" alignment="center">Dzien 1</Label>
-                                <Button prefWidth="180" onAction="#startSimulation">Start</Button>
-                                <Button prefWidth="180" disable="true">Stop</Button>
+                                <Button prefWidth="180" onAction="#startSimulation" fx:id="startSimulationButton">Start</Button>
+                                <Button prefWidth="180" onAction="#stopSimulation" disable="true" fx:id="stopSimulationButton">Stop</Button>
                             </VBox>
                         </content>
 
@@ -87,18 +87,6 @@
                                     <Label text="Days alive:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
                                     <Label text="5" GridPane.rowIndex="6" GridPane.columnIndex="1" fx:id="animalDaysAliveStat"/>
                                 </GridPane>
-                                <Label minWidth="300.0" alignment="center">Dzien 1</Label>
-                                <Button prefWidth="180">Start</Button>
-                                <Button prefWidth="180">Stop</Button>
-                            </VBox>
-                        </content>
-                    </Tab>
-                    <Tab text="Export" closable="false">
-                        <content>
-                            <VBox alignment="center">
-                                <Label minWidth="300.0" alignment="center">Dzien 1</Label>
-                                <Button prefWidth="180">Start</Button>
-                                <Button prefWidth="180">Stop</Button>
                             </VBox>
                         </content>
                     </Tab>

@@ -2,28 +2,21 @@ package agh.ics.oop.presenter;
 
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationApp;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import org.w3c.dom.css.Rect;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,15 +45,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private AbstractWorldMap worldMap;
     private Simulation simulation;
-
-    //@FXML
-    //private Label infoLabel;
-
-    @FXML
-    private Label infoLabelMove;
-
-    @FXML
-    private TextField movementTextField;
+    private SimulationEngine engine;
 
     @FXML
     private GridPane mapGrid;
@@ -77,7 +62,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void setWorldMap(AbstractWorldMap map) {
         this.worldMap = map;
-        drawMap("");
+        drawMap();
     }
 
     public void setSimulation(Simulation simulation)
@@ -88,14 +73,10 @@ public class SimulationPresenter implements MapChangeListener {
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         setWorldMap((AbstractWorldMap)worldMap);
-        Platform.runLater(()-> {
-            drawMap(message);
-            //infoLabelMove.setText(message);
-        });
-
+        Platform.runLater(this::drawMap);
     }
 
-    public void drawMap(String message){
+    public void drawMap(){
 
         clearGrid();
         Vector2d lowerLeft = worldMap.getLowerLeft();
@@ -161,7 +142,7 @@ public class SimulationPresenter implements MapChangeListener {
     {
         selectedAnimal = animal;
         stopSimulation();
-        drawStatistics();
+        drawMap();
     }
 
     private void drawStatistics()
@@ -222,7 +203,17 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private void startSimulation()
     {
-        SimulationEngine engine = new SimulationEngine(List.of(simulation));
+        startSimulationButton.setDisable(true);
+        stopSimulationButton.setDisable(false);
+        selectedAnimal = null;
+
+        if (engine != null)
+        {
+            simulation.paused = false;
+            return;
+        }
+
+        engine = new SimulationEngine(List.of(simulation));
         engine.runAsync();
         new Thread(() -> {
             try {
@@ -233,26 +224,17 @@ public class SimulationPresenter implements MapChangeListener {
         }).start();
     }
 
+    @FXML
     private void stopSimulation()
     {
-
+        simulation.paused = true;
+        startSimulationButton.setDisable(false);
+        stopSimulationButton.setDisable(true);
     }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
-    }
-
-
-    @FXML
-    private void newGame() {
-        SimulationApp simulationApp = new SimulationApp();
-        try {
-            simulationApp.start(new Stage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }

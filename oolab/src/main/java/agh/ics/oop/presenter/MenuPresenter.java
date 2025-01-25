@@ -125,7 +125,7 @@ public class MenuPresenter
             simulationStage.show();
 
             AbstractWorldMap map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
-            Simulation simulation = new Simulation(List.of(new Vector2d(4,1)), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 100, config.aging(), presenter);
+            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 100, config.aging(), presenter);
             presenter.setWorldMap(map);
             presenter.setSimulation(simulation);
         }
