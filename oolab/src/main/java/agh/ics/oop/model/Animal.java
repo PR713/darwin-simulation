@@ -17,11 +17,12 @@ public class Animal extends AbstractAnimal {
     private int numberOfChildren;
     private int numberOfDescendants;
     private int numberOfDaysAlive;
-    private List<Animal> children = new ArrayList<>(); //
+    private final List<Animal> children = new ArrayList<>(); //
     private List<Animal> descendants = new ArrayList<>(); //
     private boolean passedAway = false;
     private final boolean isAging;
     private boolean hasAlreadyMoved;
+    private int plantsConsumed;
 
 
     public Animal(Vector2d position, MapDirection orientation,
@@ -38,8 +39,10 @@ public class Animal extends AbstractAnimal {
         if (defaultEnergySpawnedWith > this.energyNeededToReproduce) {
             this.isReadyToReproduce = true;
         }
+        this.numberOfChildren = 0;
         this.numberOfDaysAlive = 0;
         this.numberOfDescendants = 0;
+        this.plantsConsumed = 0;
     }
 
     public int getEnergy() {
@@ -138,11 +141,28 @@ public class Animal extends AbstractAnimal {
     }
 
     private int getNumberOfDescendants() {
-        return getDescendants().size();
+        this.numberOfDescendants = getDescendants().size();
+        return numberOfDescendants;
     }
 
     @Override
     public Color getColor() {
         return new Color(0, 0, Math.clamp(currentEnergy * 0.5f * (1f/initialEnergy), 0, 1), 1);
+    }
+
+    public boolean isNotReadyToReproduce() {
+        return !isReadyToReproduce;
+    }
+
+    public void setReadyToReproduce(boolean readyToReproduce) {
+        isReadyToReproduce = readyToReproduce;
+    }
+
+    public void incrementPlantsConsumed() {
+        this.plantsConsumed++;
+    }
+
+    public int getPlantsConsumed() {
+        return plantsConsumed;
     }
 }

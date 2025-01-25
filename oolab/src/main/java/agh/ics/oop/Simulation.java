@@ -42,6 +42,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
     public void run() {
         for (int day = 1; day <= simulationDuration; day++) {
             map.deleteDeadAnimals();
+            map.updateAverageAliveAnimalsEnergy();
             this.animals = getAnimals(); // jeśli się nowe urodziły
             for (Animal animal : animals) {
                 animal.setHasAlreadyMoved(false);
@@ -68,12 +69,7 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
             System.out.println("Zwierze count: " + map.getAllAnimals().size());
             if (!map.getAllAnimals().isEmpty())
                 System.out.println(map.getAllAnimals().getFirst().getPosition());
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    presenter.drawMap("");
-                }
-            });
+            Platform.runLater(() -> presenter.drawMap(""));
 
         }
 

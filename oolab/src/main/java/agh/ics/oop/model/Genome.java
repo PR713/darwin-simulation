@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,5 +67,32 @@ public class Genome {
 
     public int[] getGenes() {
         return genome;
+    }
+
+    public boolean equals(Object other){
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        Genome genome1 = (Genome) other;
+        return Arrays.equals(genome1.genome, this.genome);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(genome);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int gene : genome) {
+            sb.append(gene);
+        }
+        return sb.toString();
     }
 }
