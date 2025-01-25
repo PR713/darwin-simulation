@@ -74,4 +74,6 @@ public interface WorldMap extends MoveValidator {
     void updateReproduction();
 
     void updateAnimalsLifespan();
+
+    void updateAverageAliveAnimalsEnergy();
 }

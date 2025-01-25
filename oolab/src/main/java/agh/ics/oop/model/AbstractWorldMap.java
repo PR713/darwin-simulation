@@ -19,7 +19,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     private final List<MapChangeListener> observers = new ArrayList<>();
     private final UUID id;
     protected int currentPlantCount;
-    protected int currentAnimalCount;
+    protected int currentAnimalsCount;
     protected int emptyPositionsCount;
     protected int countOfDeadAnimals;
     protected final int maxNumberOfMutations;
@@ -67,6 +67,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addAnimalToMap(AbstractAnimal animal) {
         animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
+        currentAnimalsCount++;
     }
 
 
@@ -223,7 +224,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
                 animalsToRemove.add(animal);
                 System.out.println("Animal pos: " + animal.getPosition());
-                this.currentAnimalCount--;
+                this.currentAnimalsCount--;
                 this.countOfDeadAnimals++;
                 totalDeadAgeToday += animal.getNumberOfDaysAlive();
             }
@@ -252,7 +253,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
             currentPlantCount -= 1;
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
-
+            animalWinner.incrementPlantsConsumed();
             tuftsToRemovePositions.add(grassPosition);
         }
 
@@ -278,7 +279,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             Animal animalWinner2 = solveConflictsBetweenAnimals(animalsOnPosition);
             animalsOnPosition.add(animalWinner1);
 
-            if (animalWinner1.getEnergy() < animalWinner1.getEnergyNeededToReproduce() || animalWinner2.getEnergy() < animalWinner2.getEnergyNeededToReproduce()) {
+            if (animalWinner1.isNotReadyToReproduce() || animalWinner2.isNotReadyToReproduce()) {
                 break;
             }
             Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
@@ -309,7 +310,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animalWinner1.addChild(newBornedAnimal);
         animalWinner2.addChild(newBornedAnimal);
         updateAverageAliveAnimalsNumberOfChildren();
-        currentAnimalCount++;
+        currentAnimalsCount++;
         updateCountOfChildren(animalWinner1, animalWinner2);
         return newBornedAnimal;
     }
@@ -370,21 +371,34 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public void updateAverageAliveAnimalsNumberOfChildren() {
-        averageAliveAnimalsNumberOfChildren = (averageAliveAnimalsNumberOfChildren * currentAnimalCount + 1) / (currentAnimalCount + 1);
-    }
-
-
-    public void updateAverageAliveAnimalsEnergy() {
-        int currentAnimalEnergy = 0;
+        int currentNumberOfChildren = 0;
         for (List<Animal> animalList : animals.values()) {
             for (Animal animal : animalList) {
                 if (animal.hasPassedAway()) {
                     continue;
                 }
-                currentAnimalEnergy += animal.getEnergy();
+                currentNumberOfChildren += animal.getNumberOfChildren();
             }
         }
-        averageAliveAnimalsEnergy = (double) currentAnimalEnergy / currentAnimalCount;
+        if (currentAnimalsCount > 0) {
+            averageAliveAnimalsNumberOfChildren = (double) currentNumberOfChildren / currentAnimalsCount;
+        }
+    }
+
+
+    public void updateAverageAliveAnimalsEnergy() {
+        int currentAnimalsEnergy = 0;
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.hasPassedAway()) {
+                    continue;
+                }
+                currentAnimalsEnergy += animal.getEnergy();
+            }
+        }
+        if (currentAnimalsCount > 0) {
+            averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / currentAnimalsCount;
+        }
     }
 
     public void updateAnimalsLifespan() {
@@ -415,6 +429,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public double getAverageAliveAnimalsEnergy() {
+        updateAverageAliveAnimalsEnergy();
         return averageAliveAnimalsEnergy;
     }
 

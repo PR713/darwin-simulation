@@ -32,5 +32,8 @@ public class World {
 
 
         //Application.launch(SimulationApp.class, args);
+
+//        Genome g1 = new Genome(32);
+//        System.out.println(g1);
     }
 }
