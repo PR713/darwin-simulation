@@ -49,7 +49,7 @@ public class Simulation implements Runnable {
         Animal animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
                 defaultEnergySpawnedWith, energyLossPerDay,
                 energyLossPerReproduction, energyNeededToReproduce,
-                genomeLength, startIndexOfGenome, isAging, genome);
+                genomeLength, startIndexOfGenome, genome);
         try {
             map.place(animal);
             animals.add(animal);

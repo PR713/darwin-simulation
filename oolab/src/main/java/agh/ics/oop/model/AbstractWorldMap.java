@@ -299,7 +299,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         Animal newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
                 2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                 animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
-                animalWinner1.getGenome().getGenes().length, startIndexOfGenome, animalWinner1.getIsAging(), newGene);
+                animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
         try {
             place(newBornedAnimal);
         } catch (IncorrectPositionException e) {
