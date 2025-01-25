@@ -9,6 +9,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="600.0" minWidth="1000.0"
@@ -16,9 +21,60 @@
     <center>
         <HBox>
             <VBox minWidth="300.0" prefWidth="300">
-                <Label minWidth="300.0" fx:id="moveInfoLabel">Dzien 1</Label>
-                <Button minWidth="300.0" onAction="#onSimulationStartClicked">Start</Button>
-                <Button minWidth="100.0">Step</Button>
+                <TabPane prefHeight="600" style="-fx-border-color: transparent grey transparent transparent; -fx-border-width: 2 2px 2 2;">
+                    <Tab text="Controls" closable="false">
+                        <content>
+                            <VBox alignment="center">
+                                <Label minWidth="300.0" fx:id="moveInfoLabel" alignment="center">Dzien 1</Label>
+                                <Button prefWidth="180">Start</Button>
+                                <Button prefWidth="180" disable="true">Stop</Button>
+                            </VBox>
+                        </content>
+
+                    </Tab>
+                    <Tab text="Statistics" closable="false">
+                        <content>
+                            <VBox alignment="center">
+                                <GridPane fx:id="gridPane" layoutX="50" layoutY="50" hgap="10" vgap="10">
+                                    <columnConstraints>
+                                        <!-- First column: Fixed width -->
+                                        <ColumnConstraints prefWidth="100" />
+                                        <!-- Second column: Percentage width -->
+                                        <ColumnConstraints percentWidth="50" />
+                                        <!-- Third column: Minimum and maximum width -->
+                                        <ColumnConstraints minWidth="50" maxWidth="200" />
+                                    </columnConstraints>
+                                    <Label text="Name 1:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                                    <Label text="Name 1:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                                    <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                                    <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                                    <Label text="Name 1:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                    <Label text="Name 1:" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                                </GridPane>
+                                <Label minWidth="300.0" alignment="center">Dzien 1</Label>
+                                <Button prefWidth="180">Start</Button>
+                                <Button prefWidth="180">Stop</Button>
+                            </VBox>
+                        </content>
+                    </Tab>
+                    <Tab text="Export" closable="false">
+                        <content>
+                            <VBox alignment="center">
+                                <Label minWidth="300.0" alignment="center">Dzien 1</Label>
+                                <Button prefWidth="180">Start</Button>
+                                <Button prefWidth="180">Stop</Button>
+                            </VBox>
+                        </content>
+                    </Tab>
+                </TabPane>
             </VBox>
             <VBox alignment="center" prefWidth="700">
                 <GridPane alignment="CENTER" gridLinesVisible="true" fx:id="mapGrid"></GridPane>

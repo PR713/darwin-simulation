@@ -103,7 +103,12 @@ public class SimulationPresenter implements MapChangeListener {
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d position = new Vector2d(x,y);
                 List<? extends WorldElement> element = worldMap.objectAt(position);
-                StackPane cell = getCellStackPane(true, null);
+                List<? extends WorldElement> elements = worldMap.objectAt(position);
+                WorldElement el = null;
+                if (elements != null && elements.size() > 0)
+                    el = elements.get(0);
+
+                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), el);
                 Label label;
                 if (element == null) {
                     label = new Label(" ");
@@ -130,17 +135,21 @@ public class SimulationPresenter implements MapChangeListener {
         pane.setMaxSize(CELL_WIDTH-2, CELL_HEIGHT-2);
 
         Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
-        r.setFill(new Color(1, 0, 1, 1));
+        r.setFill(grass ? new Color(0, 1, 0, 1) : new Color(0.3, 0.1, 0.1, 1));
 
         pane.getChildren().add(r);
 
-        r = new Rectangle(CELL_WIDTH-9, CELL_HEIGHT-9);
-        StackPane.setAlignment(r, Pos.CENTER);
-        r.setFill(new Color(0, 1, 1, 1));
+        if (element != null)
+        {
+            r = new Rectangle(CELL_WIDTH-9, CELL_HEIGHT-9);
+            StackPane.setAlignment(r, Pos.CENTER);
+            r.setFill(element.getColor());
 
-        pane.getChildren().add(r);
-        final int l = 5;
-        pane.setOnMouseClicked(e -> System.out.println(l));
+            pane.getChildren().add(r);
+            final int l = 5;
+            pane.setOnMouseClicked(e -> System.out.println(l));
+        }
+
         return pane;
     }
 

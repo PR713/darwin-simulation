@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,5 +130,10 @@ public class Animal extends AbstractAnimal {
         return descendants.stream()
                 .distinct()
                 .toList();
+    }
+
+    @Override
+    public Color getColor() {
+        return new Color(0, 0, currentEnergy * 0.1f, 1);
     }
 }

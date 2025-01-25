@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import javafx.scene.paint.Color;
+
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
 public class WildOwlBear extends AbstractAnimal {
@@ -36,5 +38,10 @@ public class WildOwlBear extends AbstractAnimal {
 
     public void incrementAnimalsEaten() {
         this.animalsEaten = this.animalsEaten + 1;
+    }
+
+    @Override
+    public Color getColor() {
+        return new Color(1, 0, 0, 1);
     }
 }
