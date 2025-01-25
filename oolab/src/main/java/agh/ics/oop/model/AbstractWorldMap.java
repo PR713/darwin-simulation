@@ -56,6 +56,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void place(AbstractAnimal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             addAnimalToMap(animal);
+            currentAnimalsCount++;
             allGenomes.compute(animal.getGenome().toString(), (key, value) -> value == null ? 1 : value + 1);
             mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
         } else {
@@ -67,12 +68,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addAnimalToMap(AbstractAnimal animal) {
         animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
-        currentAnimalsCount++;
     }
 
 
     protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
-        System.out.println("Deletig animal");
         if (animal == null)
             return;
         animals.get(position).remove((Animal) animal);

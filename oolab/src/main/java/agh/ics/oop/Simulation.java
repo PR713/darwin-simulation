@@ -2,18 +2,20 @@ package agh.ics.oop;
 
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Platform;
 
 import java.util.*;
 
-public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
-    public boolean paused = false;
+public class Simulation implements Runnable {
 
+    public boolean paused = false;
     private List<Animal> animals;
     private final WorldMap map;
     private final SimulationPresenter presenter;
     private final int simulationDuration;
+
 
     public Simulation(int animalCount, WorldMap map,
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
@@ -24,22 +26,35 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
         this.presenter = presenter;
         this.simulationDuration = simulationDuration;
 
-        List<Vector2d> startPositions = new LinkedList<>();
-        startPositions.add(new Vector2d(3,3));
+        RandomPositionGenerator randPosGenerator =
+                new RandomPositionGenerator(map.getUpperRight().getX() + 1,
+                        map.getUpperRight().getY() + 1, animalCount);
 
-        for (Vector2d position : startPositions) {
-            int startIndexOfGenome = (int) (Math.random() * genomeLength);
-            Genome genome = new Genome(genomeLength);
-            Animal animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
-                    defaultEnergySpawnedWith, energyLossPerDay,
-                    energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength, startIndexOfGenome, isAging, genome);
-            try {
-                map.place(animal);
-                animals.add(animal);
-            } catch (IncorrectPositionException e) {
-                System.out.println("Cannot place the animal: " + e.getMessage());
-            }
+//        List<Vector2d> startPositions = new LinkedList<>();
+//        startPositions.add(new Vector2d(3,3));
+
+        for (Vector2d position : randPosGenerator) {
+            createAndPlaceAnimal(position, genomeLength, defaultEnergySpawnedWith, energyLossPerDay,
+                    energyLossPerReproduction, energyNeededToReproduce, isAging);
+        }
+    }
+
+    private void createAndPlaceAnimal(Vector2d position, int genomeLength,
+                                        int defaultEnergySpawnedWith, int energyLossPerDay,
+                                        int energyLossPerReproduction,
+                                        int energyNeededToReproduce, boolean isAging) {
+
+        int startIndexOfGenome = (int) (Math.random() * genomeLength);
+        Genome genome = new Genome(genomeLength);
+        Animal animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
+                defaultEnergySpawnedWith, energyLossPerDay,
+                energyLossPerReproduction, energyNeededToReproduce,
+                genomeLength, startIndexOfGenome, isAging, genome);
+        try {
+            map.place(animal);
+            animals.add(animal);
+        } catch (IncorrectPositionException e) {
+            System.out.println("Cannot place the animal: " + e.getMessage());
         }
     }
 
