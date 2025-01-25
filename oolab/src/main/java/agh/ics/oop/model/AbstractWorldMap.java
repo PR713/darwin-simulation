@@ -55,6 +55,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void place(AbstractAnimal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             addAnimalToMap(animal);
+            allGenomes.compute(animal.getGenome().toString(), (key, value) -> value == null ? 1 : value + 1);
             mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
         } else {
             throw new IncorrectPositionException(animal.getPosition());
@@ -72,7 +73,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         System.out.println("Deletig animal");
         if (animal == null)
             return;
-        animals.get(position).remove((Animal)animal);
+        animals.get(position).remove((Animal) animal);
 
         if (animals.get(position).isEmpty()) {
             animals.remove(position);
@@ -113,10 +114,13 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public List<? extends WorldElement> objectAt(Vector2d position) {
-        return animals.get(position);
+    public WorldElement objectAt(Vector2d position) {
+        Animal objectAtAnimal = animals.get(position).stream()
+                .max(Comparator.comparingInt(Animal::getEnergy))
+                .orElse(null);
+        return objectAtAnimal != null ? objectAtAnimal :
+                (grassTufts.get(position) != null ? grassTufts.get(position) : null);
     }
-
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -223,7 +227,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
         for (Animal deadAnimal : animalsToRemove)
             removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
-        averageDeadAnimalsAge = (averageDeadAnimalsAge * previousCountOfDeadAnimals
+
+        averageDeadAnimalsAge = (double) (averageDeadAnimalsAge * previousCountOfDeadAnimals
                 + totalDeadAgeToday) / countOfDeadAnimals;
     }
 
@@ -241,6 +246,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
             currentPlantCount -= 1;
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
+
             tuftsToRemovePositions.add(grassPosition);
         }
 
@@ -255,25 +261,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void updateReproduction() {
         Set<Vector2d> positionsWithAnimalAt = animals.keySet();
         for (Vector2d position : positionsWithAnimalAt) {
-            while (true) {
-                List<Animal> animalsOnPosition = animals.get(position);
-                if (animalsOnPosition.size() < 2) {
-                    break;
-                }
 
-                Animal animalWinner1 = solveConflictsBetweenAnimals(animalsOnPosition);
-                animalsOnPosition.remove(animalWinner1);
-                Animal animalWinner2 = solveConflictsBetweenAnimals(animalsOnPosition);
-                animalsOnPosition.add(animalWinner1);
-
-                if (animalWinner1.getEnergy() < animalWinner1.getEnergyNeededToReproduce() || animalWinner2.getEnergy() < animalWinner2.getEnergyNeededToReproduce()) {
-                    break;
-                }
-                Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
-                addAnimalToMap(newAnimal);
-                animalWinner1.hasReproduced();
-                animalWinner2.hasReproduced();
+            List<Animal> animalsOnPosition = animals.get(position);
+            if (animalsOnPosition.size() < 2) {
+                break;
             }
+
+            Animal animalWinner1 = solveConflictsBetweenAnimals(animalsOnPosition);
+            animalsOnPosition.remove(animalWinner1);
+            Animal animalWinner2 = solveConflictsBetweenAnimals(animalsOnPosition);
+            animalsOnPosition.add(animalWinner1);
+
+            if (animalWinner1.getEnergy() < animalWinner1.getEnergyNeededToReproduce() || animalWinner2.getEnergy() < animalWinner2.getEnergyNeededToReproduce()) {
+                break;
+            }
+            Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
+            addAnimalToMap(newAnimal);
+            animalWinner1.hasReproduced();
+            animalWinner2.hasReproduced();
         }
     }
 
@@ -313,7 +318,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
-        int maxAnimalEnergy = animalsOnPosition.stream().mapToInt(Animal::getEnergy).max().orElse(-1);
+        int maxAnimalEnergy = animalsOnPosition.stream()
+                .mapToInt(Animal::getEnergy)
+                .max()
+                .orElse(-1);
         List<Animal> strongestAnimals = animalsOnPosition.stream()
                 .filter(animal -> animal.getEnergy() == maxAnimalEnergy)
                 .toList();
@@ -373,10 +381,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         averageAliveAnimalsEnergy = (double) currentAnimalEnergy / currentAnimalCount;
     }
 
-    public void updateAnimalsLifespan(){
+    public void updateAnimalsLifespan() {
         for (List<Animal> animalsOnPosition : animals.values()) {
             for (Animal animal : animalsOnPosition) {
-                if (!animal.hasPassedAway()){
+                if (!animal.hasPassedAway()) {
                     animal.incrementNumberOfDaysAlive();
                 }
             }

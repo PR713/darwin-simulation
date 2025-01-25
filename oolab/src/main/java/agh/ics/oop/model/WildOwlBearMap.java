@@ -25,6 +25,14 @@ public class WildOwlBearMap extends AbstractWorldMap {
 
     }
 
+    @Override
+    public WorldElement objectAt(Vector2d position) {
+        if (this.wildOwlBear.getPosition().equals(position)) {
+            return this.wildOwlBear;
+        }
+        return super.objectAt(position);
+    }
+
 
     public List<Vector2d> getOwlBearAreaCords() {
         int widthOfMap = upperRight.getX() - lowerLeft.getX() + 1;

@@ -48,7 +48,7 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    List<? extends WorldElement> objectAt(Vector2d position);
+    WorldElement objectAt(Vector2d position);
 
     /**
      * Zwraca kolekcję wszystkich elementów na mapie (trawy i zwierzęta).

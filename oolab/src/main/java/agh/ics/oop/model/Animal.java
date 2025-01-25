@@ -18,7 +18,7 @@ public class Animal extends AbstractAnimal {
     private int numberOfDescendants;
     private int numberOfDaysAlive;
     private List<Animal> children = new ArrayList<>(); //
-    private List<Animal> descedants = new ArrayList<>(); //
+    private List<Animal> descendants = new ArrayList<>(); //
     private boolean passedAway = false;
     private final boolean isAging;
     private boolean hasAlreadyMoved;
@@ -131,9 +131,14 @@ public class Animal extends AbstractAnimal {
             descendants.add(child);
             descendants.addAll(child.getDescendants());
         }
-        return descendants.stream()
+        this.descendants = descendants.stream()
                 .distinct()
                 .toList();
+        return this.descendants;
+    }
+
+    private int getNumberOfDescendants() {
+        return getDescendants().size();
     }
 
     @Override
