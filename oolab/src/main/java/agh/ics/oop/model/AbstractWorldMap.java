@@ -13,6 +13,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<Vector2d, Grass> grassTufts = new HashMap<>();
     protected final Map<String, Integer> allGenomes = new HashMap<>();
 
+    private final boolean isAging;
+
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
@@ -36,7 +38,8 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth,
-                            int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations) {
+                            int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations,
+                            boolean isAging) {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.averageDeadAnimalsAge = 0;
@@ -48,7 +51,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.upperRightEquatorialForest = new Vector2d(width - 1, (int) (0.6 * height));
         this.grassPlacer = new GrassPlacer(grassTufts, lowerLeft, upperRight, lowerLeftEquatorialForest, upperRightEquatorialForest,
                 consumeEnergy, dailyGrassGrowth, initialPlantCount);
-
+        this.isAging = isAging;
     }
 
 
@@ -67,7 +70,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public void addAnimalToMap(AbstractAnimal animal) {
-        animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
+
+        if (isAging) {
+            animals.computeIfAbsent(animal.getPosition(), k -> new LinkedList<>()).add((OldAgeAnimal) animal);
+        } else {
+            animals.computeIfAbsent(animal.getPosition(), k -> new ArrayList<>()).add((Animal) animal);
+        }
     }
 
 
@@ -298,10 +306,19 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         MapDirection orientation = MapDirection.randomOrientation();
         int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);
-        Animal newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
-                2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
-                animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
-                animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
+        Animal newBornedAnimal;
+        if(isAging){
+            newBornedAnimal = new OldAgeAnimal(animalWinner1.getPosition(), orientation,
+                    2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
+                    animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
+                    animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
+        }else{
+            newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
+                    2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
+                    animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
+                    animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
+        }
+
         try {
             place(newBornedAnimal);
         } catch (IncorrectPositionException e) {
