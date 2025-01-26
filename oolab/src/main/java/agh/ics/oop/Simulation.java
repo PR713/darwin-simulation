@@ -62,10 +62,19 @@ public class Simulation implements Runnable {
 
         int startIndexOfGenome = (int) (Math.random() * genomeLength);
         Genome genome = new Genome(genomeLength);
-        Animal animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
-                defaultEnergySpawnedWith, energyLossPerDay,
-                energyLossPerReproduction, energyNeededToReproduce,
-                genomeLength, startIndexOfGenome, genome);
+        Animal animal;
+        if (isAging) {
+            animal = new OldAgeAnimal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
+                    defaultEnergySpawnedWith, energyLossPerDay,
+                    energyLossPerReproduction, energyNeededToReproduce,
+                    genomeLength, startIndexOfGenome, genome);
+        } else {
+            animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
+                    defaultEnergySpawnedWith, energyLossPerDay,
+                    energyLossPerReproduction, energyNeededToReproduce,
+                    genomeLength, startIndexOfGenome, genome);
+        }
+
         try {
             map.place(animal);
             animals.add(animal);

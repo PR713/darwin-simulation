@@ -5,7 +5,7 @@ import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 public class OldAgeAnimal extends Animal {
     public OldAgeAnimal(Vector2d position, MapDirection orientation,
                         int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                        int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging,
+                        int energyNeededToReproduce, int genomeLength, int startIndexOfGenome,
                         Genome genome) {
         super(position, orientation, defaultEnergySpawnedWith, energyLossPerDay, energyLossPerReproduction,
                 energyNeededToReproduce, genomeLength, startIndexOfGenome, genome);
