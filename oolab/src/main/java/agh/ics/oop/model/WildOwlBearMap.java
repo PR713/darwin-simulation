@@ -1,7 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.IncorrectPositionException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,9 +73,9 @@ public class WildOwlBearMap extends AbstractWorldMap {
     }
 
     @Override
-    public float getSpecialFieldWeigth(Vector2d position)
+    public float getSpecialFieldWeight(Vector2d position)
     {
-        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeigth(position);
+        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
     }
 
     public boolean isOwlBearMovingBeyondBordersHorizontally(Vector2d position) {

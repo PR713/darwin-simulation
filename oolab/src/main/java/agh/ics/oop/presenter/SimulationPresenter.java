@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
 
+    public static final Color GRASS_COLOR = new Color(0, 1, 0, 1);
+    public static final Color DIRT_COLOR = new Color(0.3, 0.1, 0.1, 1);
     @FXML private Label dayInfoLabel;
     @FXML private Label animalDaysAliveStat;
     @FXML private Label animalDescendantCountStat;
@@ -43,21 +45,16 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML private Label meanChildCountStat;
     @FXML private Label animalCountStat;
 
+    @FXML private GridPane mapGrid;
+
+    @FXML private Button startSimulationButton;
+    @FXML private Button stopSimulationButton;
+
     private Animal selectedAnimal = null;
 
     private AbstractWorldMap worldMap;
     private Simulation simulation;
     private SimulationEngine engine;
-
-    @FXML
-    private GridPane mapGrid;
-
-    @FXML
-    private Button startSimulationButton;
-    @FXML
-    private Button stopSimulationButton;
-
-
 
     private static final double CELL_WIDTH = 20.0;
     private static final double CELL_HEIGHT = 20.0;
@@ -94,7 +91,6 @@ public class SimulationPresenter implements MapChangeListener {
             mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
         }
 
-        //mapGrid.add(new Rectangle(20, 20), 1, 1);
 
         //indeksowanie osi
         Label labelYX = new Label("y/x");
@@ -148,7 +144,10 @@ public class SimulationPresenter implements MapChangeListener {
     {
         grassCountStat.setText(String.valueOf(worldMap.getAllGrassTufts().size()));
         emptyCellsStat.setText(String.valueOf(worldMap.getEmptyPositionsCount()));
-        bestGenomeStat.setText(String.valueOf(worldMap.getMostPopularGenome()));
+        if (worldMap.getMostPopularGenome() == null)
+            bestGenomeStat.setText("");
+        else
+            bestGenomeStat.setText(String.valueOf(worldMap.getMostPopularGenome()));
         meanAnimalEnergyStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsEnergy()));
         meanChildCountStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsNumberOfChildren()));
         meanLifeLengthStat.setText(String.valueOf(worldMap.getAverageDeadAnimalsAge()));
@@ -176,12 +175,11 @@ public class SimulationPresenter implements MapChangeListener {
         pane.setMaxSize(CELL_WIDTH-2, CELL_HEIGHT-2);
 
         Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
-        Color color = grass ? new Color(0, 1, 0, 1) : new Color(0.3, 0.1, 0.1, 1);
-        float weight = worldMap.getSpecialFieldWeigth(position);
-        color = color.interpolate(Color.BLACK, weight * 3);
 
-
-        r.setFill(color);
+        Color cellColor = grass ? GRASS_COLOR : DIRT_COLOR;
+        float weight = worldMap.getSpecialFieldWeight(position);
+        cellColor = cellColor.interpolate(Color.BLACK, weight * 3);
+        r.setFill(cellColor);
 
         pane.getChildren().add(r);
 
@@ -233,8 +231,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     @FXML
-    private void stopSimulation()
-    {
+    private void stopSimulation() {
         simulation.paused = true;
         startSimulationButton.setDisable(false);
         stopSimulationButton.setDisable(true);

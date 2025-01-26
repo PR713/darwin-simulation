@@ -20,59 +20,36 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
-import static java.lang.Integer.max;
 import static java.lang.Integer.parseInt;
 
 public class MenuPresenter
 {
-
-    @FXML private CheckBox saveLogCheckbox;
-
     @FXML private TextField energyUsageField;
     @FXML private TextField simulationDurationField;
-    @FXML
-    private TextField xSizeField;
-    @FXML
-    private TextField ySizeField;
-    @FXML
-    private TextField animalCountField;
-    @FXML
-    private TextField grassCountField;
-    @FXML
-    private TextField grassEnergyField;
-    @FXML
-    private TextField minMutationCountField;
-    @FXML
-    private TextField genomeLengthField;
-    @FXML
-    private TextField grassGrowthField;
-    @FXML
-    private TextField baseAnimalEnergyField;
-    @FXML
-    private TextField energyToReproduceField;
-    @FXML
-    private TextField reproductionEnergyConsumptionField;
-    @FXML
-    private TextField maxMutationCountField;
-    @FXML
-    private CheckBox agingCheckbox;
-    @FXML
-    private CheckBox owlBearCheckbox;
+    @FXML private TextField xSizeField;
+    @FXML private TextField ySizeField;
+    @FXML private TextField animalCountField;
+    @FXML private TextField grassCountField;
+    @FXML private TextField grassEnergyField;
+    @FXML private TextField minMutationCountField;
+    @FXML private TextField genomeLengthField;
+    @FXML private TextField grassGrowthField;
+    @FXML private TextField baseAnimalEnergyField;
+    @FXML private TextField energyToReproduceField;
+    @FXML private TextField reproductionEnergyConsumptionField;
+    @FXML private TextField maxMutationCountField;
+    @FXML private CheckBox agingCheckbox;
+    @FXML private CheckBox owlBearCheckbox;
+    @FXML private CheckBox saveLogCheckbox;
 
-    @FXML
-    private VBox configList;
+    @FXML private Label errorMessageLabel;
 
-    @FXML
-    private TextField configNameField;
+    @FXML private VBox configList;
+    @FXML private TextField configNameField;
 
     private List<Config> configs;
-
-    @FXML
-    private Label errorMessageLabel;
 
     @FXML
     public void initialize()
@@ -97,58 +74,61 @@ public class MenuPresenter
             return;
         }
 
+        openNewSimulationWindow(config);
+    }
 
-        /*
-        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 4));
-        AbstractWorldMap map = new GlobeMap(5, 5, 5, 2, 1);
+    @FXML
+    private void createNewConfig() {
+        errorMessageLabel.setText("");
+        Config newConfig;
+        try {
+            newConfig = readFieldsToConfig();
+        }
+        catch (WrongInputException exception) {
+            errorMessageLabel.setText(exception.getMessage());
+            return;
+        }
+        configs.add(newConfig);
+        Config.saveConfigs(configs.toArray(new Config[0]));
+        renderConfigList();
+    }
 
-
-        Simulation simulationGrassField = new Simulation(positions, map, 6, 6, 1, 3, 4, 100, true);
-
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulationGrassField));
-
-        simulationEngine.runAsync();
-        new Thread(() -> {
-            try {
-                simulationEngine.awaitSimulationsEnd();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();*/
+    private void openNewSimulationWindow(Config config) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
             Stage simulationStage = new Stage();
             simulationStage.setTitle("Simulation");
-
             BorderPane borderPane = loader.load();
             Scene scene = new Scene(borderPane);
             simulationStage.setScene(scene);
             SimulationPresenter presenter = loader.getController();
             simulationStage.show();
-            AbstractWorldMap map;
-            if (config.wildOwlBear())
-                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength(), config.aging());
-            else
-                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.aging());
+
+            AbstractWorldMap map = getMapVariant(config);
             Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), config.dailyEnergyUsage(), config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, saveLogCheckbox.isSelected());
             presenter.setSimulation(simulation);
             presenter.setWorldMap(map);
 
             simulationStage.setOnCloseRequest(e -> simulation.disposeSimulation());
         }
-        catch (IOException exception)
-        {
-            errorMessageLabel.setText("Something went wrong with creating simulation.");
+        catch (IOException exception) {
+            errorMessageLabel.setText("Something went wrong when creating simulation.");
         }
-
     }
 
-    private void renderConfigList()
-    {
+    private static AbstractWorldMap getMapVariant(Config config) {
+        AbstractWorldMap map;
+        if (config.wildOwlBear())
+            map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength(), config.aging());
+        else
+            map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.aging());
+        return map;
+    }
+
+    private void renderConfigList() {
         configList.getChildren().clear();
-        for (Config config : configs)
-        {
+        for (Config config : configs) {
             HBox newElement = new HBox();
             Button configButton = new Button(config.name());
             Button deleteButton = new Button("X");
@@ -162,8 +142,7 @@ public class MenuPresenter
         }
     }
 
-    private void applyConfig(Config config)
-    {
+    private void applyConfig(Config config) {
         errorMessageLabel.setText("");
         //Ustawiamy wszystkie pola tekstowe
         xSizeField.setText(String.valueOf(config.sizeX()));
@@ -182,25 +161,6 @@ public class MenuPresenter
         simulationDurationField.setText(String.valueOf(config.simulationDuration()));
         agingCheckbox.setSelected(config.aging());
         owlBearCheckbox.setSelected(config.wildOwlBear());
-    }
-
-    @FXML
-    private void createNewConfig()
-    {
-        errorMessageLabel.setText("");
-        Config newConfig;
-        try
-        {
-            newConfig = readFieldsToConfig();
-        }
-        catch (WrongInputException exception)
-        {
-            errorMessageLabel.setText(exception.getMessage());
-            return;
-        }
-        configs.add(newConfig);
-        Config.saveConfigs(configs.toArray(new Config[0]));
-        renderConfigList();
     }
 
     private Config readFieldsToConfig() throws WrongInputException
@@ -227,8 +187,7 @@ public class MenuPresenter
         return new Config(name, sizeX, sizeY, animalCount, grassCount, grassEnergy, grassGrowth, baseAnimalEnergy, energyToReproduce, reproductionConsumption, minMutationCount, maxMutationCount, genomeLength, dailyEnergyUsage, simulationDuration, aging, owlBear);
     }
 
-    private int getValidatedFieldValue(TextField field, int minVal, int maxVal, String fieldName) throws WrongInputException
-    {
+    private int getValidatedFieldValue(TextField field, int minVal, int maxVal, String fieldName) throws WrongInputException {
         int value;
         try {
             value = parseInt(field.getText());
@@ -244,8 +203,7 @@ public class MenuPresenter
         return value;
     }
 
-    private void removeConfig(Config config)
-    {
+    private void removeConfig(Config config) {
         configs.remove(config);
         Config.saveConfigs(configs.toArray(new Config[0]));
         renderConfigList();

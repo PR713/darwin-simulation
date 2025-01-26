@@ -491,7 +491,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return emptyPositionsCount;
     }
 
-    public float getSpecialFieldWeigth(Vector2d position) {
+    public float getSpecialFieldWeight(Vector2d position) {
         //Indicates that this field is special
         return position.precedes(upperRightEquatorialForest) && position.follows(lowerLeftEquatorialForest) ? 0.1f : 0f;
     }
