@@ -5,14 +5,18 @@ import static agh.ics.oop.model.MapDirection.fromNumericValue;
 public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection orientation;
     protected Vector2d position;
-    private final Genome genome;
+    protected final Genome genome;
     private int currentIndexOfGenome;
+    private static int genomeLength;
 
-    public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
+    public AbstractAnimal(Vector2d vector, MapDirection orientation, int startIndexOfGenome, Genome genome) {
         this.position = vector;
         this.orientation = orientation;
         this.genome = genome;
         this.currentIndexOfGenome = startIndexOfGenome;
+        if (AbstractAnimal.genomeLength == 0) { //ustawiamy tylko raz
+            AbstractAnimal.genomeLength = genome.getGenes().length;
+        }
     }
 
 
@@ -31,11 +35,6 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
 
-    public boolean isAt(Vector2d position) {
-        return this.position.equals(position);
-    }
-
-
     public MapDirection getOrientation() {
         return this.orientation;
     }
@@ -45,6 +44,7 @@ public abstract class AbstractAnimal implements WorldElement {
     public Vector2d getPosition() {
         return this.position;
     }
+
 
     public void move(MoveValidator validator, int direction) {
         MapDirection newOrientation = fromNumericValue((this.orientation.getNumericValue() + direction) % 8);
@@ -61,10 +61,9 @@ public abstract class AbstractAnimal implements WorldElement {
 
                 //mapa o lowerLeft w (0,0)
             } else if (validator.isMovingBeyondBordersHorizontally(newPosition)) {
-                this.position = this.position.getX() > validator.getUpperRight().getX() ?
+                this.position = this.position.getX() >= validator.getUpperRight().getX() ?
                         new Vector2d(0, this.position.getY()) :
                         new Vector2d(validator.getUpperRight().getX(), this.position.getY());
-                this.orientation = newOrientation.reverseOrientation();
             } else { // vertically but not in corners, position doesn't change
                 this.orientation = newOrientation.reverseOrientation();
             }
@@ -72,13 +71,16 @@ public abstract class AbstractAnimal implements WorldElement {
         }
     }
 
+
     public Genome getGenome() {
         return this.genome;
     }
 
+
     public int getCurrentIndexOfGenome() {
         return this.currentIndexOfGenome;
     }
+
 
     public void incrementIndex() {
         currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.getGenes().length;

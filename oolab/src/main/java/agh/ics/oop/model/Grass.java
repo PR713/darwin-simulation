@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import javafx.scene.paint.Color;
+
 public class Grass implements WorldElement {
     private final Vector2d tuftPosition;
 
@@ -17,5 +19,10 @@ public class Grass implements WorldElement {
     @Override
     public String toString() {
         return "*";
+    }
+
+    @Override
+    public Color getColor() {
+        return null;
     }
 }

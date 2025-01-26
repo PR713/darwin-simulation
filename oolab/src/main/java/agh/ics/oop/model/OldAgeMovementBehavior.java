@@ -8,6 +8,7 @@ public class OldAgeMovementBehavior {
         int animalAge = animal.getNumberOfDaysAlive();
         return Math.random() < (1 - Math.exp(-0.001 * animalAge)) * maxChance;
         //rzadko, rzadko -> rośnie :), limes = 0.8
+        //TODO
     }
 
 }

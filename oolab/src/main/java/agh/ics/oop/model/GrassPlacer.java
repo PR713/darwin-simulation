@@ -11,7 +11,6 @@ public class GrassPlacer {
     private final Vector2d upperRight;
     final int consumeEnergy;
     private int dailyGrassGrowth;
-    private final int initialPlantCount;
 
     public GrassPlacer(Map<Vector2d, Grass> grassTufts, Vector2d lowerLeft, Vector2d upperRight,
                        Vector2d lowerLeftEquatorialForest, Vector2d upperRightEquatorialForest, int consumeEnergy,
@@ -22,7 +21,6 @@ public class GrassPlacer {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
         this.consumeEnergy = consumeEnergy;
-        this.initialPlantCount = initialPlantCount;
         this.dailyGrassGrowth = initialPlantCount;
         addGrassTufts();
         this.dailyGrassGrowth = dailyGrassGrowth;
@@ -48,12 +46,12 @@ public class GrassPlacer {
         Set<Vector2d> potentialPositionsInEquatorialForest = findEmptySpots(lowerLeftEquatorialForest, upperRightEquatorialForest);
         Set<Vector2d> potentialPositionsOutsideEquatorialForest = new HashSet<>();
 
-        Vector2d upperRightPotentialPositions1 = new Vector2d(upperRightEquatorialForest.getX() - 1, lowerLeftEquatorialForest.getY() - 1);
+        Vector2d upperRightPotentialPositions1 = new Vector2d(upperRightEquatorialForest.getX(), lowerLeftEquatorialForest.getY() - 1);
         if (upperRightPotentialPositions1.precedes(upperRight)) {
             potentialPositionsOutsideEquatorialForest.addAll(findEmptySpots(lowerLeft, upperRightPotentialPositions1));
         }
 
-        Vector2d lowerLeftPotentialPositions2 = new Vector2d(lowerLeftEquatorialForest.getX() + 1, upperRightEquatorialForest.getY() + 1);
+        Vector2d lowerLeftPotentialPositions2 = new Vector2d(lowerLeftEquatorialForest.getX(), upperRightEquatorialForest.getY() + 1);
         if (lowerLeftPotentialPositions2.follows(lowerLeft)) {
             potentialPositionsOutsideEquatorialForest.addAll(findEmptySpots(lowerLeftPotentialPositions2, upperRight));
         }
