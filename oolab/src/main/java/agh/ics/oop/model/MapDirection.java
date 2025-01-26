@@ -4,12 +4,12 @@ import java.util.Map;
 
 public enum MapDirection {
     N(new Vector2d(0, 1), 0),
-    S(new Vector2d(0, -1), 1),
-    W(new Vector2d(-1, 0), 2),
-    E(new Vector2d(1, 0), 3),
-    NE(new Vector2d(1, 1), 4),
-    SE(new Vector2d(1, -1), 5),
-    SW(new Vector2d(-1, -1), 6),
+    NE(new Vector2d(1, 1), 1),
+    E(new Vector2d(1, 0), 2),
+    SE(new Vector2d(1, -1), 3),
+    S(new Vector2d(0, -1), 4),
+    SW(new Vector2d(-1, -1), 5),
+    W(new Vector2d(-1, 0), 6),
     NW(new Vector2d(-1, 1), 7);
 
     private final Vector2d mapDirectionVector;
@@ -31,14 +31,14 @@ public enum MapDirection {
 
     public static MapDirection fromNumericValue(int numericValue){
         return switch (numericValue) {
-            case 0 -> MapDirection.N;
-            case 1 -> MapDirection.S;
-            case 2 -> MapDirection.W;
-            case 3 -> MapDirection.E;
-            case 4 -> MapDirection.NE;
-            case 5 -> MapDirection.SE;
-            case 6 -> MapDirection.SW;
-            case 7 -> MapDirection.NW;
+            case 0 -> N;
+            case 1 -> NE;
+            case 2 -> E;
+            case 3 -> SE;
+            case 4 -> S;
+            case 5 -> SW;
+            case 6 -> W;
+            case 7 -> NW;
             default -> throw new IllegalArgumentException("Invalid numeric value: " + numericValue);
         };
     }
