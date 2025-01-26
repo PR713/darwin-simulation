@@ -163,6 +163,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public void addGrassTufts() {
         grassPlacer.addGrassTufts();
+        this.emptyPositionsCount = grassPlacer.findEmptySpots(lowerLeft, upperRight).size();
     }
 
 
