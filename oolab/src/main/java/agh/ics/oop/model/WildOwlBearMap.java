@@ -12,16 +12,15 @@ public class WildOwlBearMap extends AbstractWorldMap {
     private final Vector2d owlBearAreaUpperRight;
     protected WildOwlBear wildOwlBear;
 
-    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy) {
-        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy, 5, 2);
+    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy, int minNumberOfMutations, int maxNumberOfMutations, int genomeLength) {
+        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy, maxNumberOfMutations, minNumberOfMutations);
 
         List<Vector2d> owlBearAreaCords = getOwlBearAreaCords();
         this.owlBearAreaLowerLeft = owlBearAreaCords.get(0);
         this.owlBearAreaUpperRight = owlBearAreaCords.get(1);
-        int genomeLength = AbstractAnimal.getGenomeLength();
         Genome genome = new Genome(genomeLength);
         this.wildOwlBear = new WildOwlBear(getRandomPositionOfArea(owlBearAreaLowerLeft, owlBearAreaUpperRight), MapDirection.randomOrientation(),
-                genomeLength, (int) (Math.random() * genomeLength), genome);
+                genomeLength, (int) (Math.random() * (genomeLength-1)), genome);
 
     }
 
@@ -58,6 +57,16 @@ public class WildOwlBearMap extends AbstractWorldMap {
         super.move(animal, direction);
     }
 
+    @Override
+    public void moveAnimals()
+    {
+        System.out.println("Los: " + wildOwlBear.getCurrentIndexOfGenome() + "    roz: " + wildOwlBear.getGenome().getGenes().length);
+        int direction = wildOwlBear.getGenome().getGenes()[wildOwlBear.getCurrentIndexOfGenome()];
+        wildOwlBear.move(this, direction);
+        wildOwlBear.incrementIndex();
+
+        super.moveAnimals();
+    }
 
     @Override
     public List<WorldElement> getAllWorldElements() {
@@ -75,8 +84,7 @@ public class WildOwlBearMap extends AbstractWorldMap {
         return (position.getY() > owlBearAreaUpperRight.getY() || position.getY() < owlBearAreaLowerLeft.getY());
     }
 
-    @Override
-    public boolean canMoveTo(Vector2d position) {
+    public boolean canMoveToOwl(Vector2d position) {
         return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
     }
 

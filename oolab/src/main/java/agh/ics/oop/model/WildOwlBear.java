@@ -19,7 +19,7 @@ public class WildOwlBear extends AbstractAnimal {
         MapDirection newOrientation = fromNumericValue((this.orientation.getNumericValue() + direction) % 8);
         Vector2d newPosition = this.position.add(this.orientation.toMapDirectionVector());
 
-        if (map.canMoveTo(newPosition)) {
+        if (map.canMoveToOwl(newPosition)) {
             this.position = newPosition;
             this.orientation = newOrientation;
         } else {

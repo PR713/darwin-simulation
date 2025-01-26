@@ -66,13 +66,7 @@ public class Simulation implements Runnable {
         for (int day = 1; day <= simulationDuration; day++) {
             this.day = day;
             map.deleteDeadAnimals();
-            this.animals = getAnimals(); // jeśli się nowe urodziły
-            for (Animal animal : animals) {
-                animal.setHasAlreadyMoved(false);
-                int direction = animal.getGenome().getGenes()[animal.getCurrentIndexOfGenome()];
-                map.move(animal, MapDirection.fromNumericValue(direction));
-                animal.incrementIndex();
-            }
+            map.moveAnimals();
             try {
                 do {
                     Thread.sleep(100);

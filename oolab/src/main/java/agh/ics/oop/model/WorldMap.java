@@ -80,4 +80,6 @@ public interface WorldMap extends MoveValidator {
     void updateAverageAliveAnimalsNumberOfChildren();
 
     void updateMostPopularGenome();
+
+    void moveAnimals();
 }

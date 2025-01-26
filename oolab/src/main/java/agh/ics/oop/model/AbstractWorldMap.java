@@ -71,14 +71,17 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
+    protected void removeAnimalFromMap(AbstractAnimal animal) {
         if (animal == null)
             return;
 
-        animals.get(position).remove((Animal) animal);
-
-        if (animals.get(position).isEmpty()) {
-            animals.remove(position);
+        for (List<Animal> a : animals.values())
+        {
+            while (true)
+            {
+                if(!a.remove((Animal) animal))
+                    break;
+            }
         }
     }
 
@@ -90,12 +93,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         Vector2d newPosition = animal.getPosition();
 
         if (!oldPosition.equals(newPosition)) {
-            removeAnimalFromMap(oldPosition, animal);
+            removeAnimalFromMap(animal);
             addAnimalToMap(animal);
             mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
     }
-
 
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -230,7 +232,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         for (Animal deadAnimal : animalsToRemove)
-            removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
+            removeAnimalFromMap(deadAnimal);
 
         if (countOfDeadAnimals > 0)
         {
@@ -325,6 +327,26 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
+    @Override
+    public void moveAnimals()
+    {
+        List<Animal> animalsToMove = new LinkedList<>();
+        for (List<Animal> a : animals.values())
+        {
+            for (Animal animal : a) {
+                animalsToMove.add(animal);
+            }
+        }
+
+        for (Animal anim : animalsToMove)
+        {
+            anim.setHasAlreadyMoved(false);
+            int direction = anim.getGenome().getGenes()[anim.getCurrentIndexOfGenome()];
+            move(anim, MapDirection.fromNumericValue(direction));
+            anim.incrementIndex();
+        }
+
+    }
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {

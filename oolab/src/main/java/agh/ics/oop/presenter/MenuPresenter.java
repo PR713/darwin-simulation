@@ -125,9 +125,9 @@ public class MenuPresenter
             simulationStage.show();
             AbstractWorldMap map;
             if (config.wildOwlBear())
-                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
+                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength());
             else
-                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
+                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations());
             Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, true);
             presenter.setSimulation(simulation);
             presenter.setWorldMap(map);
