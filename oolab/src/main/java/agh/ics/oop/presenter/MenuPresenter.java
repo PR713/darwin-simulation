@@ -1,14 +1,12 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.exceptions.WrongInputException;
 import agh.ics.oop.model.*;
-import javafx.application.Platform;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -16,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,9 +117,24 @@ public class MenuPresenter
     private static AbstractWorldMap getMapVariant(Config config) {
         AbstractWorldMap map;
         if (config.wildOwlBear())
-            map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength(), config.aging());
+            map = new WildOwlBearMap(config.sizeY(),
+                    config.sizeX(),
+                    config.initialGrassCount(),
+                    config.dailyGrassGrowth(),
+                    config.grassEnergy(),
+                    config.minMutations(),
+                    config.maxMutations(),
+                    config.genomeLength(),
+                    config.aging());
         else
-            map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.aging());
+            map = new GlobeMap(config.sizeY(),
+                    config.sizeX(),
+                    config.initialGrassCount(),
+                    config.dailyGrassGrowth(),
+                    config.grassEnergy(),
+                    config.minMutations(),
+                    config.maxMutations(),
+                    config.aging());
         return map;
     }
 
@@ -163,8 +175,7 @@ public class MenuPresenter
         owlBearCheckbox.setSelected(config.wildOwlBear());
     }
 
-    private Config readFieldsToConfig() throws WrongInputException
-    {
+    private Config readFieldsToConfig() throws WrongInputException {
         String name = configNameField.getText();
 
         boolean aging = agingCheckbox.isSelected();

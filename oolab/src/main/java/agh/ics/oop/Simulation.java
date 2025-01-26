@@ -13,13 +13,13 @@ public class Simulation implements Runnable {
 
     public boolean paused = false;
     private boolean quit = false;
-    private List<Animal> animals;
-    private int day;
+
     private final AbstractWorldMap map;
     private final SimulationPresenter presenter;
     private final int simulationDuration;
 
-    private UUID id;
+    private int day;
+
     private FileOutputStream fileInput;
     private PrintStream printStream;
 
@@ -27,7 +27,6 @@ public class Simulation implements Runnable {
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
                       int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration,
                       boolean isAging, SimulationPresenter presenter, boolean saveToFile) {
-        this.animals = new ArrayList<>();
         this.map = map;
         this.presenter = presenter;
         this.simulationDuration = simulationDuration;
@@ -36,17 +35,8 @@ public class Simulation implements Runnable {
                 new RandomPositionGenerator(map.getUpperRight().getX() + 1,
                         map.getUpperRight().getY() + 1, animalCount);
 
-        if (saveToFile)
-        {
-            try {
-                id = UUID.randomUUID();
-                fileInput = new FileOutputStream(id.toString() + "_log.csv", true);
-                printStream = new PrintStream(fileInput);
-                logHeaders();
-            } catch (FileNotFoundException exception) {
-                fileInput = null;
-                //Brak dostepu, there's nothing we can do :(
-            }
+        if (saveToFile) {
+            initializeFileStream();
         }
 
         for (Vector2d position : randPosGenerator) {
@@ -77,28 +67,34 @@ public class Simulation implements Runnable {
 
         try {
             map.place(animal);
-            animals.add(animal);
         } catch (IncorrectPositionException e) {
             System.out.println("Cannot place the animal: " + e.getMessage());
         }
     }
 
+    private void initializeFileStream() {
+        try {
+            UUID id = UUID.randomUUID();
+            fileInput = new FileOutputStream(id.toString() + "_log.csv", true);
+            printStream = new PrintStream(fileInput);
+            logHeaders();
+        } catch (FileNotFoundException exception) {
+            fileInput = null;
+            //Brak dostepu, there's nothing we can do :(
+        }
+    }
 
     public void run() {
         for (int day = 1; day <= simulationDuration; day++) {
             this.day = day;
+
             map.deleteDeadAnimals();
             map.moveAnimals();
+
             if (quit)
                 return;
-            try {
-                do {
-                    Thread.sleep(100);
-                } while (paused);
-            } catch (InterruptedException e) {
-                System.err.println("Symulacja przerwana: " + e.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            handleTick();
+
             map.updateEaten();
             map.updateAnimalsLifespan();
             map.updateAverageAliveAnimalsNumberOfChildren();
@@ -111,13 +107,23 @@ public class Simulation implements Runnable {
 
             if (printStream != null)
                 logStats();
-            Platform.runLater(presenter::drawMap);
+
+            Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
         }
     }
 
+    private void handleTick() {
+        try {
+            do {
+                Thread.sleep(100);
+            } while (paused);
+        } catch (InterruptedException e) {
+            System.err.println("Symulacja przerwana: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
 
-    private void logHeaders()
-    {
+    private void logHeaders() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Day,");
         stringBuilder.append("Animal Count,");
@@ -130,8 +136,7 @@ public class Simulation implements Runnable {
         printStream.println(stringBuilder);
     }
 
-    private void logStats()
-    {
+    private void logStats() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(day).append(",");
         stringBuilder.append(map.getAllAnimals().size()).append(",");
@@ -144,8 +149,7 @@ public class Simulation implements Runnable {
         printStream.println(stringBuilder);
     }
 
-    public void disposeSimulation()
-    {
+    public void disposeSimulation() {
         quit = true;
 
         if (fileInput == null)
