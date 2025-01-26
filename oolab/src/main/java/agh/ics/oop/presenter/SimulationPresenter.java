@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SimulationPresenter implements MapChangeListener {
+public class SimulationPresenter {
 
     @FXML private Label dayInfoLabel;
     @FXML private Label animalDaysAliveStat;
@@ -72,11 +72,6 @@ public class SimulationPresenter implements MapChangeListener {
         this.simulation = simulation;
     }
 
-    @Override
-    public void mapChanged(WorldMap worldMap, String message) {
-        setWorldMap((AbstractWorldMap)worldMap);
-        Platform.runLater(this::drawMap);
-    }
 
     public void drawMap(){
         dayInfoLabel.setText(String.valueOf("Day " + simulation.getDay()));
@@ -177,7 +172,7 @@ public class SimulationPresenter implements MapChangeListener {
 
         Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
         Color color = grass ? new Color(0, 1, 0, 1) : new Color(0.3, 0.1, 0.1, 1);
-        float weight = worldMap.getSpecialFieldWeigth(position);
+        float weight = worldMap.getSpecialFieldWeight(position);
         color = color.interpolate(Color.BLACK, weight * 3);
 
 

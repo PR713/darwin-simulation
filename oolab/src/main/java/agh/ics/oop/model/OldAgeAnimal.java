@@ -10,11 +10,6 @@ public class OldAgeAnimal extends Animal {
         super(position, orientation, defaultEnergySpawnedWith, energyLossPerDay, energyLossPerReproduction,
                 energyNeededToReproduce, genomeLength, startIndexOfGenome, genome);
     }
-    //TODO
-    //TODO
-    //TODO co jeśli reproduce(), przechowywujemy boolean w AbstractWorldMap?
-    //TODO
-    //TODO
 
     @Override
     public void move(MoveValidator validator, int direction) {

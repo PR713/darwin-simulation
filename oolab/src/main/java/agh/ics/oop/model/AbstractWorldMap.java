@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.SimulationStatistics;
 import agh.ics.oop.exceptions.IncorrectPositionException;
 import agh.ics.oop.model.util.MapVisualizer;
 
@@ -18,7 +17,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
     protected final MapVisualizer visualizer;
-    private final List<MapChangeListener> observers = new ArrayList<>();
     private final UUID id;
     protected int currentPlantCount;
     protected int currentAnimalsCount;
@@ -33,9 +31,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d lowerLeftEquatorialForest;
     protected Vector2d upperRightEquatorialForest;
     protected GrassPlacer grassPlacer;
-    protected SimulationStatistics simulationStatistics = new SimulationStatistics();
-    //TO DO^^^^^
-
 
     public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth,
                             int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations,
@@ -61,7 +56,6 @@ public abstract class AbstractWorldMap implements WorldMap {
             addAnimalToMap(animal);
             currentAnimalsCount++;
             allGenomes.compute(animal.getGenome().toString(), (key, value) -> value == null ? 1 : value + 1);
-            mapChanged(String.format("New animal placed at position: %s", animal.getPosition()));
         } else {
             throw new IncorrectPositionException(animal.getPosition());
         }
@@ -70,7 +64,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public void addAnimalToMap(AbstractAnimal animal) {
-
         if (isAging) {
             animals.computeIfAbsent(animal.getPosition(), k -> new LinkedList<>()).add((OldAgeAnimal) animal);
         } else {
@@ -100,9 +93,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (!oldPosition.equals(newPosition)) {
             removeAnimalFromMap(oldPosition, animal);
             addAnimalToMap(animal);
-            mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
     }
+
 
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -132,6 +125,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return objectAtAnimal != null ? objectAtAnimal :
                 (grassTufts.get(position) != null ? grassTufts.get(position) : null);
     }
+
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -182,25 +176,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    public void addObserver(MapChangeListener observer) {
-        if (!observers.contains(observer)) {
-            observers.add(observer);
-        }
-    }
-
-
-    public void removeObserver(MapChangeListener observer) {
-        observers.remove(observer);
-    }
-
-
-    protected void mapChanged(String message) {
-        for (MapChangeListener observer : observers) {
-            observer.mapChanged(this, message);
-        }
-    }
-
-
     @Override
     public String toString() {
         return visualizer.draw(lowerLeft, upperRight);
@@ -230,7 +205,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                     continue;
 
                 animalsToRemove.add(animal);
-                System.out.println("Animal pos: " + animal.getPosition());
                 this.currentAnimalsCount--;
                 this.countOfDeadAnimals++;
                 totalDeadAgeToday += animal.getNumberOfDaysAlive();
@@ -239,8 +213,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Animal deadAnimal : animalsToRemove)
             removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
 
-        if (countOfDeadAnimals > 0)
-        {
+        if (countOfDeadAnimals > 0) {
             averageDeadAnimalsAge = (double) (averageDeadAnimalsAge * previousCountOfDeadAnimals
                     + totalDeadAgeToday) / countOfDeadAnimals;
         }
@@ -338,19 +311,16 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     }
 
+
     @Override
     public void moveAnimals()
     {
         List<Animal> animalsToMove = new LinkedList<>();
-        for (List<Animal> a : animals.values())
-        {
-            for (Animal animal : a) {
-                animalsToMove.add(animal);
-            }
+        for (List<Animal> a : animals.values()) {
+            animalsToMove.addAll(a);
         }
 
-        for (Animal anim : animalsToMove)
-        {
+        for (Animal anim : animalsToMove) {
             anim.setHasAlreadyMoved(false);
             int direction = anim.getGenome().getGenes()[anim.getCurrentIndexOfGenome()];
             move(anim, MapDirection.fromNumericValue(direction));
@@ -435,13 +405,8 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         if (currentAnimalsCount - todayDied > 0) {
-            //System.out.println("Energy sum: " + currentAnimalsEnergy + "    Animals: " + currentAnimalsCount);
             averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount-todayDied);
         }
-        System.out.println("Animals count: " + currentAnimalsCount
-                + "    Dead animals count: " + todayDied
-                + "    Average energy: " + averageAliveAnimalsEnergy
-        + "    Energy sum: " + currentAnimalsEnergy);
     }
 
     public void updateAnimalsLifespan() {
@@ -455,16 +420,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void updateMostPopularGenome() {
+        if (allGenomes.isEmpty()) {
+            theMostPopularGenome = "";
+            return;
+        }
         List<String> sortedGenomes = allGenomes.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(1)
                 .map(Map.Entry::getKey)
                 .toList();
-
-        if (sortedGenomes.isEmpty())
-        {
-            theMostPopularGenome = "";
-        }
 
         this.theMostPopularGenome = sortedGenomes.getFirst();
     }
@@ -491,7 +455,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return emptyPositionsCount;
     }
 
-    public float getSpecialFieldWeigth(Vector2d position) {
+    public float getSpecialFieldWeight(Vector2d position) {
         //Indicates that this field is special
         return position.precedes(upperRightEquatorialForest) && position.follows(lowerLeftEquatorialForest) ? 0.1f : 0f;
     }
