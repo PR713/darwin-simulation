@@ -8,26 +8,25 @@ import java.util.List;
 import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class Animal extends AbstractAnimal {
-    private final int initialEnergy;
-    private int currentEnergy;
-    private final int energyLossPerDay;
-    private final int energyLossPerReproduction;
-    private boolean isReadyToReproduce = false;
-    private final int energyNeededToReproduce;
-    private int numberOfChildren;
-    private int numberOfDescendants;
-    private int numberOfDaysAlive;
-    private final List<Animal> children = new ArrayList<>(); //
-    private List<Animal> descendants = new ArrayList<>(); //
-    private boolean passedAway = false;
-    private final boolean isAging;
-    private boolean hasAlreadyMoved;
-    private int plantsConsumed;
+    protected final int initialEnergy;
+    protected int currentEnergy;
+    protected final int energyLossPerDay;
+    protected final int energyLossPerReproduction;
+    protected boolean isReadyToReproduce = false;
+    protected final int energyNeededToReproduce;
+    protected int numberOfChildren;
+    protected int numberOfDescendants;
+    protected int numberOfDaysAlive;
+    protected final List<Animal> children = new ArrayList<>(); //
+    protected List<Animal> descendants = new ArrayList<>(); //
+    protected boolean passedAway = false;
+    protected boolean hasAlreadyMoved;
+    protected int plantsConsumed;
 
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome, boolean isAging,
+                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome,
                   Genome genome) {
         super(position, orientation, genomeLength, startIndexOfGenome, genome);
         this.currentEnergy = defaultEnergySpawnedWith;
@@ -35,7 +34,6 @@ public class Animal extends AbstractAnimal {
         this.energyLossPerDay = energyLossPerDay;
         this.energyLossPerReproduction = energyLossPerReproduction;
         this.energyNeededToReproduce = energyNeededToReproduce;
-        this.isAging = isAging;
         if (defaultEnergySpawnedWith > this.energyNeededToReproduce) {
             this.isReadyToReproduce = true;
         }
@@ -58,9 +56,6 @@ public class Animal extends AbstractAnimal {
     public void move(MoveValidator validator, int direction) {
         setHasAlreadyMoved(false);
         if (currentEnergy - energyLossPerDay > 0) {
-            if (isAging && isMoveSkippedDueToAge(this)) {
-                return;
-            }
             setHasAlreadyMoved(true);
             super.move(validator, direction);
 
@@ -104,10 +99,6 @@ public class Animal extends AbstractAnimal {
 
     public int getEnergyLossPerReproduction() {
         return energyLossPerReproduction;
-    }
-
-    public boolean getIsAging() {
-        return isAging;
     }
 
     public void incrementNumberOfChildren() {
