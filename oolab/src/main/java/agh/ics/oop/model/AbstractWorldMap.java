@@ -315,7 +315,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         animalWinner1.addChild(newBornedAnimal);
         animalWinner2.addChild(newBornedAnimal);
         updateCountOfChildren(animalWinner1, animalWinner2);
-        currentAnimalsCount++;
         updateAverageAliveAnimalsNumberOfChildren();
         return newBornedAnimal;
     }
@@ -413,18 +412,24 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void updateAverageAliveAnimalsEnergy() {
         int currentAnimalsEnergy = 0;
+        int todayDied = 0;
         for (List<Animal> animalList : animals.values()) {
             for (Animal animal : animalList) {
                 if (animal.hasPassedAway()) {
+                    todayDied++;
                     continue;
                 }
                 currentAnimalsEnergy += animal.getEnergy();
             }
         }
-        if (currentAnimalsCount > 0) {
-            System.out.println("Energy sum: " + currentAnimalsEnergy + "    Animals: " + currentAnimalsCount);
-            averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / currentAnimalsCount;
+        if (currentAnimalsCount - todayDied > 0) {
+            //System.out.println("Energy sum: " + currentAnimalsEnergy + "    Animals: " + currentAnimalsCount);
+            averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount-todayDied);
         }
+        System.out.println("Animals count: " + currentAnimalsCount
+                + "    Dead animals count: " + todayDied
+                + "    Average energy: " + averageAliveAnimalsEnergy
+        + "    Energy sum: " + currentAnimalsEnergy);
     }
 
     public void updateAnimalsLifespan() {

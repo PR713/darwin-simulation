@@ -159,7 +159,7 @@ public class SimulationPresenter implements MapChangeListener {
             animalDaysAliveStat.setText(String.valueOf(selectedAnimal.getNumberOfDaysAlive()));
             animalDescendantCountStat.setText(String.valueOf(selectedAnimal.getNumberOfDescendants()));
             animalChildCountStat.setText(String.valueOf(selectedAnimal.getNumberOfChildren()));
-            animalPlantsConsumedStat.setText(String.valueOf(""));
+            animalPlantsConsumedStat.setText(String.valueOf(selectedAnimal.getPlantsConsumed()));
             animalEnergyStat.setText(String.valueOf(selectedAnimal.getEnergy()));
             animalActiveGenomeStat.setText(String.valueOf("Index: " + selectedAnimal.getCurrentIndexOfGenome()));
             animalGenomeStat.setText(String.valueOf(Arrays.stream(selectedAnimal.getGenome().getGenes()).mapToObj(String::valueOf).collect(Collectors.joining())));
