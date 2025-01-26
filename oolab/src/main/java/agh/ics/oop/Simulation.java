@@ -93,6 +93,7 @@ public class Simulation implements Runnable {
 
             if (quit)
                 return;
+
             handleTick();
 
             map.updateEaten();
@@ -102,8 +103,6 @@ public class Simulation implements Runnable {
             map.updateReproduction();
             map.updateMostPopularGenome();
             map.addGrassTufts();
-            if (!map.getAllAnimals().isEmpty())
-                System.out.println(map.getAllAnimals().getFirst().getPosition());
 
             if (printStream != null)
                 logStats();

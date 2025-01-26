@@ -22,7 +22,7 @@ public record Config(String name,
 
     static final String filePath = "configs.dat";
 
-    
+
     public static Config[] loadConfigs()
     {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath)))
