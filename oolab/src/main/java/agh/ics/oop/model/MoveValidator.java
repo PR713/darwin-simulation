@@ -16,5 +16,6 @@ public interface MoveValidator {
     boolean isMovingBeyondBordersVertically(Vector2d position);
 
     Vector2d getUpperRight();
+
     Vector2d getLowerLeft();
 }

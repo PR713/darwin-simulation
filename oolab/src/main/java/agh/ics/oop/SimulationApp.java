@@ -1,8 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.*;
 import agh.ics.oop.presenter.MenuPresenter;
-import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

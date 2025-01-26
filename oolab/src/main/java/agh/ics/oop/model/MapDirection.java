@@ -1,7 +1,5 @@
 package agh.ics.oop.model;
 
-import java.util.Map;
-
 public enum MapDirection {
     N(new Vector2d(0, 1), 0),
     NE(new Vector2d(1, 1), 1),

@@ -108,7 +108,8 @@ public class Simulation implements Runnable {
             if (printStream != null)
                 logStats();
 
-            Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
+            Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern
+            // ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
         }
     }
 

@@ -26,6 +26,7 @@ public class GrassPlacer {
         this.dailyGrassGrowth = dailyGrassGrowth;
     }
 
+
     public Set<Vector2d> findEmptySpots(Vector2d leftCorner, Vector2d rightCorner) {
         Set<Vector2d> potentialPositions = new HashSet<>();
 
