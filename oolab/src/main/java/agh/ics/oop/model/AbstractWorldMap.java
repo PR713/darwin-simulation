@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.exceptions.IncorrectPositionException;
-import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,24 +12,23 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Map<String, Integer> allGenomes = new HashMap<>();
 
     private final boolean isAging;
+    protected final int maxNumberOfMutations;
+    protected final int minNumberOfMutations;
+    protected final GrassPlacer grassPlacer;
+    private final UUID id;
 
     protected Vector2d lowerLeft;
     protected Vector2d upperRight;
-    protected final MapVisualizer visualizer;
-    private final UUID id;
+    protected Vector2d lowerLeftEquatorialForest;
+    protected Vector2d upperRightEquatorialForest;
     protected int currentPlantCount;
     protected int currentAnimalsCount;
     protected int emptyPositionsCount;
     protected int countOfDeadAnimals;
-    protected final int maxNumberOfMutations;
-    protected final int minNumberOfMutations;
     protected String theMostPopularGenome;
     protected double averageAliveAnimalsEnergy;
     protected double averageDeadAnimalsAge;
     protected double averageAliveAnimalsNumberOfChildren = 0;
-    protected Vector2d lowerLeftEquatorialForest;
-    protected Vector2d upperRightEquatorialForest;
-    protected GrassPlacer grassPlacer;
 
     public AbstractWorldMap(int height, int width, int initialPlantCount, int dailyGrassGrowth,
                             int consumeEnergy, int maxNumberOfMutations, int minNumberOfMutations,
@@ -38,7 +36,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
         this.averageDeadAnimalsAge = 0;
-        this.visualizer = new MapVisualizer(this);
         this.maxNumberOfMutations = maxNumberOfMutations;
         this.minNumberOfMutations = minNumberOfMutations;
         this.id = UUID.randomUUID();
@@ -177,12 +174,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public String toString() {
-        return visualizer.draw(lowerLeft, upperRight);
-    }
-
-
-    @Override
     public UUID getId() {
         return id;
     }
@@ -285,12 +276,12 @@ public abstract class AbstractWorldMap implements WorldMap {
             newBornedAnimal = new OldAgeAnimal(animalWinner1.getPosition(), orientation,
                     2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                     animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
-                    animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
+                    startIndexOfGenome, newGene);
         }else{
             newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
                     2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                     animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
-                    animalWinner1.getGenome().getGenes().length, startIndexOfGenome, newGene);
+                    startIndexOfGenome, newGene);
         }
 
         try {
@@ -328,6 +319,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
     }
+
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
@@ -409,6 +401,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+
     public void updateAnimalsLifespan() {
         for (List<Animal> animalsOnPosition : animals.values()) {
             for (Animal animal : animalsOnPosition) {
@@ -418,6 +411,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
     }
+
 
     public void updateMostPopularGenome() {
         if (allGenomes.isEmpty()) {
@@ -433,6 +427,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.theMostPopularGenome = sortedGenomes.getFirst();
     }
 
+
     public String getMostPopularGenome() {
         return theMostPopularGenome;
     }
@@ -443,17 +438,21 @@ public abstract class AbstractWorldMap implements WorldMap {
         return averageAliveAnimalsEnergy;
     }
 
+
     public double getAverageDeadAnimalsAge() {
         return averageDeadAnimalsAge;
     }
+
 
     public double getAverageAliveAnimalsNumberOfChildren() {
         return averageAliveAnimalsNumberOfChildren;
     }
 
+
     public int getEmptyPositionsCount() {
         return emptyPositionsCount;
     }
+
 
     public float getSpecialFieldWeight(Vector2d position) {
         //Indicates that this field is special

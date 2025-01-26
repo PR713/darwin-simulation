@@ -9,12 +9,14 @@ public abstract class AbstractAnimal implements WorldElement {
     private int currentIndexOfGenome;
     private static int genomeLength;
 
-    public AbstractAnimal(Vector2d vector, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
+    public AbstractAnimal(Vector2d vector, MapDirection orientation, int startIndexOfGenome, Genome genome) {
         this.position = vector;
         this.orientation = orientation;
         this.genome = genome;
         this.currentIndexOfGenome = startIndexOfGenome;
-        AbstractAnimal.genomeLength = genome.getGenes().length;
+        if (AbstractAnimal.genomeLength == 0) { //ustawiamy tylko raz
+            AbstractAnimal.genomeLength = genome.getGenes().length;
+        }
     }
 
 
@@ -43,6 +45,7 @@ public abstract class AbstractAnimal implements WorldElement {
         return this.position;
     }
 
+
     public void move(MoveValidator validator, int direction) {
         MapDirection newOrientation = fromNumericValue((this.orientation.getNumericValue() + direction) % 8);
         Vector2d newPosition = this.position.add(this.orientation.toMapDirectionVector());
@@ -68,20 +71,19 @@ public abstract class AbstractAnimal implements WorldElement {
         }
     }
 
+
     public Genome getGenome() {
         return this.genome;
     }
+
 
     public int getCurrentIndexOfGenome() {
         return this.currentIndexOfGenome;
     }
 
+
     public void incrementIndex() {
         currentIndexOfGenome = (currentIndexOfGenome + 1) % genome.getGenes().length;
-    }
-
-    public static int getGenomeLength(){
-        return genomeLength;
     }
 }
 

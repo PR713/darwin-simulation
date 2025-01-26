@@ -67,12 +67,12 @@ public class Simulation implements Runnable {
             animal = new OldAgeAnimal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength, startIndexOfGenome, genome);
+                    startIndexOfGenome, genome);
         } else {
             animal = new Animal(position, MapDirection.fromNumericValue(genome.getGenes()[startIndexOfGenome]),
                     defaultEnergySpawnedWith, energyLossPerDay,
                     energyLossPerReproduction, energyNeededToReproduce,
-                    genomeLength, startIndexOfGenome, genome);
+                    startIndexOfGenome, genome);
         }
 
         try {
@@ -115,9 +115,6 @@ public class Simulation implements Runnable {
         }
     }
 
-    public List<Animal> getAnimals() {
-        return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List
-    }
 
     private void logHeaders()
     {
