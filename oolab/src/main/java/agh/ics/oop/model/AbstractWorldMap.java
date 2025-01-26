@@ -292,14 +292,15 @@ public abstract class AbstractWorldMap implements WorldMap {
             if (animalWinner1.isNotReadyToReproduce() || animalWinner2.isNotReadyToReproduce()) {
                 continue;
             }
-            Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
+            
+            reproduceAnimals(animalWinner1, animalWinner2);
             animalWinner1.hasReproduced();
             animalWinner2.hasReproduced();
         }
     }
 
 
-    private Animal reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
+    private void reproduceAnimals(Animal animalWinner1, Animal animalWinner2) {
         Genome newGene = new Genome(animalWinner1.getGenome(), animalWinner2.getGenome(),
                 animalWinner1.getEnergy(), animalWinner2.getEnergy(),
                 minNumberOfMutations, maxNumberOfMutations);
@@ -328,7 +329,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         animalWinner2.addChild(newBornedAnimal);
         updateCountOfChildren(animalWinner1, animalWinner2);
         updateAverageAliveAnimalsNumberOfChildren();
-        return newBornedAnimal;
     }
 
 
