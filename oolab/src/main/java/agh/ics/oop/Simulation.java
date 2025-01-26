@@ -5,6 +5,7 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Platform;
 
+import java.io.FileInputStream;
 import java.util.*;
 
 public class Simulation implements Runnable { //Runnable bo w SimulationEngine Thread(simulation) wymaga
@@ -15,10 +16,12 @@ public class Simulation implements Runnable { //Runnable bo w SimulationEngine T
     private final SimulationPresenter presenter;
     private final int simulationDuration;
 
+    private FileInputStream fileInput;
+
     public Simulation(int animalCount, WorldMap map,
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
                       int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration,
-                      boolean isAging, SimulationPresenter presenter) {
+                      boolean isAging, SimulationPresenter presenter, boolean saveToFile) {
         this.animals = new ArrayList<>();
         this.map = map;
         this.presenter = presenter;

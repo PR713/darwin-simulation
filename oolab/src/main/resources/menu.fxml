@@ -82,7 +82,11 @@
             </HBox>
 
             <VBox alignment="CENTER" prefHeight="75">
-                <Button prefWidth="150" onAction="#onSimulationStartClicked">Run</Button>
+                <HBox alignment="CENTER" spacing="10">
+                    <Label>Save log</Label>
+                    <CheckBox fx:id="saveLogCheckbox"/>
+                    <Button prefWidth="150" onAction="#onSimulationStartClicked">Run</Button>
+                </HBox>
                 <Label style="-fx-text-fill: red;" fx:id="errorMessageLabel"> </Label>
             </VBox>
 

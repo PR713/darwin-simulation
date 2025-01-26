@@ -29,12 +29,12 @@ import static java.lang.Integer.parseInt;
 
 public class MenuPresenter
 {
+    @FXML private CheckBox saveLogCheckbox;
+
     @FXML
     private TextField xSizeField;
-
     @FXML
     private TextField ySizeField;
-
     @FXML
     private TextField animalCountField;
     @FXML
@@ -123,15 +123,18 @@ public class MenuPresenter
             simulationStage.setScene(scene);
             SimulationPresenter presenter = loader.getController();
             simulationStage.show();
-
-            AbstractWorldMap map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
-            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 100, config.aging(), presenter);
+            AbstractWorldMap map;
+            if (config.wildOwlBear())
+                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
+            else
+                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
+            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 100, config.aging(), presenter, true);
             presenter.setWorldMap(map);
             presenter.setSimulation(simulation);
         }
         catch (IOException exception)
         {
-
+            errorMessageLabel.setText("Something went wrong with creating simulation.");
         }
 
     }
