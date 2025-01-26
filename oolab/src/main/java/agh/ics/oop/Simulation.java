@@ -93,6 +93,7 @@ public class Simulation implements Runnable {
 
             if (quit)
                 return;
+
             handleTick();
 
             map.updateEaten();
@@ -102,13 +103,12 @@ public class Simulation implements Runnable {
             map.updateReproduction();
             map.updateMostPopularGenome();
             map.addGrassTufts();
-            if (!map.getAllAnimals().isEmpty())
-                System.out.println(map.getAllAnimals().getFirst().getPosition());
 
             if (printStream != null)
                 logStats();
 
-            Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
+            if (presenter != null)
+                Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
         }
     }
 

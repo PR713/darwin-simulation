@@ -95,6 +95,24 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
+    public void moveAnimals()
+    {
+        List<Animal> animalsToMove = new LinkedList<>();
+        for (List<Animal> a : animals.values()) {
+            animalsToMove.addAll(a);
+        }
+
+        for (Animal anim : animalsToMove) {
+            anim.setHasAlreadyMoved(false);
+            int direction = anim.getGenome().getGenes()[anim.getCurrentIndexOfGenome()];
+            move(anim, MapDirection.fromNumericValue(direction));
+            anim.incrementIndex();
+        }
+
+    }
+
+
+    @Override
     public boolean isOccupied(Vector2d position) {
         return isOccupiedByAnimal(position) || isOccupiedByGrass(position);
     }
@@ -142,46 +160,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    public Vector2d getUpperRight() {
-        return upperRight;
-    }
-
-
-    public Vector2d getLowerLeft() {
-        return lowerLeft;
-    }
-
-
-    @Override
-    public List<Grass> getAllGrassTufts() {
-        return List.copyOf(grassTufts.values());
-    }
-
-
-    @Override
-    public List<Animal> getAllAnimals() {
-        return animals.values().stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<WorldElement> getAllWorldElements() {
-        return Stream.concat(getAllAnimals().stream(), getAllGrassTufts().stream())
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-
     @Override
     public void addGrassTufts() {
         grassPlacer.addGrassTufts();
+        this.emptyPositionsCount = grassPlacer.findEmptySpots(lowerLeft, upperRight).size();
     }
 
 
@@ -205,8 +187,9 @@ public abstract class AbstractWorldMap implements WorldMap {
             removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
 
         if (countOfDeadAnimals > 0) {
-            averageDeadAnimalsAge = (double) (averageDeadAnimalsAge * previousCountOfDeadAnimals
+            double averageDeadAge = (averageDeadAnimalsAge * previousCountOfDeadAnimals
                     + totalDeadAgeToday) / countOfDeadAnimals;
+            this.averageDeadAnimalsAge = Math.round(averageDeadAge * 100.0) / 100.0;
         }
     }
 
@@ -303,21 +286,65 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    @Override
-    public void moveAnimals()
-    {
-        List<Animal> animalsToMove = new LinkedList<>();
-        for (List<Animal> a : animals.values()) {
-            animalsToMove.addAll(a);
+    public void updateAverageAliveAnimalsNumberOfChildren() {
+        int currentNumberOfChildren = 0;
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.hasPassedAway()) {
+                    continue;
+                }
+                currentNumberOfChildren += animal.getNumberOfChildren();
+            }
         }
-
-        for (Animal anim : animalsToMove) {
-            anim.setHasAlreadyMoved(false);
-            int direction = anim.getGenome().getGenes()[anim.getCurrentIndexOfGenome()];
-            move(anim, MapDirection.fromNumericValue(direction));
-            anim.incrementIndex();
+        if (currentAnimalsCount > 0) {
+            double averageCountOfChildren = (double) currentNumberOfChildren / currentAnimalsCount;
+            this.averageAliveAnimalsNumberOfChildren = Math.round(averageCountOfChildren * 100.0) / 100.0;
         }
+    }
 
+
+    public void updateAverageAliveAnimalsEnergy() {
+        int currentAnimalsEnergy = 0;
+        int todayDied = 0;
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.hasPassedAway()) {
+                    todayDied++;
+                    continue;
+                }
+                currentAnimalsEnergy += animal.getEnergy();
+            }
+        }
+        if (currentAnimalsCount - todayDied > 0) {
+            double avgAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount-todayDied);
+            this.averageAliveAnimalsEnergy = Math.round(avgAliveAnimalsEnergy * 100.0) / 100.0;
+        }
+    }
+
+
+    public void updateAnimalsLifespan() {
+        for (List<Animal> animalsOnPosition : animals.values()) {
+            for (Animal animal : animalsOnPosition) {
+                if (!animal.hasPassedAway()) {
+                    animal.incrementNumberOfDaysAlive();
+                }
+            }
+        }
+    }
+
+
+    public void updateMostPopularGenome() {
+        if (allGenomes.isEmpty()) {
+            theMostPopularGenome = "";
+            return;
+        }
+        List<String> sortedGenomes = allGenomes.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(1)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        this.theMostPopularGenome = sortedGenomes.getFirst();
     }
 
 
@@ -368,68 +395,45 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    public void updateAverageAliveAnimalsNumberOfChildren() {
-        int currentNumberOfChildren = 0;
-        for (List<Animal> animalList : animals.values()) {
-            for (Animal animal : animalList) {
-                if (animal.hasPassedAway()) {
-                    continue;
-                }
-                currentNumberOfChildren += animal.getNumberOfChildren();
-            }
-        }
-        if (currentAnimalsCount > 0) {
-            averageAliveAnimalsNumberOfChildren = (double) currentNumberOfChildren / currentAnimalsCount;
-        }
-    }
-
-
-    public void updateAverageAliveAnimalsEnergy() {
-        int currentAnimalsEnergy = 0;
-        int todayDied = 0;
-        for (List<Animal> animalList : animals.values()) {
-            for (Animal animal : animalList) {
-                if (animal.hasPassedAway()) {
-                    todayDied++;
-                    continue;
-                }
-                currentAnimalsEnergy += animal.getEnergy();
-            }
-        }
-        if (currentAnimalsCount - todayDied > 0) {
-            averageAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount-todayDied);
-        }
-    }
-
-
-    public void updateAnimalsLifespan() {
-        for (List<Animal> animalsOnPosition : animals.values()) {
-            for (Animal animal : animalsOnPosition) {
-                if (!animal.hasPassedAway()) {
-                    animal.incrementNumberOfDaysAlive();
-                }
-            }
-        }
-    }
-
-
-    public void updateMostPopularGenome() {
-        if (allGenomes.isEmpty()) {
-            theMostPopularGenome = "";
-            return;
-        }
-        List<String> sortedGenomes = allGenomes.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(1)
-                .map(Map.Entry::getKey)
-                .toList();
-
-        this.theMostPopularGenome = sortedGenomes.getFirst();
-    }
-
-
     public String getMostPopularGenome() {
         return theMostPopularGenome;
+    }
+
+
+    public Vector2d getUpperRight() {
+        return upperRight;
+    }
+
+
+    public Vector2d getLowerLeft() {
+        return lowerLeft;
+    }
+
+
+    @Override
+    public List<Grass> getAllGrassTufts() {
+        return List.copyOf(grassTufts.values());
+    }
+
+
+    @Override
+    public List<Animal> getAllAnimals() {
+        return animals.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<WorldElement> getAllWorldElements() {
+        return Stream.concat(getAllAnimals().stream(), getAllGrassTufts().stream())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
 

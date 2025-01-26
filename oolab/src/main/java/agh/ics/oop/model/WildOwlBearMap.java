@@ -18,9 +18,10 @@ public class WildOwlBearMap extends AbstractWorldMap {
         this.owlBearAreaUpperRight = owlBearAreaCords.get(1);
         Genome genome = new Genome(genomeLength);
         this.wildOwlBear = new WildOwlBear(getRandomPositionOfArea(owlBearAreaLowerLeft, owlBearAreaUpperRight), MapDirection.randomOrientation(),
-                genomeLength, (int) (Math.random() * (genomeLength-1)), genome);
+                genomeLength, (int) (Math.random() * (genomeLength - 1)), genome);
 
     }
+
 
     @Override
     public WorldElement objectAt(Vector2d position) {
@@ -28,6 +29,62 @@ public class WildOwlBearMap extends AbstractWorldMap {
             return this.wildOwlBear;
         }
         return super.objectAt(position);
+    }
+
+
+    @Override
+    public void move(AbstractAnimal animal, MapDirection direction) {
+        super.move(animal, direction);
+    }
+
+
+    @Override
+    public void moveAnimals() {
+        int direction = wildOwlBear.getGenome().getGenes()[wildOwlBear.getCurrentIndexOfGenome()];
+        wildOwlBear.move(this, direction);
+        wildOwlBear.incrementIndex();
+
+        super.moveAnimals();
+    }
+
+
+    public boolean isOwlBearMovingBeyondBordersHorizontally(Vector2d position) {
+        return (position.getX() > owlBearAreaUpperRight.getX() || position.getX() < owlBearAreaLowerLeft.getX());
+    }
+
+
+    public boolean isOwlBearMovingBeyondBordersVertically(Vector2d position) {
+        return (position.getY() > owlBearAreaUpperRight.getY() || position.getY() < owlBearAreaLowerLeft.getY());
+    }
+
+
+    public boolean canMoveToOwl(Vector2d position) {
+        return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
+    }
+
+
+    public void updateEaten() {
+        Vector2d position = this.wildOwlBear.getPosition();
+        if (this.animals.containsKey(position)) {
+            for (Animal animal : this.animals.get(position)) {
+                animal.setPassedAway(true);
+                wildOwlBear.incrementAnimalsEaten();
+            }
+        }
+        super.updateEaten();
+    }
+
+
+    @Override
+    public List<WorldElement> getAllWorldElements() {
+        return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public float getSpecialFieldWeight(Vector2d position) {
+        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
     }
 
 
@@ -47,59 +104,5 @@ public class WildOwlBearMap extends AbstractWorldMap {
         int x = (int) (Math.random() * (upperRight.getX() - lowerLeft.getX()) + lowerLeft.getX());
         int y = (int) (Math.random() * (upperRight.getY() - lowerLeft.getY()) + lowerLeft.getY());
         return new Vector2d(x, y);
-    }
-
-
-    @Override
-    public void move(AbstractAnimal animal, MapDirection direction) {
-        super.move(animal, direction);
-    }
-
-    @Override
-    public void moveAnimals()
-    {
-        System.out.println("Los: " + wildOwlBear.getCurrentIndexOfGenome() + "    roz: " + wildOwlBear.getGenome().getGenes().length);
-        int direction = wildOwlBear.getGenome().getGenes()[wildOwlBear.getCurrentIndexOfGenome()];
-        wildOwlBear.move(this, direction);
-        wildOwlBear.incrementIndex();
-
-        super.moveAnimals();
-    }
-
-    @Override
-    public List<WorldElement> getAllWorldElements() {
-        return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public float getSpecialFieldWeight(Vector2d position)
-    {
-        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
-    }
-
-    public boolean isOwlBearMovingBeyondBordersHorizontally(Vector2d position) {
-        return (position.getX() > owlBearAreaUpperRight.getX() || position.getX() < owlBearAreaLowerLeft.getX());
-    }
-
-
-    public boolean isOwlBearMovingBeyondBordersVertically(Vector2d position) {
-        return (position.getY() > owlBearAreaUpperRight.getY() || position.getY() < owlBearAreaLowerLeft.getY());
-    }
-
-    public boolean canMoveToOwl(Vector2d position) {
-        return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
-    }
-
-
-    public void updateEaten() {
-        Vector2d position = this.wildOwlBear.getPosition();
-        if (this.animals.containsKey(position)) {
-            for (Animal animal : this.animals.get(position)) {
-                animal.setPassedAway(true);
-                wildOwlBear.incrementAnimalsEaten();
-            }
-        }
-        super.updateEaten();
     }
 }

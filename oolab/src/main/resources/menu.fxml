@@ -31,7 +31,7 @@
                     <Label prefHeight="30" alignment="BOTTOM_CENTER">Energy from grass</Label>
                     <TextField fx:id="grassEnergyField">5</TextField>
 
-                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Daily energy usage</Label>
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Daily energy loss</Label>
                     <TextField fx:id="energyUsageField">1</TextField>
 
                     <Label prefHeight="30" alignment="BOTTOM_CENTER">Minimal mutation count</Label>

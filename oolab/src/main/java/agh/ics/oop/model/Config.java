@@ -18,9 +18,10 @@ public record Config(String name,
                      int dailyEnergyUsage,
                      int simulationDuration,
                      boolean aging,
-                     boolean wildOwlBear) implements Serializable
-{
+                     boolean wildOwlBear) implements Serializable {
+
     static final String filePath = "configs.dat";
+
 
     public static Config[] loadConfigs()
     {

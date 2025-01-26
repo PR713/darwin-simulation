@@ -50,13 +50,12 @@ public abstract class AbstractAnimal implements WorldElement {
         MapDirection newOrientation = fromNumericValue((this.orientation.getNumericValue() + direction) % 8);
         Vector2d newPosition = this.position.add(this.orientation.toMapDirectionVector());
 
-        if (validator.canMoveTo(newPosition)) {
+        if (validator == null || validator.canMoveTo(newPosition)) {
             this.position = newPosition;
             this.orientation = newOrientation;
         } else {
             if (validator.isMovingBeyondBordersHorizontally(newPosition)
                     && validator.isMovingBeyondBordersVertically(newPosition)) {
-                //position doesn't change
                 this.orientation = newOrientation.reverseOrientation();
 
                 //mapa o lowerLeft w (0,0)
