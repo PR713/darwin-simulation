@@ -81,7 +81,10 @@ public class Simulation implements Runnable {
             }
             map.updateEaten();
             map.updateAnimalsLifespan();
+            map.updateAverageAliveAnimalsNumberOfChildren();
+            map.updateAverageAliveAnimalsEnergy();
             map.updateReproduction();
+            map.updateMostPopularGenome();
             map.addGrassTufts();
             if (!map.getAllAnimals().isEmpty())
                 System.out.println(map.getAllAnimals().getFirst().getPosition());

@@ -37,7 +37,6 @@ public class RandomPositionIterator implements Iterator<Vector2d> {
         int randomIndex = random.nextInt(rangeOfChoosing + 1);
         int actualIndex = allIndicesList.get(randomIndex);
 
-        rangeOfChoosing -= 1;
         remainingToGenerate -= 1;
         return new Vector2d(actualIndex % maxWidth, actualIndex / maxWidth);
     }
