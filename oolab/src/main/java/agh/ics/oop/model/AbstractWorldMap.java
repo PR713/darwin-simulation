@@ -74,6 +74,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
         if (animal == null)
             return;
+
+        if (!animals.containsKey(position))
+        {
+            Vector2d pos2 = new Vector2d(-10, -10);
+            for (Vector2d pos : animals.keySet())
+            {
+                for (Animal a : animals.get(pos))
+                {
+                    if (a == animal)
+                    {
+                        pos2 = pos;
+                        break;
+                    }
+                }
+
+            }
+            System.out.println("BLAD!!!!!! Pos1: " + animal.getPosition() + "     " + pos2);
+        }
         animals.get(position).remove((Animal) animal);
 
         if (animals.get(position).isEmpty()) {
@@ -365,7 +383,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
 
-        return mostProlificAnimals.get((int) (Math.random() * mostProlificAnimals.size()));
+        int randomValue = (int)(Math.random() * mostProlificAnimals.size());
+        if (randomValue == mostProlificAnimals.size())
+            randomValue--;
+        return mostProlificAnimals.get(randomValue);
     }
 
 
