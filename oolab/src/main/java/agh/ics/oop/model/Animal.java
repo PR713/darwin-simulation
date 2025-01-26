@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 
 public class Animal extends AbstractAnimal {
     protected final int initialEnergy;
@@ -131,7 +130,7 @@ public class Animal extends AbstractAnimal {
         return this.descendants;
     }
 
-    private int getNumberOfDescendants() {
+    public int getNumberOfDescendants() {
         this.numberOfDescendants = getDescendants().size();
         return numberOfDescendants;
     }

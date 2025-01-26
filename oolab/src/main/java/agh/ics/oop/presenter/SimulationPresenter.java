@@ -147,7 +147,7 @@ public class SimulationPresenter implements MapChangeListener {
     {
         grassCountStat.setText(String.valueOf(worldMap.getAllGrassTufts().size()));
         emptyCellsStat.setText(String.valueOf(worldMap.getEmptyPositionsCount()));
-        bestGenomeStat.setText(String.valueOf(worldMap.getMostPopularGenomes()));
+        bestGenomeStat.setText(String.valueOf(worldMap.getMostPopularGenome()));
         meanAnimalEnergyStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsEnergy()));
         meanChildCountStat.setText(String.valueOf(worldMap.getAverageAliveAnimalsNumberOfChildren()));
         meanLifeLengthStat.setText(String.valueOf(worldMap.getAverageDeadAnimalsAge()));
@@ -157,7 +157,7 @@ public class SimulationPresenter implements MapChangeListener {
         {
             animalDetailsGrid.setVisible(true);
             animalDaysAliveStat.setText(String.valueOf(selectedAnimal.getNumberOfDaysAlive()));
-            animalDescendantCountStat.setText(String.valueOf(selectedAnimal.getDescendants().size()));
+            animalDescendantCountStat.setText(String.valueOf(selectedAnimal.getNumberOfDescendants()));
             animalChildCountStat.setText(String.valueOf(selectedAnimal.getNumberOfChildren()));
             animalPlantsConsumedStat.setText(String.valueOf(""));
             animalEnergyStat.setText(String.valueOf(selectedAnimal.getEnergy()));

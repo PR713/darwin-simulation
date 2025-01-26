@@ -75,25 +75,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (animal == null)
             return;
 
-        if (!animals.containsKey(position))
-        {
-            Vector2d pos2 = new Vector2d(-10, -10);
-            for (Vector2d pos : animals.keySet())
-            {
-                for (Animal a : animals.get(pos))
-                {
-                    if (a == animal)
-                    {
-                        pos2 = pos;
-                        animals.get(pos).remove(a);
-                        break;
-                    }
-                }
-
-            }
-            System.out.println("BLAD!!!!!! Pos1: " + animal.getPosition() + "     " + pos2);
-            return;
-        }
         animals.get(position).remove((Animal) animal);
 
         if (animals.get(position).isEmpty()) {
@@ -238,7 +219,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> animalsToRemove = new LinkedList<>();
         for (List<Animal> animalList : animals.values()) {
             for (Animal animal : animalList) {
-                if (!animal.hasPassedAway() || animalsToRemove.contains(animal))
+                if (!animal.hasPassedAway())
                     continue;
 
                 animalsToRemove.add(animal);
@@ -269,8 +250,9 @@ public abstract class AbstractWorldMap implements WorldMap {
             List<Animal> animalsOnPositionThatMoved = animalsOnPosition.stream()
                     .filter(Animal::getHasAlreadyMoved)
                     .toList();
-            if (animalsOnPositionThatMoved.size() == 0)
+            if (animalsOnPositionThatMoved.isEmpty()){
                 continue;
+            }
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
             currentPlantCount -= 1;
             animalWinner.setEnergy(animalWinner.getEnergy() + grassPlacer.consumeEnergy);
@@ -330,9 +312,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         addAnimalToMap(newBornedAnimal);
         animalWinner1.addChild(newBornedAnimal);
         animalWinner2.addChild(newBornedAnimal);
-        updateAverageAliveAnimalsNumberOfChildren();
-        currentAnimalsCount++;
         updateCountOfChildren(animalWinner1, animalWinner2);
+        currentAnimalsCount++;
+        updateAverageAliveAnimalsNumberOfChildren();
         return newBornedAnimal;
     }
 
@@ -340,17 +322,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void updateCountOfChildren(Animal animal1, Animal animal2) {
         animal1.incrementNumberOfChildren();
         animal2.incrementNumberOfChildren();
+
     }
 
 
     @Override
     public Animal solveConflictsBetweenAnimals(List<Animal> animalsOnPosition) {
-
-        if (animalsOnPosition == null || animalsOnPosition.size() == 0)
-        {
-            System.out.println("CO TU SIE DZIEJEEEEEE");
-        }
-
         int maxAnimalEnergy = animalsOnPosition.stream()
                 .mapToInt(Animal::getEnergy)
                 .max()
@@ -392,8 +369,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
         int randomValue = (int)(Math.random() * mostProlificAnimals.size());
-        if (randomValue == mostProlificAnimals.size())
-            randomValue--;
         return mostProlificAnimals.get(randomValue);
     }
 
@@ -440,7 +415,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public String getMostPopularGenomes() {
+    public void updateMostPopularGenome() {
         List<String> sortedGenomes = allGenomes.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(1)
@@ -450,12 +425,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (sortedGenomes.isEmpty())
         {
             theMostPopularGenome = "";
-            return theMostPopularGenome;
         }
 
         this.theMostPopularGenome = sortedGenomes.getFirst();
+    }
+
+    public String getMostPopularGenome() {
         return theMostPopularGenome;
     }
+
 
     public double getAverageAliveAnimalsEnergy() {
         updateAverageAliveAnimalsEnergy();
@@ -473,6 +451,4 @@ public abstract class AbstractWorldMap implements WorldMap {
     public int getEmptyPositionsCount() {
         return emptyPositionsCount;
     }
-
-
 }
