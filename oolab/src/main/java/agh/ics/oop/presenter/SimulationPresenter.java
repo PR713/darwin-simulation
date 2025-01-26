@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SimulationPresenter implements MapChangeListener {
+public class SimulationPresenter {
 
     public static final Color GRASS_COLOR = new Color(0, 1, 0, 1);
     public static final Color DIRT_COLOR = new Color(0.3, 0.1, 0.1, 1);
+    public static final Color SELECTED_ANIMAL = new Color(1, 1, 0, 1);
     @FXML private Label dayInfoLabel;
     @FXML private Label animalDaysAliveStat;
     @FXML private Label animalDescendantCountStat;
@@ -69,11 +70,6 @@ public class SimulationPresenter implements MapChangeListener {
         this.simulation = simulation;
     }
 
-    @Override
-    public void mapChanged(WorldMap worldMap, String message) {
-        setWorldMap((AbstractWorldMap)worldMap);
-        Platform.runLater(this::drawMap);
-    }
 
     public void drawMap(){
         dayInfoLabel.setText(String.valueOf("Day " + simulation.getDay()));
@@ -116,17 +112,11 @@ public class SimulationPresenter implements MapChangeListener {
                 Vector2d position = new Vector2d(x,y);
                 WorldElement element = worldMap.objectAt(position);
 
-                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), element, position);
-                Label label;
-                if (element == null) {
-                    label = new Label(" ");
-                } else {
-                    label = new Label(element.toString());
-                }
+                float specialFieldWeight = worldMap.getSpecialFieldWeight(position);
+                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), element, specialFieldWeight);
 
                 GridPane.setHalignment(cell, HPos.CENTER);
                 mapGrid.add(cell, x - lowerLeft.getX() + 1, upperRight.getY() - y + 1);
-                // label, column, row
             }
         }
 
@@ -168,7 +158,7 @@ public class SimulationPresenter implements MapChangeListener {
             animalDetailsGrid.setVisible(false);
     }
 
-    StackPane getCellStackPane(boolean grass, WorldElement element, Vector2d position)
+    private StackPane getCellStackPane(boolean grass, WorldElement element, float specialFieldWeight)
     {
         StackPane pane = new StackPane();
         pane.setMinSize(CELL_WIDTH-2, CELL_HEIGHT-2);
@@ -177,33 +167,42 @@ public class SimulationPresenter implements MapChangeListener {
         Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
 
         Color cellColor = grass ? GRASS_COLOR : DIRT_COLOR;
-        float weight = worldMap.getSpecialFieldWeight(position);
-        cellColor = cellColor.interpolate(Color.BLACK, weight * 3);
+        cellColor = cellColor.interpolate(Color.BLACK, specialFieldWeight * 3);
         r.setFill(cellColor);
 
         pane.getChildren().add(r);
 
-        if (element != null)
-        {
-            r = new Rectangle(CELL_WIDTH-9, CELL_HEIGHT-9);
-            StackPane.setAlignment(r, Pos.CENTER);
-            r.setFill(element.getColor());
-
-            pane.getChildren().add(r);
-            if (element instanceof Animal animal)
-            {
-                pane.setOnMouseClicked(e -> selectAnimal(animal));
-
-                if (animal == selectedAnimal)
-                    r.setFill(new Color(1, 1, 0, 1));
-                else if (Objects.equals(worldMap.getMostPopularGenome(), animal.getGenome().toString()))
-                {
-                    r.setFill(new Color(element.getColor().getBlue(), 0f, element.getColor().getBlue(), 1f));
-                }
-            }
+        if (element != null) {
+            Rectangle elementRectangle = createWorldElementRectangle(pane, element);
+            pane.getChildren().add(elementRectangle);
         }
 
         return pane;
+    }
+
+    private Rectangle createWorldElementRectangle(StackPane pane, WorldElement element)
+    {
+        Rectangle r = new Rectangle(CELL_WIDTH-9, CELL_HEIGHT-9);
+        StackPane.setAlignment(r, Pos.CENTER);
+        r.setFill(element.getColor());
+
+        if (element instanceof Animal animal)
+        {
+            pane.setOnMouseClicked(e -> selectAnimal(animal));
+
+            if (animal == selectedAnimal)
+                r.setFill(SELECTED_ANIMAL);
+            else if (Objects.equals(worldMap.getMostPopularGenome(), animal.getGenome().toString()))
+            {
+                r.setFill(specialColorFromNormal(element.getColor()));
+            }
+        }
+        return r;
+    }
+
+    private static Color specialColorFromNormal(Color normalColor)
+    {
+        return new Color(normalColor.getBlue(), 0f, normalColor.getBlue(), 1f);
     }
 
     @FXML

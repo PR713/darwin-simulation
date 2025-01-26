@@ -91,16 +91,6 @@ public class WildOwlBearMap extends AbstractWorldMap {
         return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
     }
 
-    //List<WorldElement> worldElement = new ArrayList<>(getAllGrassTufts());
-
-    public Vector2d getOwlBearAreaUpperRight() {
-        return this.owlBearAreaUpperRight;
-    }
-
-    public Vector2d getOwlBearAreaLowerLeft() {
-        return this.owlBearAreaLowerLeft;
-    }
-
 
     public void updateEaten() {
         Vector2d position = this.wildOwlBear.getPosition();

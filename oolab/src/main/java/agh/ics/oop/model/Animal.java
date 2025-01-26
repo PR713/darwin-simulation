@@ -25,9 +25,9 @@ public class Animal extends AbstractAnimal {
 
     public Animal(Vector2d position, MapDirection orientation,
                   int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                  int energyNeededToReproduce, int genomeLength, int startIndexOfGenome,
+                  int energyNeededToReproduce, int startIndexOfGenome,
                   Genome genome) {
-        super(position, orientation, genomeLength, startIndexOfGenome, genome);
+        super(position, orientation, startIndexOfGenome, genome);
         this.currentEnergy = defaultEnergySpawnedWith;
         this.initialEnergy = defaultEnergySpawnedWith;
         this.energyLossPerDay = energyLossPerDay;
@@ -42,9 +42,11 @@ public class Animal extends AbstractAnimal {
         this.plantsConsumed = 0;
     }
 
+
     public int getEnergy() {
         return currentEnergy;
     }
+
 
     public void setEnergy(int newEnergy) {
         this.currentEnergy = newEnergy;
@@ -64,50 +66,62 @@ public class Animal extends AbstractAnimal {
         System.out.println("New pos: " + getPosition());
     }
 
+
     public boolean hasPassedAway() {
         return passedAway;
     }
+
 
     public void setPassedAway(boolean passedAway) {
         this.passedAway = passedAway;
     }
 
+
     public int getNumberOfDaysAlive() {
         return numberOfDaysAlive;
     }
+
 
     public void setHasAlreadyMoved(boolean hasAlreadyMoved) {
         this.hasAlreadyMoved = hasAlreadyMoved;
     }
 
+
     public boolean getHasAlreadyMoved() {
         return this.hasAlreadyMoved;
     }
+
 
     public int getNumberOfChildren() {
         return numberOfChildren;
     }
 
+
     public int getEnergyNeededToReproduce() {
         return energyNeededToReproduce;
     }
+
 
     public int getEnergyLossPerDay() {
         return energyLossPerDay;
     }
 
+
     public int getEnergyLossPerReproduction() {
         return energyLossPerReproduction;
     }
+
 
     public void incrementNumberOfChildren() {
         this.numberOfChildren++;
     }
 
+
     public void hasReproduced() {
         this.isReadyToReproduce = false;
         currentEnergy -= energyNeededToReproduce;
     }
+
 
     public void incrementNumberOfDaysAlive() {
         this.numberOfDaysAlive++;
@@ -117,6 +131,7 @@ public class Animal extends AbstractAnimal {
     public void addChild(Animal animal) {
         this.children.add(animal);
     }
+
 
     public List<Animal> getDescendants(){
         List<Animal> descendants = new ArrayList<>();
@@ -130,27 +145,28 @@ public class Animal extends AbstractAnimal {
         return this.descendants;
     }
 
+
     public int getNumberOfDescendants() {
         this.numberOfDescendants = getDescendants().size();
         return numberOfDescendants;
     }
+
 
     @Override
     public Color getColor() {
         return new Color(0, 0, Math.clamp(currentEnergy * 0.5f * (1f/initialEnergy), 0, 1), 1);
     }
 
+
     public boolean isNotReadyToReproduce() {
         return !isReadyToReproduce;
     }
 
-    public void setReadyToReproduce(boolean readyToReproduce) {
-        isReadyToReproduce = readyToReproduce;
-    }
 
     public void incrementPlantsConsumed() {
         this.plantsConsumed++;
     }
+
 
     public int getPlantsConsumed() {
         return plantsConsumed;

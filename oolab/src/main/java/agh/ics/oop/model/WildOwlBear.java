@@ -9,7 +9,7 @@ public class WildOwlBear extends AbstractAnimal {
     private int animalsEaten = 0;
 
     public WildOwlBear(Vector2d position, MapDirection orientation, int genomeLength, int startIndexOfGenome, Genome genome) {
-        super(position, orientation, genomeLength, startIndexOfGenome, genome);
+        super(position, orientation, startIndexOfGenome, genome);
     }
 
 

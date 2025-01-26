@@ -5,16 +5,11 @@ import static agh.ics.oop.model.OldAgeMovementBehavior.isMoveSkippedDueToAge;
 public class OldAgeAnimal extends Animal {
     public OldAgeAnimal(Vector2d position, MapDirection orientation,
                         int defaultEnergySpawnedWith, int energyLossPerDay, int energyLossPerReproduction,
-                        int energyNeededToReproduce, int genomeLength, int startIndexOfGenome,
+                        int energyNeededToReproduce, int startIndexOfGenome,
                         Genome genome) {
         super(position, orientation, defaultEnergySpawnedWith, energyLossPerDay, energyLossPerReproduction,
-                energyNeededToReproduce, genomeLength, startIndexOfGenome, genome);
+                energyNeededToReproduce, startIndexOfGenome, genome);
     }
-    //TODO
-    //TODO
-    //TODO co jeśli reproduce(), przechowywujemy boolean w AbstractWorldMap?
-    //TODO
-    //TODO
 
     @Override
     public void move(MoveValidator validator, int direction) {
