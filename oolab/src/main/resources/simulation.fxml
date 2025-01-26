@@ -49,7 +49,7 @@
                                     <Label text="Empty cells:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
                                     <Label text="Name 1:" GridPane.rowIndex="2" GridPane.columnIndex="1" fx:id="emptyCellsStat" />
 
-                                    <Label text="Best genome:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                    <Label text="Best genome (pink):" GridPane.rowIndex="3" GridPane.columnIndex="0" />
                                     <Label text="Name 1:" GridPane.rowIndex="3" GridPane.columnIndex="1" fx:id="bestGenomeStat" />
 
                                     <Label text="Mean Animal Energy:" GridPane.rowIndex="4" GridPane.columnIndex="0" />

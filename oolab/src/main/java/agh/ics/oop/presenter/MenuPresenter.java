@@ -128,9 +128,9 @@ public class MenuPresenter
             simulationStage.show();
             AbstractWorldMap map;
             if (config.wildOwlBear())
-                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength());
+                map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength(), config.aging());
             else
-                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations());
+                map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.aging());
             Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), config.dailyEnergyUsage(), config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, saveLogCheckbox.isSelected());
             presenter.setSimulation(simulation);
             presenter.setWorldMap(map);
@@ -222,7 +222,7 @@ public class MenuPresenter
         int maxMutationCount = getValidatedFieldValue(maxMutationCountField, minMutationCount, Integer.MAX_VALUE, "Maximum Mutation Count");
         int genomeLength = getValidatedFieldValue(genomeLengthField, 1, Integer.MAX_VALUE, "Genome Length");
         int dailyEnergyUsage = getValidatedFieldValue(energyUsageField, 0, Integer.MAX_VALUE, "Daily Energy Usage");
-        int simulationDuration = getValidatedFieldValue(energyUsageField, 1, Integer.MAX_VALUE, "Simulation Duration");
+        int simulationDuration = getValidatedFieldValue(simulationDurationField, 1, Integer.MAX_VALUE, "Simulation Duration");
 
         return new Config(name, sizeX, sizeY, animalCount, grassCount, grassEnergy, grassGrowth, baseAnimalEnergy, energyToReproduce, reproductionConsumption, minMutationCount, maxMutationCount, genomeLength, dailyEnergyUsage, simulationDuration, aging, owlBear);
     }

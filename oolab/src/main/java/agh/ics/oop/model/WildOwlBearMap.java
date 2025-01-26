@@ -12,8 +12,8 @@ public class WildOwlBearMap extends AbstractWorldMap {
     private final Vector2d owlBearAreaUpperRight;
     protected WildOwlBear wildOwlBear;
 
-    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy, int minNumberOfMutations, int maxNumberOfMutations, int genomeLength) {
-        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy, maxNumberOfMutations, minNumberOfMutations);
+    public WildOwlBearMap(int height, int width, int initialPlantCount, int dailyPlantGrowth, int consumeEnergy, int minNumberOfMutations, int maxNumberOfMutations, int genomeLength, boolean isAging) {
+        super(height, width, initialPlantCount, dailyPlantGrowth, consumeEnergy, maxNumberOfMutations, minNumberOfMutations, isAging);
 
         List<Vector2d> owlBearAreaCords = getOwlBearAreaCords();
         this.owlBearAreaLowerLeft = owlBearAreaCords.get(0);
@@ -74,6 +74,11 @@ public class WildOwlBearMap extends AbstractWorldMap {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public float getSpecialFieldWeigth(Vector2d position)
+    {
+        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeigth(position);
+    }
 
     public boolean isOwlBearMovingBeyondBordersHorizontally(Vector2d position) {
         return (position.getX() > owlBearAreaUpperRight.getX() || position.getX() < owlBearAreaLowerLeft.getX());

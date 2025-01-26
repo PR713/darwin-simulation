@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
@@ -119,7 +120,7 @@ public class SimulationPresenter implements MapChangeListener {
                 Vector2d position = new Vector2d(x,y);
                 WorldElement element = worldMap.objectAt(position);
 
-                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), element);
+                StackPane cell = getCellStackPane(worldMap.isOccupiedByGrass(position), element, position);
                 Label label;
                 if (element == null) {
                     label = new Label(" ");
@@ -168,14 +169,19 @@ public class SimulationPresenter implements MapChangeListener {
             animalDetailsGrid.setVisible(false);
     }
 
-    StackPane getCellStackPane(boolean grass, WorldElement element)
+    StackPane getCellStackPane(boolean grass, WorldElement element, Vector2d position)
     {
         StackPane pane = new StackPane();
         pane.setMinSize(CELL_WIDTH-2, CELL_HEIGHT-2);
         pane.setMaxSize(CELL_WIDTH-2, CELL_HEIGHT-2);
 
         Rectangle r = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
-        r.setFill(grass ? new Color(0, 1, 0, 1) : new Color(0.3, 0.1, 0.1, 1));
+        Color color = grass ? new Color(0, 1, 0, 1) : new Color(0.3, 0.1, 0.1, 1);
+        float weight = worldMap.getSpecialFieldWeigth(position);
+        color = color.interpolate(Color.BLACK, weight * 3);
+
+
+        r.setFill(color);
 
         pane.getChildren().add(r);
 
@@ -192,6 +198,10 @@ public class SimulationPresenter implements MapChangeListener {
 
                 if (animal == selectedAnimal)
                     r.setFill(new Color(1, 1, 0, 1));
+                else if (Objects.equals(worldMap.getMostPopularGenome(), animal.getGenome().toString()))
+                {
+                    r.setFill(new Color(element.getColor().getBlue(), 0f, element.getColor().getBlue(), 1f));
+                }
             }
         }
 
