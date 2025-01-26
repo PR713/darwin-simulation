@@ -32,25 +32,6 @@ public class WildOwlBearMap extends AbstractWorldMap {
     }
 
 
-    public List<Vector2d> getOwlBearAreaCords() {
-        int widthOfMap = upperRight.getX() - lowerLeft.getX() + 1;
-        int heightOfMap = upperRight.getY() - lowerLeft.getY() + 1;
-        int areaSurface = widthOfMap * heightOfMap;
-        int areaSideLength = (int) Math.sqrt(0.2 * areaSurface); // >= shorterSide
-        int lowerLeftXAreaCord = (int) (Math.random() * (widthOfMap - areaSideLength) + lowerLeft.getX());
-        int lowerLeftYAreaCord = (int) (Math.random() * (heightOfMap - areaSideLength) + lowerLeft.getY());
-        return List.of(new Vector2d(lowerLeftXAreaCord, lowerLeftYAreaCord),
-                new Vector2d(lowerLeftXAreaCord + areaSideLength - 1, lowerLeftYAreaCord + areaSideLength - 1));
-    }
-
-
-    public Vector2d getRandomPositionOfArea(Vector2d lowerLeft, Vector2d upperRight) {
-        int x = (int) (Math.random() * (upperRight.getX() - lowerLeft.getX()) + lowerLeft.getX());
-        int y = (int) (Math.random() * (upperRight.getY() - lowerLeft.getY()) + lowerLeft.getY());
-        return new Vector2d(x, y);
-    }
-
-
     @Override
     public void move(AbstractAnimal animal, MapDirection direction) {
         super.move(animal, direction);
@@ -64,19 +45,6 @@ public class WildOwlBearMap extends AbstractWorldMap {
         wildOwlBear.incrementIndex();
 
         super.moveAnimals();
-    }
-
-
-    @Override
-    public List<WorldElement> getAllWorldElements() {
-        return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public float getSpecialFieldWeight(Vector2d position) {
-        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
     }
 
 
@@ -104,5 +72,37 @@ public class WildOwlBearMap extends AbstractWorldMap {
             }
         }
         super.updateEaten();
+    }
+
+
+    @Override
+    public List<WorldElement> getAllWorldElements() {
+        return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public float getSpecialFieldWeight(Vector2d position) {
+        return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
+    }
+
+
+    public List<Vector2d> getOwlBearAreaCords() {
+        int widthOfMap = upperRight.getX() - lowerLeft.getX() + 1;
+        int heightOfMap = upperRight.getY() - lowerLeft.getY() + 1;
+        int areaSurface = widthOfMap * heightOfMap;
+        int areaSideLength = (int) Math.sqrt(0.2 * areaSurface); // >= shorterSide
+        int lowerLeftXAreaCord = (int) (Math.random() * (widthOfMap - areaSideLength) + lowerLeft.getX());
+        int lowerLeftYAreaCord = (int) (Math.random() * (heightOfMap - areaSideLength) + lowerLeft.getY());
+        return List.of(new Vector2d(lowerLeftXAreaCord, lowerLeftYAreaCord),
+                new Vector2d(lowerLeftXAreaCord + areaSideLength - 1, lowerLeftYAreaCord + areaSideLength - 1));
+    }
+
+
+    public Vector2d getRandomPositionOfArea(Vector2d lowerLeft, Vector2d upperRight) {
+        int x = (int) (Math.random() * (upperRight.getX() - lowerLeft.getX()) + lowerLeft.getX());
+        int y = (int) (Math.random() * (upperRight.getY() - lowerLeft.getY()) + lowerLeft.getY());
+        return new Vector2d(x, y);
     }
 }

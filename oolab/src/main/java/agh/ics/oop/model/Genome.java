@@ -20,27 +20,43 @@ public class Genome {
                   int minNumberOfMutations, int maxNumberOfMutations) {
         int genomeLength = g1.getGenes().length;
 
-        double genotypeDivisionRatio = (double) g1Energy / (g1Energy + g2Energy);
 
-        boolean g1LeftSide = Math.random() < 0.5;
-
-        int divisionPoint = (int) Math.round(genotypeDivisionRatio * genomeLength);
+        boolean leftSide = Math.random() < 0.5;
 
         int[] tempGenome = new int[genomeLength];
 
-        if (g1LeftSide) {
+        Genome strongerGenome;
+        Genome weakerGenome;
+        int strongerEnergy;
+
+        if (g1Energy >= g2Energy){
+            strongerGenome = g1;
+            weakerGenome = g2;
+            strongerEnergy = g1Energy;
+        } else {
+            strongerGenome = g2;
+            weakerGenome = g1;
+            strongerEnergy = g2Energy;
+        }
+
+        double genotypeDivisionRatio = (double) strongerEnergy / (g1Energy + g2Energy);
+
+        int divisionPoint = (int) Math.floor(genotypeDivisionRatio * (genomeLength - 1));
+
+
+        if (leftSide) {
             for (int i = 0; i < divisionPoint; i++) {
-                tempGenome[i] = g1.getGenes()[i];
+                tempGenome[i] = strongerGenome.getGenes()[i];
             }
             for (int i = divisionPoint; i < genomeLength; i++) {
-                tempGenome[i] = g2.getGenes()[i];
+                tempGenome[i] = weakerGenome.getGenes()[i];
             }
         } else {
             for (int i = 0; i < divisionPoint; i++) {
-                tempGenome[i] = g2.getGenes()[i];
+                tempGenome[i] = weakerGenome.getGenes()[i];
             }
             for (int i = divisionPoint; i < genomeLength; i++) {
-                tempGenome[i] = g1.getGenes()[i];
+                tempGenome[i] = strongerGenome.getGenes()[i];
             }
         }
 
