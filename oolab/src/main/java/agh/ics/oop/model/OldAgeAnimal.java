@@ -11,6 +11,7 @@ public class OldAgeAnimal extends Animal {
                 energyNeededToReproduce, startIndexOfGenome, genome);
     }
 
+
     @Override
     public void move(MoveValidator validator, int direction) {
         if (currentEnergy - energyLossPerDay > 0) {

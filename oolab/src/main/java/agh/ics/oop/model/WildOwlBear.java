@@ -36,9 +36,11 @@ public class WildOwlBear extends AbstractAnimal {
         }
     }
 
+
     public void incrementAnimalsEaten() {
         this.animalsEaten = this.animalsEaten + 1;
     }
+
 
     @Override
     public Color getColor() {

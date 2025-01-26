@@ -47,6 +47,7 @@ public class Genome {
         this.genome = mutate(tempGenome, minNumberOfMutations, maxNumberOfMutations);
     }
 
+
     public int[] mutate(int[] genome, int minNumberOfMutations, int maxNumberOfMutations) {
         int range = maxNumberOfMutations - minNumberOfMutations + 1;
         int genesToMutate = minNumberOfMutations + (int) (Math.random() * range);
@@ -65,9 +66,11 @@ public class Genome {
         return genome;
     }
 
+
     public int[] getGenes() {
         return genome;
     }
+
 
     public boolean equals(Object other){
         if (this == other) {
@@ -82,10 +85,12 @@ public class Genome {
 
     }
 
+
     @Override
     public int hashCode() {
         return Arrays.hashCode(genome);
     }
+
 
     @Override
     public String toString() {

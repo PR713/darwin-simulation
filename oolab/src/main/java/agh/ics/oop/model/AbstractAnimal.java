@@ -56,7 +56,6 @@ public abstract class AbstractAnimal implements WorldElement {
         } else {
             if (validator.isMovingBeyondBordersHorizontally(newPosition)
                     && validator.isMovingBeyondBordersVertically(newPosition)) {
-                //position doesn't change
                 this.orientation = newOrientation.reverseOrientation();
 
                 //mapa o lowerLeft w (0,0)

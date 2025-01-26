@@ -21,6 +21,7 @@ public class Grass implements WorldElement {
         return "*";
     }
 
+
     @Override
     public Color getColor() {
         return null;

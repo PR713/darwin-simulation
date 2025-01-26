@@ -63,7 +63,6 @@ public class Animal extends AbstractAnimal {
             setEnergy(currentEnergy - energyLossPerDay);
             isReadyToReproduce = currentEnergy >= energyNeededToReproduce;
         } else setPassedAway(true);
-        System.out.println("New pos: " + getPosition());
     }
 
 

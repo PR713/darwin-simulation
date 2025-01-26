@@ -18,9 +18,10 @@ public class WildOwlBearMap extends AbstractWorldMap {
         this.owlBearAreaUpperRight = owlBearAreaCords.get(1);
         Genome genome = new Genome(genomeLength);
         this.wildOwlBear = new WildOwlBear(getRandomPositionOfArea(owlBearAreaLowerLeft, owlBearAreaUpperRight), MapDirection.randomOrientation(),
-                genomeLength, (int) (Math.random() * (genomeLength-1)), genome);
+                genomeLength, (int) (Math.random() * (genomeLength - 1)), genome);
 
     }
+
 
     @Override
     public WorldElement objectAt(Vector2d position) {
@@ -55,10 +56,9 @@ public class WildOwlBearMap extends AbstractWorldMap {
         super.move(animal, direction);
     }
 
+
     @Override
-    public void moveAnimals()
-    {
-        System.out.println("Los: " + wildOwlBear.getCurrentIndexOfGenome() + "    roz: " + wildOwlBear.getGenome().getGenes().length);
+    public void moveAnimals() {
         int direction = wildOwlBear.getGenome().getGenes()[wildOwlBear.getCurrentIndexOfGenome()];
         wildOwlBear.move(this, direction);
         wildOwlBear.incrementIndex();
@@ -66,17 +66,19 @@ public class WildOwlBearMap extends AbstractWorldMap {
         super.moveAnimals();
     }
 
+
     @Override
     public List<WorldElement> getAllWorldElements() {
         return Stream.concat(Stream.of(wildOwlBear), super.getAllWorldElements().stream())
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public float getSpecialFieldWeight(Vector2d position)
-    {
+    public float getSpecialFieldWeight(Vector2d position) {
         return (position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight) ? 0.1f : 0f) + super.getSpecialFieldWeight(position);
     }
+
 
     public boolean isOwlBearMovingBeyondBordersHorizontally(Vector2d position) {
         return (position.getX() > owlBearAreaUpperRight.getX() || position.getX() < owlBearAreaLowerLeft.getX());
@@ -86,6 +88,7 @@ public class WildOwlBearMap extends AbstractWorldMap {
     public boolean isOwlBearMovingBeyondBordersVertically(Vector2d position) {
         return (position.getY() > owlBearAreaUpperRight.getY() || position.getY() < owlBearAreaLowerLeft.getY());
     }
+
 
     public boolean canMoveToOwl(Vector2d position) {
         return position.follows(owlBearAreaLowerLeft) && position.precedes(owlBearAreaUpperRight);
