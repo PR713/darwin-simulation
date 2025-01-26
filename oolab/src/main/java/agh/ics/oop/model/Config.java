@@ -15,6 +15,8 @@ public record Config(String name,
                      int minMutations,
                      int maxMutations,
                      int genomeLength,
+                     int dailyEnergyUsage,
+                     int simulationDuration,
                      boolean aging,
                      boolean wildOwlBear) implements Serializable
 {
@@ -34,13 +36,13 @@ public record Config(String name,
 
     public static void saveConfigs(Config[] configs)
     {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath)))
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath)))
         {
-            oos.writeObject(configs);
+            objectOutputStream.writeObject(configs);
         }
         catch (IOException e)
         {
-            //TODO
+            //Brak dostępu
         }
     }
 }

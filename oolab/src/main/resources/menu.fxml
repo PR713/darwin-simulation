@@ -31,11 +31,17 @@
                     <Label prefHeight="30" alignment="BOTTOM_CENTER">Energy from grass</Label>
                     <TextField fx:id="grassEnergyField">5</TextField>
 
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Daily energy usage</Label>
+                    <TextField fx:id="energyUsageField">1</TextField>
+
                     <Label prefHeight="30" alignment="BOTTOM_CENTER">Minimal mutation count</Label>
                     <TextField fx:id="minMutationCountField">1</TextField>
 
                     <Label prefHeight="30" alignment="BOTTOM_CENTER">Genome length</Label>
                     <TextField fx:id="genomeLengthField">10</TextField>
+
+                    <Label prefHeight="30" alignment="BOTTOM_CENTER">Simulation duration</Label>
+                    <TextField fx:id="simulationDurationField">1000</TextField>
                 </VBox>
                 <VBox alignment="CENTER">
 

@@ -6,21 +6,24 @@ import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Platform;
 
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.*;
 
 public class Simulation implements Runnable {
 
     public boolean paused = false;
+    private boolean quit = false;
     private List<Animal> animals;
     private int day;
-    private final WorldMap map;
+    private final AbstractWorldMap map;
     private final SimulationPresenter presenter;
     private final int simulationDuration;
 
-    private FileInputStream fileInput;
+    private UUID id;
+    private FileOutputStream fileInput;
+    private PrintStream printStream;
 
-    public Simulation(int animalCount, WorldMap map,
+    public Simulation(int animalCount, AbstractWorldMap map,
                       int genomeLength, int defaultEnergySpawnedWith, int energyLossPerDay,
                       int energyLossPerReproduction, int energyNeededToReproduce, int simulationDuration,
                       boolean isAging, SimulationPresenter presenter, boolean saveToFile) {
@@ -33,8 +36,18 @@ public class Simulation implements Runnable {
                 new RandomPositionGenerator(map.getUpperRight().getX() + 1,
                         map.getUpperRight().getY() + 1, animalCount);
 
-//        List<Vector2d> startPositions = new LinkedList<>();
-//        startPositions.add(new Vector2d(3,3));
+        if (saveToFile)
+        {
+            try {
+                id = UUID.randomUUID();
+                fileInput = new FileOutputStream(id.toString() + "_log.csv", true);
+                printStream = new PrintStream(fileInput);
+                logHeaders();
+            } catch (FileNotFoundException exception) {
+                fileInput = null;
+                //Brak dostepu, there's nothing we can do :(
+            }
+        }
 
         for (Vector2d position : randPosGenerator) {
             createAndPlaceAnimal(position, genomeLength, defaultEnergySpawnedWith, energyLossPerDay,
@@ -67,6 +80,8 @@ public class Simulation implements Runnable {
             this.day = day;
             map.deleteDeadAnimals();
             map.moveAnimals();
+            if (quit)
+                return;
             try {
                 do {
                     Thread.sleep(100);
@@ -85,12 +100,59 @@ public class Simulation implements Runnable {
             if (!map.getAllAnimals().isEmpty())
                 System.out.println(map.getAllAnimals().getFirst().getPosition());
 
+            if (printStream != null)
+                logStats();
             Platform.runLater(presenter::drawMap);
         }
     }
 
     public List<Animal> getAnimals() {
         return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List
+    }
+
+    private void logHeaders()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Day,");
+        stringBuilder.append("Animal Count,");
+        stringBuilder.append("Grass Count,");
+        stringBuilder.append("Empty Cells,");
+        stringBuilder.append("Best Genome,");
+        stringBuilder.append("Mean Animal Energy,");
+        stringBuilder.append("Mean Life Length,");
+        stringBuilder.append("Mean Child Count,");
+        printStream.println(stringBuilder);
+    }
+
+    private void logStats()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(day).append(",");
+        stringBuilder.append(map.getAllAnimals().size()).append(",");
+        stringBuilder.append(map.getAllGrassTufts().size()).append(",");
+        stringBuilder.append(map.getEmptyPositionsCount()).append(",");
+        stringBuilder.append(map.getMostPopularGenome()).append(",");
+        stringBuilder.append(map.getAverageAliveAnimalsEnergy()).append(",");
+        stringBuilder.append(map.getAverageDeadAnimalsAge()).append(",");
+        stringBuilder.append(map.getAverageAliveAnimalsNumberOfChildren()).append(",");
+        printStream.println(stringBuilder);
+    }
+
+    public void disposeSimulation()
+    {
+        quit = true;
+
+        if (fileInput == null)
+            return;
+
+        printStream.close();
+        try {
+            fileInput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        fileInput = null;
+        printStream = null;
     }
 
     public int getDay() {

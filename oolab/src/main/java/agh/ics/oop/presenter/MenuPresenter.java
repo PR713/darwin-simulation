@@ -29,8 +29,11 @@ import static java.lang.Integer.parseInt;
 
 public class MenuPresenter
 {
+
     @FXML private CheckBox saveLogCheckbox;
 
+    @FXML private TextField energyUsageField;
+    @FXML private TextField simulationDurationField;
     @FXML
     private TextField xSizeField;
     @FXML
@@ -128,9 +131,11 @@ public class MenuPresenter
                 map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations(), config.genomeLength());
             else
                 map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy(), config.minMutations(), config.maxMutations());
-            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, true);
+            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), config.dailyEnergyUsage(), config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, saveLogCheckbox.isSelected());
             presenter.setSimulation(simulation);
             presenter.setWorldMap(map);
+
+            simulationStage.setOnCloseRequest(e -> simulation.disposeSimulation());
         }
         catch (IOException exception)
         {
@@ -173,6 +178,8 @@ public class MenuPresenter
         minMutationCountField.setText(String.valueOf(config.minMutations()));
         maxMutationCountField.setText(String.valueOf(config.maxMutations()));
         genomeLengthField.setText(String.valueOf(config.genomeLength()));
+        energyUsageField.setText(String.valueOf(config.dailyEnergyUsage()));
+        simulationDurationField.setText(String.valueOf(config.simulationDuration()));
         agingCheckbox.setSelected(config.aging());
         owlBearCheckbox.setSelected(config.wildOwlBear());
     }
@@ -214,8 +221,10 @@ public class MenuPresenter
         int minMutationCount = getValidatedFieldValue(minMutationCountField, 0, Integer.MAX_VALUE, "Minimum Mutation Count");
         int maxMutationCount = getValidatedFieldValue(maxMutationCountField, minMutationCount, Integer.MAX_VALUE, "Maximum Mutation Count");
         int genomeLength = getValidatedFieldValue(genomeLengthField, 1, Integer.MAX_VALUE, "Genome Length");
+        int dailyEnergyUsage = getValidatedFieldValue(energyUsageField, 0, Integer.MAX_VALUE, "Daily Energy Usage");
+        int simulationDuration = getValidatedFieldValue(energyUsageField, 1, Integer.MAX_VALUE, "Simulation Duration");
 
-        return new Config(name, sizeX, sizeY, animalCount, grassCount, grassEnergy, grassGrowth, baseAnimalEnergy, energyToReproduce, reproductionConsumption, minMutationCount, maxMutationCount, genomeLength, aging, owlBear);
+        return new Config(name, sizeX, sizeY, animalCount, grassCount, grassEnergy, grassGrowth, baseAnimalEnergy, energyToReproduce, reproductionConsumption, minMutationCount, maxMutationCount, genomeLength, dailyEnergyUsage, simulationDuration, aging, owlBear);
     }
 
     private int getValidatedFieldValue(TextField field, int minVal, int maxVal, String fieldName) throws WrongInputException
