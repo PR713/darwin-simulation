@@ -24,8 +24,8 @@
                 <TabPane prefHeight="600" style="-fx-border-color: transparent grey transparent transparent; -fx-border-width: 2 2px 2 2;">
                     <Tab text="Controls" closable="false">
                         <content>
-                            <VBox alignment="center">
-                                <Label minWidth="300.0" fx:id="moveInfoLabel" alignment="center">Dzien 1</Label>
+                            <VBox alignment="center" spacing="10">
+                                <Label minWidth="300.0" fx:id="dayInfoLabel" alignment="center">Day 1</Label>
                                 <Button prefWidth="180" onAction="#startSimulation" fx:id="startSimulationButton">Start</Button>
                                 <Button prefWidth="180" onAction="#stopSimulation" disable="true" fx:id="stopSimulationButton">Stop</Button>
                             </VBox>

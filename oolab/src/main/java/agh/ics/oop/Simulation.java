@@ -13,6 +13,7 @@ public class Simulation implements Runnable {
 
     public boolean paused = false;
     private List<Animal> animals;
+    private int day;
     private final WorldMap map;
     private final SimulationPresenter presenter;
     private final int simulationDuration;
@@ -63,6 +64,7 @@ public class Simulation implements Runnable {
 
     public void run() {
         for (int day = 1; day <= simulationDuration; day++) {
+            this.day = day;
             map.deleteDeadAnimals();
             this.animals = getAnimals(); // jeśli się nowe urodziły
             for (Animal animal : animals) {
@@ -73,7 +75,7 @@ public class Simulation implements Runnable {
             }
             try {
                 do {
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                 } while (paused);
             } catch (InterruptedException e) {
                 System.err.println("Symulacja przerwana: " + e.getMessage());
@@ -92,6 +94,10 @@ public class Simulation implements Runnable {
 
     public List<Animal> getAnimals() {
         return Collections.unmodifiableList(map.getAllAnimals()); //only view on animals List
+    }
+
+    public int getDay() {
+        return day;
     }
 }
 

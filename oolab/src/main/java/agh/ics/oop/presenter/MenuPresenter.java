@@ -128,9 +128,9 @@ public class MenuPresenter
                 map = new WildOwlBearMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
             else
                 map = new GlobeMap(config.sizeY(), config.sizeX(), config.initialGrassCount(), config.dailyGrassGrowth(), config.grassEnergy());
-            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 100, config.aging(), presenter, true);
-            presenter.setWorldMap(map);
+            Simulation simulation = new Simulation(config.initialPopulation(), map, config.genomeLength(), config.initialAnimalEnergy(), 1, config.reproductionConsumedEnergy(), config.reproductionMinEnergy(), 1000, config.aging(), presenter, true);
             presenter.setSimulation(simulation);
+            presenter.setWorldMap(map);
         }
         catch (IOException exception)
         {

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
 
+    @FXML private Label dayInfoLabel;
     @FXML private Label animalDaysAliveStat;
     @FXML private Label animalDescendantCountStat;
     @FXML private Label animalChildCountStat;
@@ -77,16 +78,13 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void drawMap(){
-
+        dayInfoLabel.setText(String.valueOf("Day " + simulation.getDay()));
         clearGrid();
         Vector2d lowerLeft = worldMap.getLowerLeft();
         Vector2d upperRight = worldMap.getUpperRight();
 
         int numberOfRows = upperRight.getY() - lowerLeft.getY() + 1;
         int numberOfColumns = upperRight.getX() - lowerLeft.getX() + 1;
-
-        System.out.println("drawing " + numberOfRows + " " + numberOfColumns);
-
 
         for (int i = 0; i < numberOfColumns + 1; i++) {//+1 bo jeszcze kolumna na y/x, np -1,0,1,2...
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
