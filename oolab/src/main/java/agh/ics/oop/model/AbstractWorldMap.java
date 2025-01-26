@@ -71,17 +71,14 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    protected void removeAnimalFromMap(AbstractAnimal animal) {
+    protected void removeAnimalFromMap(Vector2d position, AbstractAnimal animal) {
         if (animal == null)
             return;
 
-        for (List<Animal> a : animals.values())
-        {
-            while (true)
-            {
-                if(!a.remove((Animal) animal))
-                    break;
-            }
+        List<Animal> animalsAtPosition = animals.get(position);
+
+        if (animalsAtPosition != null) {
+            animalsAtPosition.remove((Animal) animal);
         }
     }
 
@@ -93,7 +90,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         Vector2d newPosition = animal.getPosition();
 
         if (!oldPosition.equals(newPosition)) {
-            removeAnimalFromMap(animal);
+            removeAnimalFromMap(oldPosition, animal);
             addAnimalToMap(animal);
             mapChanged(String.format("Animal moved from %s to %s", oldPosition, newPosition));
         }
@@ -232,7 +229,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         for (Animal deadAnimal : animalsToRemove)
-            removeAnimalFromMap(deadAnimal);
+            removeAnimalFromMap(deadAnimal.getPosition(), deadAnimal);
 
         if (countOfDeadAnimals > 0)
         {
@@ -288,7 +285,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 continue;
             }
             Animal newAnimal = reproduceAnimals(animalWinner1, animalWinner2);
-            addAnimalToMap(newAnimal);
             animalWinner1.hasReproduced();
             animalWinner2.hasReproduced();
         }
@@ -311,7 +307,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         } catch (IncorrectPositionException e) {
             System.out.println("Cannot place the animal: " + e.getMessage());
         }
-        addAnimalToMap(newBornedAnimal);
         animalWinner1.addChild(newBornedAnimal);
         animalWinner2.addChild(newBornedAnimal);
         updateCountOfChildren(animalWinner1, animalWinner2);
