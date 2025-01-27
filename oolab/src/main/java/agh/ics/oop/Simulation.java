@@ -89,19 +89,22 @@ public class Simulation implements Runnable {
             this.day = day;
 
             map.deleteDeadAnimals();
-            map.moveAnimals();
 
             if (quit)
                 return;
 
             handleTick();
 
+            map.moveAnimals();
+
             map.updateEaten();
-            map.updateAnimalsLifespan();
+
+            map.updateReproduction();
             map.updateAverageAliveAnimalsNumberOfChildren();
             map.updateAverageAliveAnimalsEnergy();
-            map.updateReproduction();
             map.updateMostPopularGenome();
+            map.updateAnimalsLifespan();
+
             map.addGrassTufts();
 
             if (printStream != null)
