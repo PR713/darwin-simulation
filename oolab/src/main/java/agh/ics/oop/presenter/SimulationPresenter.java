@@ -32,6 +32,7 @@ public class SimulationPresenter {
     private static final double CELL_WIDTH = 20.0;
     private static final double CELL_HEIGHT = 20.0;
 
+    @FXML private Label animalIsAliveStat;
     @FXML private Label dayInfoLabel;
     @FXML private Label animalDaysAliveStat;
     @FXML private Label animalDescendantCountStat;
@@ -72,8 +73,9 @@ public class SimulationPresenter {
     }
 
     public void drawMap() {
-        clearGrid();
 
+        clearGrid();
+        System.out.println("Drawing map");
         Vector2d lowerLeft = worldMap.getLowerLeft();
         Vector2d upperRight = worldMap.getUpperRight();
 
@@ -187,6 +189,7 @@ public class SimulationPresenter {
             animalEnergyStat.setText(String.valueOf(selectedAnimal.getEnergy()));
             animalActiveGenomeStat.setText(String.valueOf("Index: " + selectedAnimal.getCurrentIndexOfGenome()));
             animalGenomeStat.setText(String.valueOf(Arrays.stream(selectedAnimal.getGenome().getGenes()).mapToObj(String::valueOf).collect(Collectors.joining())));
+            animalIsAliveStat.setText(selectedAnimal.hasPassedAway() ? "No" : "Yes");
         }
         else
             animalDetailsGrid.setVisible(false);
