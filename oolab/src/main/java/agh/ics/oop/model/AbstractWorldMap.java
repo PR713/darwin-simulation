@@ -438,7 +438,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public double getAverageAliveAnimalsEnergy() {
-        updateAverageAliveAnimalsEnergy();
         return averageAliveAnimalsEnergy;
     }
 
