@@ -86,6 +86,9 @@
 
                                     <Label text="Days alive:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
                                     <Label text="5" GridPane.rowIndex="6" GridPane.columnIndex="1" fx:id="animalDaysAliveStat"/>
+
+                                    <Label text="Is alive:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                    <Label text="9" GridPane.rowIndex="7" GridPane.columnIndex="1" fx:id="animalIsAliveStat"/>
                                 </GridPane>
                             </VBox>
                         </content>
