@@ -55,8 +55,7 @@ public class Animal extends AbstractAnimal {
 
     @Override
     public void move(MoveValidator validator, int direction) {
-        setHasAlreadyMoved(false);
-        if (currentEnergy - energyLossPerDay > 0) {
+        if (currentEnergy - energyLossPerDay >= 0) {
             setHasAlreadyMoved(true);
             super.move(validator, direction);
 
