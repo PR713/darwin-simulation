@@ -90,11 +90,6 @@ public class Simulation implements Runnable {
 
             map.deleteDeadAnimals();
 
-            if (quit)
-                return;
-
-            handleTick();
-
             map.moveAnimals();
 
             map.updateEaten();
@@ -112,6 +107,12 @@ public class Simulation implements Runnable {
 
             if (presenter != null)
                 Platform.runLater(presenter::drawMap); //Tu mogl by byc observer pattern ale jest to nie potrzebne bo jest tylko jeden przypadek uzycia
+
+            if (quit)
+                return;
+
+            handleTick(); //martwe też widać, można po deleteDeadAnimals przestawić i wtedy ich nie będzie
+            //averageAnimalEnergy ok bo sprawdza też ile zmarło dzisiaj
         }
     }
 
