@@ -111,8 +111,8 @@ public class Simulation implements Runnable {
             if (quit)
                 return;
 
-            handleTick(); //jeśli pod drawMap to stan na koniec dnia,
-            //jeśli np pod deleteDeadAnimals to jeśli zrobimy stop to martwych też nie będzie
+            handleTick(); //jeśli pod drawMap to stan na koniec dnia (z martwymi też)
+            //jeśli np pod deleteDeadAnimals to jeśli zrobimy stop to martwych już nie będzie
             //bo platform.runlater już ma w kolejce drawMap - tak jakby dzięki platform.runlater
             //to się rysuje w momencie zrobienia handleTick bo wtedy ma czas na to :)
             //kliknięcie na animala też powoduje drawMap
