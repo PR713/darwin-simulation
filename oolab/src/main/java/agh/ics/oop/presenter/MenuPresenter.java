@@ -21,52 +21,66 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class MenuPresenter
-{
-    @FXML private TextField energyUsageField;
-    @FXML private TextField simulationDurationField;
-    @FXML private TextField xSizeField;
-    @FXML private TextField ySizeField;
-    @FXML private TextField animalCountField;
-    @FXML private TextField grassCountField;
-    @FXML private TextField grassEnergyField;
-    @FXML private TextField minMutationCountField;
-    @FXML private TextField genomeLengthField;
-    @FXML private TextField grassGrowthField;
-    @FXML private TextField baseAnimalEnergyField;
-    @FXML private TextField energyToReproduceField;
-    @FXML private TextField reproductionEnergyConsumptionField;
-    @FXML private TextField maxMutationCountField;
-    @FXML private CheckBox agingCheckbox;
-    @FXML private CheckBox owlBearCheckbox;
-    @FXML private CheckBox saveLogCheckbox;
+public class MenuPresenter {
+    @FXML
+    private TextField energyUsageField;
+    @FXML
+    private TextField simulationDurationField;
+    @FXML
+    private TextField xSizeField;
+    @FXML
+    private TextField ySizeField;
+    @FXML
+    private TextField animalCountField;
+    @FXML
+    private TextField grassCountField;
+    @FXML
+    private TextField grassEnergyField;
+    @FXML
+    private TextField minMutationCountField;
+    @FXML
+    private TextField genomeLengthField;
+    @FXML
+    private TextField grassGrowthField;
+    @FXML
+    private TextField baseAnimalEnergyField;
+    @FXML
+    private TextField energyToReproduceField;
+    @FXML
+    private TextField reproductionEnergyConsumptionField;
+    @FXML
+    private TextField maxMutationCountField;
+    @FXML
+    private CheckBox agingCheckbox;
+    @FXML
+    private CheckBox owlBearCheckbox;
+    @FXML
+    private CheckBox saveLogCheckbox;
 
-    @FXML private Label errorMessageLabel;
+    @FXML
+    private Label errorMessageLabel;
 
-    @FXML private VBox configList;
-    @FXML private TextField configNameField;
+    @FXML
+    private VBox configList;
+    @FXML
+    private TextField configNameField;
 
     private List<Config> configs;
 
     @FXML
-    public void initialize()
-    {
+    public void initialize() {
         configs = new ArrayList<>();
         configs.addAll(List.of(Config.loadConfigs()));
         renderConfigList();
     }
 
     @FXML
-    private void onSimulationStartClicked(ActionEvent actionEvent)
-    {
+    private void onSimulationStartClicked(ActionEvent actionEvent) {
         errorMessageLabel.setText("");
         Config config;
-        try
-        {
+        try {
             config = readFieldsToConfig();
-        }
-        catch (WrongInputException exception)
-        {
+        } catch (WrongInputException exception) {
             errorMessageLabel.setText(exception.getMessage());
             return;
         }
@@ -80,8 +94,7 @@ public class MenuPresenter
         Config newConfig;
         try {
             newConfig = readFieldsToConfig();
-        }
-        catch (WrongInputException exception) {
+        } catch (WrongInputException exception) {
             errorMessageLabel.setText(exception.getMessage());
             return;
         }
@@ -108,8 +121,7 @@ public class MenuPresenter
             presenter.setWorldMap(map);
 
             simulationStage.setOnCloseRequest(e -> simulation.disposeSimulation());
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             errorMessageLabel.setText("Something went wrong when creating simulation.");
         }
     }
@@ -124,7 +136,7 @@ public class MenuPresenter
                     config.grassEnergy(),
                     config.minMutations(),
                     config.maxMutations(),
-                    config.genomeLength(),
+                    config.genomeLength(), // dlaczego ta mapa dostaje długość genomu, a GlobeMap nie?
                     config.aging());
         else
             map = new GlobeMap(config.sizeY(),

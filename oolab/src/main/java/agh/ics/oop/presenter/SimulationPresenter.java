@@ -32,29 +32,48 @@ public class SimulationPresenter {
     private static final double CELL_WIDTH = 20.0;
     private static final double CELL_HEIGHT = 20.0;
 
-    @FXML private Label dayInfoLabel;
-    @FXML private Label animalDaysAliveStat;
-    @FXML private Label animalDescendantCountStat;
-    @FXML private Label animalChildCountStat;
-    @FXML private Label animalPlantsConsumedStat;
-    @FXML private Label animalEnergyStat;
-    @FXML private Label animalActiveGenomeStat;
-    @FXML private Label animalGenomeStat;
+    @FXML
+    private Label dayInfoLabel;
+    @FXML
+    private Label animalDaysAliveStat;
+    @FXML
+    private Label animalDescendantCountStat;
+    @FXML
+    private Label animalChildCountStat;
+    @FXML
+    private Label animalPlantsConsumedStat;
+    @FXML
+    private Label animalEnergyStat;
+    @FXML
+    private Label animalActiveGenomeStat;
+    @FXML
+    private Label animalGenomeStat;
 
-    @FXML private GridPane animalDetailsGrid;
+    @FXML
+    private GridPane animalDetailsGrid;
 
-    @FXML private Label grassCountStat;
-    @FXML private Label emptyCellsStat;
-    @FXML private Label bestGenomeStat;
-    @FXML private Label meanAnimalEnergyStat;
-    @FXML private Label meanLifeLengthStat;
-    @FXML private Label meanChildCountStat;
-    @FXML private Label animalCountStat;
+    @FXML
+    private Label grassCountStat;
+    @FXML
+    private Label emptyCellsStat;
+    @FXML
+    private Label bestGenomeStat;
+    @FXML
+    private Label meanAnimalEnergyStat;
+    @FXML
+    private Label meanLifeLengthStat;
+    @FXML
+    private Label meanChildCountStat;
+    @FXML
+    private Label animalCountStat;
 
-    @FXML private GridPane mapGrid;
+    @FXML
+    private GridPane mapGrid;
 
-    @FXML private Button startSimulationButton;
-    @FXML private Button stopSimulationButton;
+    @FXML
+    private Button startSimulationButton;
+    @FXML
+    private Button stopSimulationButton;
 
     private Animal selectedAnimal = null;
 
@@ -89,8 +108,7 @@ public class SimulationPresenter {
         stopSimulationButton.setDisable(false);
         selectedAnimal = null;
 
-        if (engine != null)
-        {
+        if (engine != null) {
             simulation.paused = false;
             return;
         }
@@ -99,7 +117,7 @@ public class SimulationPresenter {
         engine.runAsync();
         new Thread(() -> {
             try {
-                engine.awaitSimulationsEnd();
+                engine.awaitSimulationsEnd(); // jaki jest sens odpalać wątek spejcalnie po to, żeby poczekał na inne wątki?
             } catch (InterruptedException e) {
                 //Konczymy dzialanie
             }
@@ -133,7 +151,7 @@ public class SimulationPresenter {
 
             Label label = new Label(String.valueOf(upperRight.getY() - y + 1));
             GridPane.setHalignment(label, HPos.CENTER);
-            mapGrid.add(label,0, y);
+            mapGrid.add(label, 0, y);
         }
 
         for (int x = 1; x < numberOfColumns + 1; x++) {
@@ -146,7 +164,7 @@ public class SimulationPresenter {
     private void fillGridCells(Vector2d lowerLeft, Vector2d upperRight) {
         for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
-                Vector2d position = new Vector2d(x,y);
+                Vector2d position = new Vector2d(x, y);
                 WorldElement element = worldMap.objectAt(position);
 
                 float specialFieldWeight = worldMap.getSpecialFieldWeight(position);
@@ -187,18 +205,17 @@ public class SimulationPresenter {
             animalEnergyStat.setText(String.valueOf(selectedAnimal.getEnergy()));
             animalActiveGenomeStat.setText(String.valueOf("Index: " + selectedAnimal.getCurrentIndexOfGenome()));
             animalGenomeStat.setText(String.valueOf(Arrays.stream(selectedAnimal.getGenome().getGenes()).mapToObj(String::valueOf).collect(Collectors.joining())));
-        }
-        else
+        } else
             animalDetailsGrid.setVisible(false);
     }
 
     private StackPane getCellStackPane(boolean grass, WorldElement element, float specialFieldWeight) {
         StackPane pane = new StackPane();
         //Zmniejszone o 2 ze wzgledu na border
-        pane.setMinSize(CELL_WIDTH-2, CELL_HEIGHT-2);
-        pane.setMaxSize(CELL_WIDTH-2, CELL_HEIGHT-2);
+        pane.setMinSize(CELL_WIDTH - 2, CELL_HEIGHT - 2);
+        pane.setMaxSize(CELL_WIDTH - 2, CELL_HEIGHT - 2);
 
-        Rectangle cellRectangle = new Rectangle(CELL_WIDTH-2, CELL_HEIGHT-2);
+        Rectangle cellRectangle = new Rectangle(CELL_WIDTH - 2, CELL_HEIGHT - 2);
 
         Color cellColor = grass ? GRASS_COLOR : DIRT_COLOR;
         cellColor = cellColor.interpolate(Color.BLACK, specialFieldWeight * 3);
@@ -214,9 +231,8 @@ public class SimulationPresenter {
         return pane;
     }
 
-    private Rectangle createWorldElementRectangle(StackPane pane, WorldElement element)
-    {
-        Rectangle rectangle = new Rectangle(CELL_WIDTH-ANIMAL_RECTANGLE_SIZE_REDUCTION, CELL_HEIGHT-ANIMAL_RECTANGLE_SIZE_REDUCTION);
+    private Rectangle createWorldElementRectangle(StackPane pane, WorldElement element) {
+        Rectangle rectangle = new Rectangle(CELL_WIDTH - ANIMAL_RECTANGLE_SIZE_REDUCTION, CELL_HEIGHT - ANIMAL_RECTANGLE_SIZE_REDUCTION);
         StackPane.setAlignment(rectangle, Pos.CENTER);
         rectangle.setFill(element.getColor());
 

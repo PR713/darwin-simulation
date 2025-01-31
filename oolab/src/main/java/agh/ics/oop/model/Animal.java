@@ -70,12 +70,12 @@ public class Animal extends AbstractAnimal {
     }
 
 
-    public void setPassedAway(boolean passedAway) {
+    public void setPassedAway(boolean passedAway) { // czy zwierzę można wskrzesić?
         this.passedAway = passedAway;
     }
 
 
-    public int getNumberOfDaysAlive() {
+    public int getNumberOfDaysAlive() { // czemu nie getAge?
         return numberOfDaysAlive;
     }
 
@@ -131,7 +131,7 @@ public class Animal extends AbstractAnimal {
     }
 
 
-    public List<Animal> getDescendants(){
+    public List<Animal> getDescendants() {
         List<Animal> descendants = new ArrayList<>();
         for (Animal child : children) {
             descendants.add(child);
@@ -152,7 +152,7 @@ public class Animal extends AbstractAnimal {
 
     @Override
     public Color getColor() {
-        return new Color(0, 0, Math.clamp(currentEnergy * 0.5f * (1f/initialEnergy), 0, 1), 1);
+        return new Color(0, 0, Math.clamp(currentEnergy * 0.5f * (1f / initialEnergy), 0, 1), 1);
     }
 
 

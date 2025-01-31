@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model; // przydałoby się uporządkować ten pakiet
 
 import static agh.ics.oop.model.MapDirection.fromNumericValue;
 
@@ -6,8 +6,8 @@ public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection orientation;
     protected Vector2d position;
     protected final Genome genome;
-    private int currentIndexOfGenome;
-    private static int genomeLength;
+    private int currentIndexOfGenome; // czy to nie powinno być w genomie?
+    private static int genomeLength; // i to?
 
     public AbstractAnimal(Vector2d vector, MapDirection orientation, int startIndexOfGenome, Genome genome) {
         this.position = vector;

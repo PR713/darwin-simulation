@@ -24,34 +24,24 @@ public enum MapDirection {
     }
 
     public int getNumericValue() {
-        return numericValue;
+        return ordinal();
     }
 
-    public static MapDirection fromNumericValue(int numericValue){
-        return switch (numericValue) {
-            case 0 -> N;
-            case 1 -> NE;
-            case 2 -> E;
-            case 3 -> SE;
-            case 4 -> S;
-            case 5 -> SW;
-            case 6 -> W;
-            case 7 -> NW;
-            default -> throw new IllegalArgumentException("Invalid numeric value: " + numericValue);
-        };
+    public static MapDirection fromNumericValue(int numericValue) {
+        return values()[numericValue];
     }
 
 
-    public MapDirection reverseOrientation(){
+    public MapDirection reverseOrientation() {
         return fromNumericValue((this.getNumericValue() + 4) % 8);
     }
 
-    public static MapDirection randomOrientation(){
+    public static MapDirection randomOrientation() {
         return fromNumericValue((int) (Math.random() * 8));
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return switch (this) {
             case N -> "Północ";
             case S -> "Południe";

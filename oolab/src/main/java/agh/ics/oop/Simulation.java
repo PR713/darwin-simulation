@@ -12,7 +12,7 @@ import java.util.*;
 public class Simulation implements Runnable {
 
     public boolean paused = false;
-    private boolean quit = false;
+    private boolean quit = false; // nazwa do przemyślenia
 
     private final AbstractWorldMap map;
     private final SimulationPresenter presenter;
@@ -46,9 +46,9 @@ public class Simulation implements Runnable {
     }
 
     private void createAndPlaceAnimal(Vector2d position, int genomeLength,
-                                        int defaultEnergySpawnedWith, int energyLossPerDay,
-                                        int energyLossPerReproduction,
-                                        int energyNeededToReproduce, boolean isAging) {
+                                      int defaultEnergySpawnedWith, int energyLossPerDay,
+                                      int energyLossPerReproduction,
+                                      int energyNeededToReproduce, boolean isAging) {
 
         int startIndexOfGenome = (int) (Math.random() * genomeLength);
         Genome genome = new Genome(genomeLength);
@@ -67,7 +67,7 @@ public class Simulation implements Runnable {
 
         try {
             map.place(animal);
-        } catch (IncorrectPositionException e) {
+        } catch (IncorrectPositionException e) { // czy to się może zdarzyć?
             System.out.println("Cannot place the animal: " + e.getMessage());
         }
     }
@@ -123,7 +123,7 @@ public class Simulation implements Runnable {
             } while (paused);
         } catch (InterruptedException e) {
             System.err.println("Symulacja przerwana: " + e.getMessage());
-            Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt(); // jaki jest sens wysyłać interrupt sobie samemu?
         }
     }
 
@@ -163,7 +163,7 @@ public class Simulation implements Runnable {
         try {
             fileInput.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // czy to dobry wybór?
         }
         fileInput = null;
         printStream = null;

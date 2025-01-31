@@ -9,7 +9,7 @@ public class GrassPlacer {
     private final Vector2d upperRightEquatorialForest;
     private final Vector2d lowerLeft;
     private final Vector2d upperRight;
-    final int consumeEnergy;
+    final int consumeEnergy; // nazwa + modyfikator dostępu?
     private int dailyGrassGrowth;
 
     public GrassPlacer(Map<Vector2d, Grass> grassTufts, Vector2d lowerLeft, Vector2d upperRight,
@@ -59,7 +59,7 @@ public class GrassPlacer {
 
         for (int i = 0; i < dailyGrassGrowth; i++) {
             Set<Vector2d> potentialPositions;
-            if (Math.random() < 0.8 && !potentialPositionsInEquatorialForest.isEmpty()){
+            if (Math.random() < 0.8 && !potentialPositionsInEquatorialForest.isEmpty()) {
                 potentialPositions = potentialPositionsInEquatorialForest;
             } else if (!potentialPositionsOutsideEquatorialForest.isEmpty()) {
                 potentialPositions = potentialPositionsOutsideEquatorialForest;

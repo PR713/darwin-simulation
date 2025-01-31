@@ -9,7 +9,9 @@ public class SimulationEngine {
 
     public SimulationEngine(List<Simulation> simulationsList) {
         this.simulationsList = simulationsList;
-    };
+    }
+
+    ; // co to?
 
     public void runAsync() {
         for (Simulation simulation : simulationsList) {
@@ -17,11 +19,13 @@ public class SimulationEngine {
             threads.add(thread);
             thread.start();
         }
-    };
+    }
 
-    public void awaitSimulationsEnd() throws InterruptedException{
-            for (Thread thread : threads) { //belongs to runAsync()
-                    thread.join();
-            }
+    ; // jw.
+
+    public void awaitSimulationsEnd() throws InterruptedException {
+        for (Thread thread : threads) { //belongs to runAsync()
+            thread.join();
+        }
     }
 }

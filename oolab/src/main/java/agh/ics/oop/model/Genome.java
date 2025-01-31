@@ -29,7 +29,7 @@ public class Genome {
         Genome weakerGenome;
         int strongerEnergy;
 
-        if (g1Energy >= g2Energy){
+        if (g1Energy >= g2Energy) {
             strongerGenome = g1;
             weakerGenome = g2;
             strongerEnergy = g1Energy;
@@ -88,7 +88,7 @@ public class Genome {
     }
 
 
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         if (this == other) {
             return true;
         }

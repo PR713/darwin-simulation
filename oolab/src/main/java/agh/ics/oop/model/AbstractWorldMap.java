@@ -95,8 +95,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     @Override
-    public void moveAnimals()
-    {
+    public void moveAnimals() {
         List<Animal> animalsToMove = new LinkedList<>();
         for (List<Animal> a : animals.values()) {
             animalsToMove.addAll(a);
@@ -204,7 +203,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             List<Animal> animalsOnPositionThatMoved = animalsOnPosition.stream()
                     .filter(Animal::getHasAlreadyMoved)
                     .toList();
-            if (animalsOnPositionThatMoved.isEmpty()){
+            if (animalsOnPositionThatMoved.isEmpty()) {
                 continue;
             }
             Animal animalWinner = solveConflictsBetweenAnimals(animalsOnPositionThatMoved);
@@ -239,7 +238,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             if (animalWinner1.isNotReadyToReproduce() || animalWinner2.isNotReadyToReproduce()) {
                 continue;
             }
-            
+
             reproduceAnimals(animalWinner1, animalWinner2);
             animalWinner1.hasReproduced();
             animalWinner2.hasReproduced();
@@ -255,13 +254,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         MapDirection orientation = MapDirection.randomOrientation();
         int startIndexOfGenome = (int) (Math.random() * animalWinner1.getGenome().getGenes().length);
         Animal newBornedAnimal;
-        if(isAging){
+        if (isAging) {
             newBornedAnimal = new OldAgeAnimal(animalWinner1.getPosition(), orientation,
                     2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                     animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
                     startIndexOfGenome, newGene);
-        }else{
-            newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation,
+        } else {
+            newBornedAnimal = new Animal(animalWinner1.getPosition(), orientation, // nie ma słowa borned; born to już imiesłów przeszły
                     2 * animalWinner1.getEnergyNeededToReproduce(), animalWinner1.getEnergyLossPerDay(),
                     animalWinner1.getEnergyLossPerReproduction(), animalWinner1.getEnergyNeededToReproduce(),
                     startIndexOfGenome, newGene);
@@ -270,7 +269,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         try {
             place(newBornedAnimal);
         } catch (IncorrectPositionException e) {
-            System.out.println("Cannot place the animal: " + e.getMessage());
+            System.out.println("Cannot place the animal: " + e.getMessage()); // czy to dobry wybór?
         }
         animalWinner1.addChild(newBornedAnimal);
         animalWinner2.addChild(newBornedAnimal);
@@ -316,7 +315,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         if (currentAnimalsCount - todayDied > 0) {
-            double avgAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount-todayDied);
+            double avgAliveAnimalsEnergy = (double) currentAnimalsEnergy / (currentAnimalsCount - todayDied);
             this.averageAliveAnimalsEnergy = Math.round(avgAliveAnimalsEnergy * 100.0) / 100.0;
         }
     }
@@ -390,7 +389,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             return mostProlificAnimals.getFirst();
         }
 
-        int randomValue = (int)(Math.random() * mostProlificAnimals.size());
+        int randomValue = (int) (Math.random() * mostProlificAnimals.size());
         return mostProlificAnimals.get(randomValue);
     }
 

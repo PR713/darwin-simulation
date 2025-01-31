@@ -12,12 +12,12 @@ public class Vector2d {
     }
 
 
-    public int getX(){
+    public int getX() {
         return x;
     }
 
 
-    public int getY(){
+    public int getY() {
         return y;
     }
 
@@ -58,7 +58,7 @@ public class Vector2d {
 
 
     public Vector2d opposite() {
-        return new Vector2d(-x,-y);
+        return new Vector2d(-x, -y);
     }
 
 
@@ -73,6 +73,6 @@ public class Vector2d {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x,y);
+        return Objects.hash(x, y);
     }
 }

@@ -1,4 +1,4 @@
-package agh.ics.oop.exceptions;
+package agh.ics.oop.exceptions; // samo bycie wyjątkiem, to nie jest cecha wspólna, która usprawiedliwia wspólny pakiet
 
 import agh.ics.oop.model.Vector2d;
 

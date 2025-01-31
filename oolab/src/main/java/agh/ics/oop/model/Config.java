@@ -23,26 +23,18 @@ public record Config(String name,
     static final String filePath = "configs.dat";
 
 
-    public static Config[] loadConfigs()
-    {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath)))
-        {
+    public static Config[] loadConfigs() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             return (Config[]) ois.readObject();
-        }
-        catch (IOException | ClassNotFoundException e)
-        {
+        } catch (IOException | ClassNotFoundException e) {
             return new Config[0];
         }
     }
 
-    public static void saveConfigs(Config[] configs)
-    {
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath)))
-        {
+    public static void saveConfigs(Config[] configs) {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath))) {
             objectOutputStream.writeObject(configs);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             //Brak dostępu
         }
     }

@@ -40,10 +40,10 @@ public class GenomeTest {
         }
 
         int mutationLeftCount = 0;
-        int genomeDivisor = (int) Math.floor((double) 60/(60+40) * (genomeLength - 1));
+        int genomeDivisor = (int) Math.floor((double) 60 / (60 + 40) * (genomeLength - 1));
         //left side stronger's one
         for (int i = 0; i < childGenes.length; i++) {
-            if (i < genomeDivisor ) {
+            if (i < genomeDivisor) {
                 if (childGenes[i] != g2.getGenes()[i]) {
                     mutationLeftCount++;
                 }
@@ -58,7 +58,7 @@ public class GenomeTest {
         int mutationRightCount = 0;
         //right side stronger's one
         for (int i = 0; i < childGenes.length; i++) {
-            if (i < genomeDivisor ) {
+            if (i < genomeDivisor) {
                 if (childGenes[i] != g1.getGenes()[i]) {
                     mutationRightCount++;
                 }
@@ -76,7 +76,7 @@ public class GenomeTest {
 
 
     @Test
-    public void testEquals(){
+    public void testEquals() {
         Genome genome1 = new Genome(50);
         Genome genome2 = new Genome(50); //szansa że takie same 1/8^50...
 
@@ -87,7 +87,7 @@ public class GenomeTest {
 
 
     @Test
-    public void testToString(){
+    public void testToString() {
         Genome genome = new Genome(10);
         int[] genes = genome.getGenes();
         String genomeString = genome.toString();
