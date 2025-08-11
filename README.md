@@ -5,6 +5,8 @@
 **Biblioteka GUI**: JavaFX  
 **Budowanie projektu**: Gradle  
 
+<img width="1242" height="775" alt="Zrzut ekranu 2025-01-27 000244" src="https://github.com/user-attachments/assets/3266d25b-4654-4197-9818-ee3351a1ad08" />
+
 ---
 
 ## 🎯 Cel projektu
